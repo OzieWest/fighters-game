@@ -44,7 +44,7 @@ namespace TestGame.Domain
 		/// <summary>
 		/// Устанавливаем текущий цвет значением по умолчанию
 		/// </summary>
-		public void SetDefaultColor()
+		protected void SetDefaultColor()
 		{
 			_colorCurrent = _colorDefault;
 		}
@@ -52,10 +52,35 @@ namespace TestGame.Domain
 		/// <summary>
 		/// Устанавливаем текущий цвет значением по "выбранный"
 		/// </summary>
-		public void SetSelectedColor()
+		protected void SetSelectedColor()
 		{
 			_colorCurrent = _colorSelected;
 		}
 
+		public void Focus()
+		{
+			this.SetSelectedColor();
+			position.Width = _texture.Width + 2;
+			position.Height = _texture.Height + 2;
+		}
+
+		public void UnFocus()
+		{
+			this.SetDefaultColor();
+			position.Width = _texture.Width;
+			position.Height = _texture.Height;
+		}
+
+		public void ToggleSize(GameTime gameTime)
+		{
+			if (position.Width == _texture.Width && position.Height == _texture.Height)
+			{
+				
+			}
+			else
+			{
+				
+			}
+		}
 	}
 }

@@ -27,6 +27,8 @@ namespace TestGame
 		CursorObject _cursor;
 		#endregion
 
+		AnimateTile testTile;
+
 		public Game1()
 			: base()
 		{
@@ -45,15 +47,19 @@ namespace TestGame
 			_cursor = new CursorObject(spriteBatch, Content, "cursor");
 			_background = new TileObject(spriteBatch, Content, TileTypes.def, "back_2");
 
-			_tileController = new TileController(spriteBatch, Content);
-			_tileController.CreateGrid(8);
+			testTile = new AnimateTile(Content.Load<Texture2D>(@"set1/ntile_0"), new Vector2(50, 50), 60, 60);
+
+			//_tileController = new TileController(spriteBatch, Content, _cursor);
+			//_tileController.CreateGrid(8);
 		}
 
 		protected override void Update(GameTime gameTime)
 		{
 			_cursor.Update();
 
-			_tileController.IsIntersect(_cursor);
+			//_tileController.Update(gameTime);
+
+			testTile.Update(gameTime);
 
 			base.Update(gameTime);
 		}
@@ -65,7 +71,9 @@ namespace TestGame
 			//=====================
 			_background.Draw();
 
-			_tileController.Draw();
+			//_tileController.Draw();
+
+			testTile.Draw(spriteBatch);
 
 			_infoMessage.Draw("output: ", new Vector2(5, 5));
 			_cursor.Draw();
