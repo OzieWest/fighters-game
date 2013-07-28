@@ -8,10 +8,10 @@ namespace TestGame.Domain
 	public enum TileTypes
 	{
 		def = 0, // базовый тайл, не учавствует в игре
-		first,
-		second,
-		third,
-		foth,
-		fifth
+		first = 1,
+		second = 2,
+		third = 3,
+		foth = 4,
+		fifth = 5
 	}
 }

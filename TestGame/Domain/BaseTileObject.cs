@@ -22,12 +22,12 @@ namespace TestGame.Domain
 		protected TileTypes _type;
 		#endregion
 
-		public BaseTileObject(SpriteBatch spriteBatch, ContentManager content, String fileName)
+		public BaseTileObject(SpriteBatch spriteBatch, ContentManager content, TileTypes type, String fileName)
 		{
 			_spriteBatch = spriteBatch;
 			_texture = content.Load<Texture2D>(fileName);
 			_colorCurrent = Color.White;
-			_type = TileTypes.def;
+			_type = type;
 
 			position = new Rectangle(0, 0, _texture.Width, _texture.Height);
 		}

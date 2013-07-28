@@ -12,7 +12,8 @@ namespace TestGame.Domain
 	public class CursorObject : BaseObject
 	{
 		protected Texture2D _texture;
-		public Rectangle position;
+		public Rectangle size;
+		public Vector2 position;
 
 		public CursorObject(SpriteBatch spriteBatch, ContentManager content, String fileName)
 		{
@@ -20,12 +21,14 @@ namespace TestGame.Domain
 			_texture = content.Load<Texture2D>(fileName);
 			Color = Color.White;
 
-			position = new Rectangle(0, 0, _texture.Width, _texture.Height);
+			size = new Rectangle(0, 0, 1, 1);
+
+			position = new Vector2(size.X, size.Y);
 		}
 
 		public Boolean Intersects(TileObject obj)
 		{
-			return position.Intersects(obj.position);
+			return size.Intersects(obj.position);
 		}
 
 		public void Update()
@@ -33,6 +36,9 @@ namespace TestGame.Domain
 			var state = Mouse.GetState();
 			position.X = state.X;
 			position.Y = state.Y;
+
+			size.X = state.X;
+			size.Y = state.Y;
 		}
 
 		public void Draw()

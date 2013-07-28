@@ -34,6 +34,7 @@ namespace TestGame
 			Content.RootDirectory = "Content";
 
 			this.SetResoluton(800, 600, false);
+			this.IsMouseVisible = false;
 		}
 
 		protected override void LoadContent()
@@ -42,23 +43,25 @@ namespace TestGame
 
 			_infoMessage = new FontObject(spriteBatch, Content, "MainFont");
 			_cursor = new CursorObject(spriteBatch, Content, "cursor");
-			_background = new TileObject(spriteBatch, Content, "back_2");
+			_background = new TileObject(spriteBatch, Content, TileTypes.def, "back_2");
 
 			_tileController = new TileController(spriteBatch, Content);
-			_tileController.CreateGrid(5);
+			_tileController.CreateGrid(8);
 		}
 
 		protected override void Update(GameTime gameTime)
 		{
 			_cursor.Update();
 
+			_tileController.IsIntersect(_cursor);
+
 			base.Update(gameTime);
 		}
 
 		protected override void Draw(GameTime gameTime)
 		{
-			GraphicsDevice.Clear(Color.CornflowerBlue);
-			spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+			GraphicsDevice.Clear(Color.Black);
+			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied);
 			//=====================
 			_background.Draw();
 
@@ -88,7 +91,7 @@ namespace TestGame
 
 			if (graphics.IsFullScreen != isFullScreen)
 			{
-				graphics.ToggleFullScreen(); 
+				graphics.ToggleFullScreen();
 			}
 
 			graphics.ApplyChanges();

@@ -10,8 +10,8 @@ namespace TestGame.Domain
 {
 	public class TileObject : BaseTileObject
 	{
-		public TileObject(SpriteBatch spriteBatch, ContentManager content, String fileName)
-			: base(spriteBatch, content, fileName)
+		public TileObject(SpriteBatch spriteBatch, ContentManager content, TileTypes type, String fileName)
+			: base(spriteBatch, content, type, fileName)
 		{
 		}
 

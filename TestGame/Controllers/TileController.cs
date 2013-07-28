@@ -26,7 +26,7 @@ namespace TestGame.Controllers
 			_content = content;
 			_spriteBatch = spriteBatch;
 
-			_defaultColor = Color.Black;
+			_defaultColor = Color.White;
 			_selectedColor = Color.Gray;
 		}
 
@@ -36,9 +36,10 @@ namespace TestGame.Controllers
 		/// <param name="x">Количество элементов по оси X/Y</param>
 		public void CreateGrid(int x)
 		{
-			var posX = 50;
-			var posY = 50;
-			var step = 100 + 10;
+			var posX = 135;
+			var posY = 40;
+			var step = 60 + 5;
+			var rnd = new Random();
 
 			_tiles = new List<List<TileObject>>();
 
@@ -48,7 +49,7 @@ namespace TestGame.Controllers
 
 				for (var j = 0; j < x; j++)
 				{
-					var cell = this.GetRandomTile();
+					var cell = this.GetRandomTile(rnd);
 					cell.SetPosition(posX, posY);
 
 					row.Add(cell);
@@ -58,7 +59,7 @@ namespace TestGame.Controllers
 
 				_tiles.Add(row);
 
-				posX = 50;
+				posX = 135;
 				posY += step;
 			}
 		}
@@ -67,9 +68,9 @@ namespace TestGame.Controllers
 		/// Генерируем случайный тайл
 		/// </summary>
 		/// <returns></returns>
-		public TileObject GetRandomTile()
+		public TileObject GetRandomTile(Random rnd)
 		{
-			int rInt = new Random().Next(1, 6); // все тайлы, кроме дефолтного
+			int rInt = rnd.Next(1, 6); // все тайлы, кроме дефолтного
 
 			var result = this.GetTileByType((TileTypes)rInt);
 
@@ -104,7 +105,7 @@ namespace TestGame.Controllers
 					break;
 			}
 
-			var result = new TileObject(_spriteBatch, _content, fileName);
+			var result = new TileObject(_spriteBatch, _content, type, "set1/" + fileName);
 			result.SetColors(_defaultColor, _selectedColor);
 
 			return result;
@@ -115,13 +116,31 @@ namespace TestGame.Controllers
 		/// </summary>
 		public void Draw()
 		{
-			_tiles.ForEach((row) =>
+			foreach (var row in _tiles)
 			{
-				row.ForEach((cell) => 
+				foreach (var cell in row)
 				{
 					cell.Draw();
-				});
-			});
+				}
+			}
+		}
+
+		public void IsIntersect(CursorObject cursor)
+		{
+			foreach (var row in _tiles)
+			{
+				foreach (var cell in row)
+				{
+					if (cursor.Intersects(cell))
+					{
+						cell.SetSelectedColor();
+					}
+					else
+					{
+						cell.SetDefaultColor();
+					}
+				}
+			}
 		}
 	}
 }
