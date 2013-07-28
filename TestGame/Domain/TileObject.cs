@@ -10,19 +10,26 @@ namespace TestGame.Domain
 {
 	public class TileObject : BaseTileObject
 	{
-		public TileObject(List<TileObject> tiles, SpriteBatch spriteBatch, ContentManager content, String fileName)
+		public TileObject(SpriteBatch spriteBatch, ContentManager content, String fileName)
 			: base(spriteBatch, content, fileName)
 		{
-			tiles.Add(this);
 		}
 
+		/// <summary>
+		/// Устанавливаем цвета отрисовки объекта
+		/// </summary>
+		/// <param name="defaulf">Стандартый цвет</param>
+		/// <param name="selected">"Выбранный" цвет</param>
 		public void SetColors(Color defaulf, Color selected)
 		{
 			_colorDefault = defaulf;
 			_colorSelected = selected;
 		}
 
-		public void ToggleColor()
+		/// <summary>
+		/// Переключаем текущий цвет отрисовки
+		/// </summary>
+		public void ToggleCurrentColor()
 		{
 			if (_colorCurrent == _colorDefault)
 			{
@@ -34,12 +41,18 @@ namespace TestGame.Domain
 			}
 		}
 
-		public void ColorDefault()
+		/// <summary>
+		/// Устанавливаем текущий цвет значением по умолчанию
+		/// </summary>
+		public void SetDefaultColor()
 		{
 			_colorCurrent = _colorDefault;
 		}
 
-		public void ColorSelected()
+		/// <summary>
+		/// Устанавливаем текущий цвет значением по "выбранный"
+		/// </summary>
+		public void SetSelectedColor()
 		{
 			_colorCurrent = _colorSelected;
 		}

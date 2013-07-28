@@ -10,6 +10,7 @@ namespace TestGame.Domain
 {
 	public class BaseTileObject
 	{
+		#region Injects
 		protected SpriteBatch _spriteBatch;
 		protected Texture2D _texture;
 		public Rectangle position;
@@ -18,11 +19,15 @@ namespace TestGame.Domain
 		protected Color _colorDefault;
 		protected Color _colorSelected;
 
+		protected TileTypes _type;
+		#endregion
+
 		public BaseTileObject(SpriteBatch spriteBatch, ContentManager content, String fileName)
 		{
 			_spriteBatch = spriteBatch;
 			_texture = content.Load<Texture2D>(fileName);
 			_colorCurrent = Color.White;
+			_type = TileTypes.def;
 
 			position = new Rectangle(0, 0, _texture.Width, _texture.Height);
 		}
@@ -49,6 +54,9 @@ namespace TestGame.Domain
 			position.Y = y;
 		}
 
+		/// <summary>
+		/// Отрисовываем объект
+		/// </summary>
 		public virtual void Draw()
 		{
 			_spriteBatch.Draw(_texture, position, _colorCurrent);

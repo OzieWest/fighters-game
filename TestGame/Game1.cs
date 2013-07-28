@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Storage;
 using Microsoft.Xna.Framework.GamerServices;
 using TestGame.Domain;
+using TestGame.Controllers;
 #endregion
 
 namespace TestGame
@@ -18,12 +19,12 @@ namespace TestGame
 		GraphicsDeviceManager graphics;
 		SpriteBatch spriteBatch;
 
-		FontObject _mainFont;
+		TileObject _background;
+
+		TileController _tileController;
+
+		FontObject _infoMessage;
 		CursorObject _cursor;
-
-		TileObject _tile;
-
-		List<TileObject> _tiles;
 		#endregion
 
 		public Game1()
@@ -32,27 +33,24 @@ namespace TestGame
 			graphics = new GraphicsDeviceManager(this);
 			Content.RootDirectory = "Content";
 
-			_tiles = new List<TileObject>();
-
-			//this.SetResoluton(1200, 600, false);
+			this.SetResoluton(800, 600, false);
 		}
 
 		protected override void LoadContent()
 		{
 			spriteBatch = new SpriteBatch(GraphicsDevice);
 
-			_mainFont = new FontObject(spriteBatch, Content, "MainFont");
+			_infoMessage = new FontObject(spriteBatch, Content, "MainFont");
 			_cursor = new CursorObject(spriteBatch, Content, "cursor");
+			_background = new TileObject(spriteBatch, Content, "back_2");
 
-			_tile = new TileObject(_tiles, spriteBatch, Content, "tile_0");
-
-			_tile.SetColors(Color.White, Color.Gray);
+			_tileController = new TileController(spriteBatch, Content);
+			_tileController.CreateGrid(5);
 		}
 
 		protected override void Update(GameTime gameTime)
 		{
 			_cursor.Update();
-			_tile.Update(100, 100);
 
 			base.Update(gameTime);
 		}
@@ -60,21 +58,13 @@ namespace TestGame
 		protected override void Draw(GameTime gameTime)
 		{
 			GraphicsDevice.Clear(Color.CornflowerBlue);
-			spriteBatch.Begin();
+			spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
 			//=====================
+			_background.Draw();
 
-			if (_cursor.Intersects(_tile))
-			{
-				_tile.ColorSelected();
-			}
-			else
-			{
-				_tile.ColorDefault();
-			}
+			_tileController.Draw();
 
-			_tile.Draw();
-
-			_mainFont.Draw("action: ", new Vector2(10, 10));
+			_infoMessage.Draw("output: ", new Vector2(5, 5));
 			_cursor.Draw();
 			//=====================
 			spriteBatch.End();
