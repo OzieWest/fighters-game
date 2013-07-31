@@ -95,6 +95,9 @@
     <Content Include="Content\set1\ntile_4.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\set1\testObj.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\tile_0.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

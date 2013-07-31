@@ -26,11 +26,6 @@ namespace TestGame.Domain
 			position = new Vector2(size.X, size.Y);
 		}
 
-		public Boolean Intersects(TileObject obj)
-		{
-			return size.Intersects(obj.position);
-		}
-
 		public void Update()
 		{
 			var state = Mouse.GetState();

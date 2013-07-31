@@ -12,21 +12,18 @@ namespace TestGame.Controllers
 	public class TileController
 	{
 		#region Injects
-		protected List<List<TileObject>> _tiles;
+		protected List<List<AnimatedTile>> _tiles;
 
-		protected SpriteBatch _spriteBatch;
 		protected ContentManager _content;
 		protected CursorObject _cursor;
-		protected GameTime _gameTime;
 
 		protected Color _defaultColor;
 		protected Color _selectedColor;
 		#endregion
 
-		public TileController(SpriteBatch spriteBatch, ContentManager content, CursorObject cursor)
+		public TileController(ContentManager content, CursorObject cursor)
 		{
 			_content = content;
-			_spriteBatch = spriteBatch;
 			_cursor = cursor;
 
 			_defaultColor = Color.White;
@@ -50,7 +47,7 @@ namespace TestGame.Controllers
 		/// <param name="x">Количество элементов по оси X/Y</param>
 		public void CreateGrid(int x)
 		{
-			_tiles = new List<List<TileObject>>();
+			_tiles = new List<List<AnimatedTile>>();
 
 			var rnd = new Random();
 			var constPosX = 135;
@@ -62,7 +59,7 @@ namespace TestGame.Controllers
 
 			for (var i = 0; i < x; i++)
 			{
-				var row = new List<TileObject>();
+				var row = new List<AnimatedTile>();
 
 				for (var j = 0; j < x; j++)
 				{
@@ -85,7 +82,7 @@ namespace TestGame.Controllers
 		/// Генерируем случайный тайл
 		/// </summary>
 		/// <returns></returns>
-		public TileObject GetRandomTile(Random rnd)
+		public AnimatedTile GetRandomTile(Random rnd)
 		{
 			int rInt = rnd.Next(1, 6); // все тайлы, кроме дефолтного
 
@@ -99,30 +96,30 @@ namespace TestGame.Controllers
 		/// </summary>
 		/// <param name="type">Тип тайла</param>
 		/// <returns></returns>
-		public TileObject CreateTileByType(TileTypes type)
+		public AnimatedTile CreateTileByType(TileTypes type)
 		{
 			var fileName = String.Empty;
 
 			switch (type)
 			{
 				case TileTypes.first:
-					fileName = "tile_0";
+					fileName = "ntile_0";
 					break;
 				case TileTypes.second:
-					fileName = "tile_1";
+					fileName = "ntile_1";
 					break;
 				case TileTypes.third:
-					fileName = "tile_2";
+					fileName = "ntile_2";
 					break;
 				case TileTypes.foth:
-					fileName = "tile_3";
+					fileName = "ntile_3";
 					break;
 				case TileTypes.fifth:
-					fileName = "tile_4";
+					fileName = "ntile_4";
 					break;
 			}
 
-			var result = new TileObject(_spriteBatch, _content, type, "set1/" + fileName);
+			var result = new AnimatedTile(_content, type, "set1/" + fileName, 60);
 			result.SetColors(_defaultColor, _selectedColor);
 
 			return result;
@@ -131,13 +128,13 @@ namespace TestGame.Controllers
 		/// <summary>
 		/// Отрисовываем все объекты
 		/// </summary>
-		public void Draw()
+		public void Draw(SpriteBatch spriteBatch)
 		{
 			foreach (var row in _tiles)
 			{
 				foreach (var cell in row)
 				{
-					cell.Draw();
+					cell.Draw(spriteBatch);
 				}
 			}
 		}
@@ -148,27 +145,23 @@ namespace TestGame.Controllers
 		/// <param name="gameTime">Игровое время</param>
 		public void Update(GameTime gameTime)
 		{
-			_gameTime = gameTime;
-
-			this.CheckIntersect();
+			this.CheckIntersect(gameTime);
 		}
 
 		/// <summary>
 		/// Проверяем тайлы на столкновение с курсором
 		/// </summary>
-		protected void CheckIntersect()
+		protected void CheckIntersect(GameTime gameTime)
 		{
 			foreach (var row in _tiles)
 			{
 				foreach (var cell in row)
 				{
-					if (_cursor.Intersects(cell))
+					cell.Update(gameTime);
+
+					if (cell.Intersects(_cursor))
 					{
-						cell.Focus();
-					}
-					else
-					{
-						cell.UnFocus();
+						cell.Animate(gameTime);
 					}
 				}
 			}
