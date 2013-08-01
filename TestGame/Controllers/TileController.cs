@@ -12,7 +12,7 @@ namespace TestGame.Controllers
 	public class TileController
 	{
 		#region Injects
-		protected List<List<AnimatedTile>> _tiles;
+		protected List<List<TileObject>> _tiles;
 
 		protected ContentManager _content;
 		protected CursorObject _cursor;
@@ -47,7 +47,7 @@ namespace TestGame.Controllers
 		/// <param name="x">Количество элементов по оси X/Y</param>
 		public void CreateGrid(int x)
 		{
-			_tiles = new List<List<AnimatedTile>>();
+			_tiles = new List<List<TileObject>>();
 
 			var rnd = new Random();
 			var constPosX = 135;
@@ -59,7 +59,7 @@ namespace TestGame.Controllers
 
 			for (var i = 0; i < x; i++)
 			{
-				var row = new List<AnimatedTile>();
+				var row = new List<TileObject>();
 
 				for (var j = 0; j < x; j++)
 				{
@@ -82,7 +82,7 @@ namespace TestGame.Controllers
 		/// Генерируем случайный тайл
 		/// </summary>
 		/// <returns></returns>
-		public AnimatedTile GetRandomTile(Random rnd)
+		public TileObject GetRandomTile(Random rnd)
 		{
 			int rInt = rnd.Next(1, 6); // все тайлы, кроме дефолтного
 
@@ -96,7 +96,7 @@ namespace TestGame.Controllers
 		/// </summary>
 		/// <param name="type">Тип тайла</param>
 		/// <returns></returns>
-		public AnimatedTile CreateTileByType(TileTypes type)
+		public TileObject CreateTileByType(TileTypes type)
 		{
 			var fileName = String.Empty;
 
@@ -119,7 +119,7 @@ namespace TestGame.Controllers
 					break;
 			}
 
-			var result = new AnimatedTile(_content, type, "set1/" + fileName, 60);
+			var result = new TileObject(_content, type, "set1/" + fileName, 60);
 			result.SetColors(_defaultColor, _selectedColor);
 
 			return result;

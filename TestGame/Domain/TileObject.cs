@@ -1,86 +1,83 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using TestGame.Controllers;
 
 namespace TestGame.Domain
 {
-	public class TileObject : BaseTileObject
+	public class TileObject : BaseObject
 	{
-		public TileObject(SpriteBatch spriteBatch, ContentManager content, TileTypes type, String fileName)
-			: base(spriteBatch, content, type, fileName)
+		#region Declare
+		protected int _currentFrame;
+		protected float _timer;
+		protected float _frameInterval;
+
+		protected TileTypes _type;
+
+		public Vector2 velocity;
+		#endregion
+
+		public void Init(Texture2D texture, TileTypes type, int frameInterval, Color defaultColor, Color opositeColor)
 		{
+			_color = new ColorController();
+			_color.SetColors(defaultColor, opositeColor);
+
+			_frameInterval = frameInterval;
+			_type = type;
+
+			_texture = texture;
+			_rectangle = new Rectangle(0, 0, frameInterval, texture.Height);
 		}
 
 		/// <summary>
-		/// Устанавливаем цвета отрисовки объекта
+		/// Обновляем состояние объекта
 		/// </summary>
-		/// <param name="defaulf">Стандартый цвет</param>
-		/// <param name="selected">"Выбранный" цвет</param>
-		public void SetColors(Color defaulf, Color selected)
+		/// <param name="gameTime">Игровое время</param>
+		public void Update(GameTime gameTime)
 		{
-			_colorDefault = defaulf;
-			_colorSelected = selected;
+			_rectangle.X = _currentFrame * (int)_frameInterval;
+			_rectangle.Y = 0;
 		}
 
 		/// <summary>
-		/// Переключаем текущий цвет отрисовки
+		/// Обновляем состояние объекта
 		/// </summary>
-		public void ToggleCurrentColor()
+		/// <param name="gameTime">Игровое время</param>
+		/// <param name="x">Координата X</param>
+		/// <param name="y">Координата Y</param>
+		public void Update(GameTime gameTime, int x, int y)
 		{
-			if (_colorCurrent == _colorDefault)
+			this.SetPosition(x, y);
+			this.Update(gameTime);
+		}
+
+		public void Animate(GameTime gameTime)
+		{
+			_timer += (float)gameTime.ElapsedGameTime.TotalMilliseconds / 2;
+			if (_timer > _frameInterval)
 			{
-				_colorCurrent = _colorSelected;
-			}
-			else
-			{
-				_colorCurrent = _colorDefault;
+				_currentFrame++;
+				_timer = 0;
+				if (_currentFrame > 3)
+				{
+					_currentFrame = 0;
+				}
 			}
 		}
 
 		/// <summary>
-		/// Устанавливаем текущий цвет значением по умолчанию
+		/// Отрисовываем объект
 		/// </summary>
-		protected void SetDefaultColor()
+		/// <param name="spriteBatch"></param>
+		public void Draw(SpriteBatch spriteBatch)
 		{
-			_colorCurrent = _colorDefault;
-		}
-
-		/// <summary>
-		/// Устанавливаем текущий цвет значением по "выбранный"
-		/// </summary>
-		protected void SetSelectedColor()
-		{
-			_colorCurrent = _colorSelected;
-		}
-
-		public void Focus()
-		{
-			this.SetSelectedColor();
-			position.Width = _texture.Width + 2;
-			position.Height = _texture.Height + 2;
-		}
-
-		public void UnFocus()
-		{
-			this.SetDefaultColor();
-			position.Width = _texture.Width;
-			position.Height = _texture.Height;
-		}
-
-		public void ToggleSize(GameTime gameTime)
-		{
-			if (position.Width == _texture.Width && position.Height == _texture.Height)
-			{
-				
-			}
-			else
-			{
-				
-			}
+			spriteBatch.Draw(_texture, _position, _rectangle, _color.GetCurrent(), 0f, _originalPosition, 1.0f, SpriteEffects.None, 0);
 		}
 	}
 }
