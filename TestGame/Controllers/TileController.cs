@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -118,12 +119,12 @@ namespace TestGame.Controllers
 			}
 		}
 
-		public void Update(GameTime gameTime, IPosition obj)
+		public void Update(GameTime gameTime, IPosition obj, Boolean isSelect)
 		{
-			this.CheckIntersect(gameTime, obj);
+			this.CheckIntersect(gameTime, obj, isSelect);
 		}
 
-		protected void CheckIntersect(GameTime gameTime, IPosition obj)
+		protected void CheckIntersect(GameTime gameTime, IPosition obj, Boolean isSelect)
 		{
 			if (obj != null)
 			{
@@ -133,9 +134,27 @@ namespace TestGame.Controllers
 					{
 						cell.Update(gameTime);
 
-						if (cell.IsIntersectWith(obj))
+						if (isSelect)
 						{
-							cell.Animate(gameTime);
+							if (cell.IsIntersectWith(obj) && cell.State != TileState.Selected)
+							{
+								cell.State = TileState.Selected;
+							}
+							else
+							{
+								cell.State = TileState.Normal;
+							}
+						}
+						else
+						{
+							if (cell.IsIntersectWith(obj) && cell.State != TileState.Selected)
+							{
+								cell.State = TileState.Focused;
+							}
+							else if (!cell.IsIntersectWith(obj) && cell.State != TileState.Selected)
+							{
+								cell.State = TileState.Normal;
+							}
 						}
 					}
 				}

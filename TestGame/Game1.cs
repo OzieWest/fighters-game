@@ -24,6 +24,8 @@ namespace TestGame
 
 		FontObject _infoMessage;
 		MouseObject _cursor;
+
+		MouseState previousMouseState;
 		#endregion
 
 		public Game1()
@@ -31,6 +33,8 @@ namespace TestGame
 		{
 			graphics = new GraphicsDeviceManager(this);
 			Content.RootDirectory = "Content";
+
+			previousMouseState = Mouse.GetState();
 
 			this.SetResoluton(800, 600, false);
 			this.IsMouseVisible = false;
@@ -55,7 +59,20 @@ namespace TestGame
 		{
 			_cursor.Update(gameTime);
 
-			_tileController.Update(gameTime, _cursor);
+
+			if (previousMouseState.LeftButton == ButtonState.Released
+			&& Mouse.GetState().LeftButton == ButtonState.Pressed)
+			{
+				_infoMessage.Update(gameTime, "output: Pressed");
+				_tileController.Update(gameTime, _cursor, true);
+			}
+			else
+			{
+				_tileController.Update(gameTime, _cursor, false);
+				_infoMessage.Update(gameTime, "output: ");
+			}
+
+			previousMouseState = Mouse.GetState();
 
 			base.Update(gameTime);
 		}

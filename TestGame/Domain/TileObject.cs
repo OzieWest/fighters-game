@@ -24,11 +24,17 @@ namespace TestGame.Domain
 		protected Vector2 _velocity;
 		#endregion
 
+		#region Properties
+		public TileState State { get; set; }
+		#endregion
+
 		public TileObject(Texture2D texture, TileTypes type, int frameInterval, int frameOffset) : base(texture)
 		{
 			_frameInterval = frameInterval;
 			_frameOffset = frameOffset;
 			_type = type;
+
+			State = TileState.Normal;
 
 			_rectangle = new Rectangle(0, 0, frameInterval, texture.Height);
 		}
@@ -58,6 +64,19 @@ namespace TestGame.Domain
 		{
 			_rectangle.X = _currentFrame * (int)_frameInterval;
 			_rectangle.Y = 0;
+
+			switch (State)
+			{
+				case TileState.Focused:
+					Animate(gameTime, 0, 4, 2);
+					break;
+				case TileState.Selected:
+					Animate(gameTime, 5, 9, 2);
+					break;
+				default:
+					_currentFrame = 0;
+					break;
+			}
 		}
 
 		public void Update(GameTime gameTime, int x, int y)
@@ -66,16 +85,17 @@ namespace TestGame.Domain
 			this.Update(gameTime);
 		}
 
-		public void Animate(GameTime gameTime)
+		//0, 3
+		public void Animate(GameTime gameTime, int startFrame, int endFrame, int speed)
 		{
 			_timer += (float)gameTime.ElapsedGameTime.TotalMilliseconds / 2;
-			if (_timer > _frameInterval)
+			if (_timer > _frameInterval / speed)
 			{
 				_currentFrame++;
 				_timer = 0;
-				if (_currentFrame > 3)
+				if (_currentFrame > endFrame)
 				{
-					_currentFrame = 0;
+					_currentFrame = startFrame;
 				}
 			}
 		}

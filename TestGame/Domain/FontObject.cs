@@ -30,7 +30,7 @@ namespace TestGame.Domain
 			_position = new Vector2();
 
 			_color = new ColorController();
-			_color.SetColors(Color.White, Color.Gray);
+			_color.SetColors(Color.Black, Color.Gray);
 
 			Text = String.Empty;
 		}
@@ -41,16 +41,16 @@ namespace TestGame.Domain
 			_position.Y = y;
 		}
 
-		public void Update(GameTime gameTime, int x, int y)
+		public void Update(GameTime gameTime, String text, int x, int y)
 		{
 			this.SetPosition(x, y);
+
+			this.Update(gameTime, text);
 		}
 
-		public void Draw(SpriteBatch spriteBatch, String text)
+		public void Update(GameTime gameTime, String text)
 		{
 			Text = text;
-
-			this.Draw(spriteBatch);
 		}
 
 		public void Draw(SpriteBatch spriteBatch)
