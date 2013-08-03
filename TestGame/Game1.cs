@@ -47,7 +47,7 @@ namespace TestGame
 			_backController = new BackgroundController(Content, spriteBatch);
 
 			_tileController = new TileController(Content, spriteBatch);
-			_tileController.CreateGrid(8);
+			_tileController.Init(8);
 
 			_infoMessage = new FontObject(Content.Load<SpriteFont>("MainFont"));
 			_infoMessage.SetPosition(5, 5);

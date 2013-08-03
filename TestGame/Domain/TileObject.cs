@@ -28,7 +28,12 @@ namespace TestGame.Domain
 		public TileState State { get; set; }
 		#endregion
 
-		public TileObject(Texture2D texture, TileTypes type, int frameInterval, int frameOffset) : base(texture)
+		#region Injects
+		public PlaceController Place { get; set; }
+		#endregion
+
+		public TileObject(Texture2D texture, TileTypes type, int frameInterval, int frameOffset)
+			: base(texture)
 		{
 			_frameInterval = frameInterval;
 			_frameOffset = frameOffset;
@@ -37,6 +42,7 @@ namespace TestGame.Domain
 			State = TileState.Normal;
 
 			_rectangle = new Rectangle(0, 0, frameInterval, texture.Height);
+			Place = new PlaceController();
 		}
 
 		public virtual Boolean IsIntersectWith(IPosition obj)
