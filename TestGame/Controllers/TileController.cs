@@ -11,44 +11,33 @@ namespace TestGame.Controllers
 {
 	public class TileController
 	{
-		#region Injects
+		#region Values
 		protected List<List<TileObject>> _tiles;
-
 		protected ContentManager _content;
-		protected CursorObject _cursor;
-
-		protected Color _defaultColor;
-		protected Color _selectedColor;
+		protected SpriteBatch _spriteBatch;
 		#endregion
 
-		public TileController(ContentManager content, CursorObject cursor)
+		public TileController(ContentManager content, SpriteBatch spriteBatch)
 		{
 			_content = content;
-			_cursor = cursor;
+			_spriteBatch = spriteBatch;
 
-			_defaultColor = Color.White;
-			_selectedColor = Color.Wheat;
+			_tiles = new List<List<TileObject>>();
 		}
 
-		/// <summary>
-		/// Установливаем цвет отрисовки для всех тайлов
-		/// </summary>
-		/// <param name="def">Цвет по умолчанию, рекомендуется "White"</param>
-		/// <param name="selected">Цвет "выбранного" тайла, рекомендуется "Gray"</param>
-		protected void SetColors(Color def, Color selected)
+		public void SetColors(Color defColor, Color selColor)
 		{
-			_defaultColor = def;
-			_selectedColor = selected;
+			foreach (var row in _tiles)
+			{
+				foreach (var cell in row)
+				{
+					cell.SetColors(defColor, selColor);
+				}
+			}
 		}
 
-		/// <summary>
-		/// Создаем равностороннюю сетку объектов
-		/// </summary>
-		/// <param name="x">Количество элементов по оси X/Y</param>
 		public void CreateGrid(int x)
 		{
-			_tiles = new List<List<TileObject>>();
-
 			var rnd = new Random();
 			var constPosX = 135;
 			var constPosY = 40;
@@ -76,13 +65,11 @@ namespace TestGame.Controllers
 				posX = constPosX;
 				posY += step;
 			}
+
+			this.SetColors(Color.White, Color.Gray);
 		}
 
-		/// <summary>
-		/// Генерируем случайный тайл
-		/// </summary>
-		/// <returns></returns>
-		public TileObject GetRandomTile(Random rnd)
+		protected TileObject GetRandomTile(Random rnd)
 		{
 			int rInt = rnd.Next(1, 6); // все тайлы, кроме дефолтного
 
@@ -91,12 +78,7 @@ namespace TestGame.Controllers
 			return result;
 		}
 
-		/// <summary>
-		/// Получаем тайл по его типу
-		/// </summary>
-		/// <param name="type">Тип тайла</param>
-		/// <returns></returns>
-		public TileObject CreateTileByType(TileTypes type)
+		protected TileObject CreateTileByType(TileTypes type)
 		{
 			var fileName = String.Empty;
 
@@ -119,49 +101,42 @@ namespace TestGame.Controllers
 					break;
 			}
 
-			var result = new TileObject(_content, type, "set1/" + fileName, 60);
-			result.SetColors(_defaultColor, _selectedColor);
+			var tex = _content.Load<Texture2D>("set1/" + fileName);
+			var result = new TileObject(tex, type, 60, 10);
 
 			return result;
 		}
 
-		/// <summary>
-		/// Отрисовываем все объекты
-		/// </summary>
-		public void Draw(SpriteBatch spriteBatch)
+		public void Draw()
 		{
 			foreach (var row in _tiles)
 			{
 				foreach (var cell in row)
 				{
-					cell.Draw(spriteBatch);
+					cell.Draw(_spriteBatch);
 				}
 			}
 		}
 
-		/// <summary>
-		/// Обновляем параметры тайлов
-		/// </summary>
-		/// <param name="gameTime">Игровое время</param>
-		public void Update(GameTime gameTime)
+		public void Update(GameTime gameTime, IPosition obj)
 		{
-			this.CheckIntersect(gameTime);
+			this.CheckIntersect(gameTime, obj);
 		}
 
-		/// <summary>
-		/// Проверяем тайлы на столкновение с курсором
-		/// </summary>
-		protected void CheckIntersect(GameTime gameTime)
+		protected void CheckIntersect(GameTime gameTime, IPosition obj)
 		{
-			foreach (var row in _tiles)
+			if (obj != null)
 			{
-				foreach (var cell in row)
+				foreach (var row in _tiles)
 				{
-					cell.Update(gameTime);
-
-					if (cell.Intersects(_cursor))
+					foreach (var cell in row)
 					{
-						cell.Animate(gameTime);
+						cell.Update(gameTime);
+
+						if (cell.IsIntersectWith(obj))
+						{
+							cell.Animate(gameTime);
+						}
 					}
 				}
 			}

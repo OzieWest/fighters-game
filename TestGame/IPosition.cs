@@ -6,8 +6,9 @@ using System.Text;
 
 namespace TestGame
 {
-	public interface IRectangle
+	public interface IPosition
 	{
-		Rectangle Rectangle { get; set; }
+		Vector2 Position { get; }
+		Rectangle Rectangle { get;}
 	}
 }

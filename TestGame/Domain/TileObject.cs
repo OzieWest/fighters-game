@@ -13,44 +13,53 @@ namespace TestGame.Domain
 {
 	public class TileObject : BaseObject
 	{
-		#region Declare
+		#region Values
 		protected int _currentFrame;
 		protected float _timer;
 		protected float _frameInterval;
+		protected int _frameOffset;
 
 		protected TileTypes _type;
 
-		public Vector2 velocity;
+		protected Vector2 _velocity;
 		#endregion
 
-		public void Init(Texture2D texture, TileTypes type, int frameInterval, Color defaultColor, Color opositeColor)
+		public TileObject(Texture2D texture, TileTypes type, int frameInterval, int frameOffset) : base(texture)
 		{
-			_color = new ColorController();
-			_color.SetColors(defaultColor, opositeColor);
-
 			_frameInterval = frameInterval;
+			_frameOffset = frameOffset;
 			_type = type;
 
-			_texture = texture;
 			_rectangle = new Rectangle(0, 0, frameInterval, texture.Height);
 		}
 
-		/// <summary>
-		/// Обновляем состояние объекта
-		/// </summary>
-		/// <param name="gameTime">Игровое время</param>
+		public virtual Boolean IsIntersectWith(IPosition obj)
+		{
+			var objX = obj.Position.X;
+			var objY = obj.Position.Y;
+
+			var thisX = _position.X;
+			var thisY = _position.Y;
+
+			if (objX > (thisX + _frameOffset) &&
+				objX < (thisX + _frameInterval) - _frameOffset &&
+				objY > (thisY + _frameOffset) &&
+				objY < (thisY + _frameInterval) - _frameOffset)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+
 		public void Update(GameTime gameTime)
 		{
 			_rectangle.X = _currentFrame * (int)_frameInterval;
 			_rectangle.Y = 0;
 		}
 
-		/// <summary>
-		/// Обновляем состояние объекта
-		/// </summary>
-		/// <param name="gameTime">Игровое время</param>
-		/// <param name="x">Координата X</param>
-		/// <param name="y">Координата Y</param>
 		public void Update(GameTime gameTime, int x, int y)
 		{
 			this.SetPosition(x, y);
@@ -69,15 +78,6 @@ namespace TestGame.Domain
 					_currentFrame = 0;
 				}
 			}
-		}
-
-		/// <summary>
-		/// Отрисовываем объект
-		/// </summary>
-		/// <param name="spriteBatch"></param>
-		public void Draw(SpriteBatch spriteBatch)
-		{
-			spriteBatch.Draw(_texture, _position, _rectangle, _color.GetCurrent(), 0f, _originalPosition, 1.0f, SpriteEffects.None, 0);
 		}
 	}
 }

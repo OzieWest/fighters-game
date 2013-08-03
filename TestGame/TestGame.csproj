@@ -35,17 +35,19 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="BackgroundController.cs" />
+    <Compile Include="BackgroundTile.cs" />
     <Compile Include="Controllers\ColorController.cs" />
     <Compile Include="Controllers\TileController.cs" />
     <Compile Include="Domain\TileObject.cs" />
     <Compile Include="Domain\BaseObject.cs" />
-    <Compile Include="Domain\CursorObject.cs" />
+    <Compile Include="Domain\MouseObject.cs" />
     <Compile Include="Domain\FontObject.cs" />
     <Compile Include="Domain\BaseTileObject.cs" />
     <Compile Include="Domain\TileTypes.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="IColorController.cs" />
-    <Compile Include="IRectangle.cs" />
+    <Compile Include="IPosition.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

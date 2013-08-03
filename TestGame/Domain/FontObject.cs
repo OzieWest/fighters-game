@@ -5,50 +5,57 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using TestGame.Controllers;
 
 namespace TestGame.Domain
 {
-	public class FontObject : BaseObject
+	public class FontObject
 	{
+		#region Values
 		protected SpriteFont _font;
+		protected Vector2 _position;
+		#endregion
+
+		#region Property
 		public String Text { get; set; }
+		#endregion
 
-		public FontObject(SpriteBatch spriteBatch, ContentManager content, String fileName)
+		#region Injects
+		protected IColorController _color;
+		#endregion
+
+		public FontObject(SpriteFont font)
 		{
-			_font = content.Load<SpriteFont>(fileName);
-			_position = new Vector2(10, 10);
-			Color = Color.Black;
+			_font = font;
+			_position = new Vector2();
+
+			_color = new ColorController();
+			_color.SetColors(Color.White, Color.Gray);
+
 			Text = String.Empty;
-			_spriteBatch = spriteBatch;
 		}
 
-		public void Draw(String text, Vector2 position, Color color)
+		public void SetPosition(int x, int y)
 		{
-			_position = position;
-			Color = color;
-			Text = text;
-
-			this.Draw();
+			_position.X = x;
+			_position.Y = y;
 		}
 
-		public void Draw(String text, Vector2 position)
+		public void Update(GameTime gameTime, int x, int y)
 		{
-			_position = position;
-			Text = text;
-
-			this.Draw();
+			this.SetPosition(x, y);
 		}
 
-		public void Draw(String text)
+		public void Draw(SpriteBatch spriteBatch, String text)
 		{
 			Text = text;
 
-			this.Draw();
+			this.Draw(spriteBatch);
 		}
 
-		public void Draw()
+		public void Draw(SpriteBatch spriteBatch)
 		{
-			_spriteBatch.DrawString(_font, Text, _position, Color);
+			spriteBatch.DrawString(_font, Text, _position, _color.GetCurrent());
 		}
 	}
 }

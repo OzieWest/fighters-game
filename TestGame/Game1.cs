@@ -19,12 +19,11 @@ namespace TestGame
 		GraphicsDeviceManager graphics;
 		SpriteBatch spriteBatch;
 
-		TileObject _background;
-
+		BackgroundController _backController;
 		TileController _tileController;
 
 		FontObject _infoMessage;
-		CursorObject _cursor;
+		MouseObject _cursor;
 		#endregion
 
 		public Game1()
@@ -41,19 +40,22 @@ namespace TestGame
 		{
 			spriteBatch = new SpriteBatch(GraphicsDevice);
 
-			_infoMessage = new FontObject(spriteBatch, Content, "MainFont");
-			_cursor = new CursorObject(spriteBatch, Content, "cursor");
-			_background = new TileObject(spriteBatch, Content, TileTypes.def, "back_2");
+			_backController = new BackgroundController(Content, spriteBatch);
 
-			_tileController = new TileController(Content, _cursor);
+			_tileController = new TileController(Content, spriteBatch);
 			_tileController.CreateGrid(8);
+
+			_infoMessage = new FontObject(Content.Load<SpriteFont>("MainFont"));
+			_infoMessage.SetPosition(5, 5);
+
+			_cursor = new MouseObject(Content.Load<Texture2D>("cursor"));
 		}
 
 		protected override void Update(GameTime gameTime)
 		{
-			_cursor.Update();
+			_cursor.Update(gameTime);
 
-			_tileController.Update(gameTime);
+			_tileController.Update(gameTime, _cursor);
 
 			base.Update(gameTime);
 		}
@@ -63,17 +65,19 @@ namespace TestGame
 			GraphicsDevice.Clear(Color.Black);
 			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied);
 			//=====================
-			_background.Draw();
 
-			_tileController.Draw(spriteBatch);
+			_backController.Draw();
+			_tileController.Draw();
 
-			_infoMessage.Draw();
-			_cursor.Draw();
+			_infoMessage.Draw(spriteBatch);
+			_cursor.Draw(spriteBatch);
+
 			//=====================
 			spriteBatch.End();
 			base.Draw(gameTime);
 		}
 
+		#region Init
 		protected override void Initialize()
 		{
 			base.Initialize();
@@ -96,5 +100,6 @@ namespace TestGame
 
 			graphics.ApplyChanges();
 		}
+		#endregion
 	}
 }
