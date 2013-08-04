@@ -19,7 +19,7 @@ namespace TestGame.Domain
 		protected float _frameInterval;
 		protected int _frameOffset;
 
-		protected TileTypes _type;
+		public TileTypes Type;
 
 		protected Vector2 _velocity;
 		#endregion
@@ -42,7 +42,7 @@ namespace TestGame.Domain
 		{
 			_frameInterval = frameInterval;
 			_frameOffset = frameOffset;
-			_type = type;
+			Type = type;
 
 			State = TileState.Normal;
 
@@ -83,6 +83,9 @@ namespace TestGame.Domain
 				case TileState.Selected:
 					Animate(gameTime, 5, 9, 2);
 					break;
+				case TileState.Test:
+					Animate(gameTime, 0, 4, 2);
+					break;
 				default:
 					_currentFrame = 0;
 					break;
@@ -110,6 +113,19 @@ namespace TestGame.Domain
 			}
 		}
 
+		public Boolean IsSame(TileObject obj)
+		{
+			if (this.X == obj.X &&
+				this.Y == obj.Y &&
+				this.Position.X == obj.Position.X &&
+				this.Position.Y == obj.Position.Y)
+			{
+				return true;
+			}
+
+			return false;
+		}
+
 		public List<TileObject> GetNeighbors()
 		{
 			var result = new List<TileObject>();
@@ -132,6 +148,14 @@ namespace TestGame.Domain
 			}
 
 			return result;
+		}
+
+		public void ResetPlace()
+		{
+			Bottom = null;
+			Top = null;
+			Right = null;
+			Left = null;
 		}
 	}
 }

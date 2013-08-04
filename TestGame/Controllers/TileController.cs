@@ -43,6 +43,20 @@ namespace TestGame.Controllers
 			}
 		}
 
+		public TileObject GetByState(TileState state)
+		{
+			foreach (var row in _tiles)
+			{
+				foreach (var cell in row)
+				{
+					if (cell.State == state)
+						return cell;
+				}
+			}
+
+			return null;
+		}
+
 		public void Init(int x)
 		{
 			this.CreateGrid(x);
@@ -135,7 +149,31 @@ namespace TestGame.Controllers
 
 		public void Update(GameTime gameTime, IPosition obj, Boolean isSelect)
 		{
+			this.OtherCheck(isSelect);
 			this.CheckIntersect(gameTime, obj, isSelect);
+
+		}
+
+		public String Find()
+		{
+			return _placeController.FindChain();
+		}
+
+		protected void OtherCheck(Boolean isSelect)
+		{
+			var selected = this.GetByState(TileState.Selected);
+			var focused = this.GetByState(TileState.Focused);
+
+			if (selected != null && focused != null && !selected.IsSame(focused))
+			{
+				var neighbor = selected.GetNeighbors().SingleOrDefault(o => o == focused);
+
+				if (isSelect && neighbor != null)
+				{
+					_placeController.ChangePlace(selected, focused);
+					_placeController.GenerateNeighbors();
+				}
+			}
 		}
 
 		protected void CheckIntersect(GameTime gameTime, IPosition obj, Boolean isSelect)
@@ -153,10 +191,6 @@ namespace TestGame.Controllers
 							if (cell.IsIntersectWith(obj) && cell.State != TileState.Selected)
 							{
 								cell.State = TileState.Selected;
-								foreach (var item in cell.GetNeighbors())
-								{
-									item.State = TileState.Focused;
-								}
 							}
 							else
 							{

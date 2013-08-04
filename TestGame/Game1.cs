@@ -59,18 +59,20 @@ namespace TestGame
 		{
 			_cursor.Update(gameTime);
 
+			var output = String.Empty;
 
 			if (previousMouseState.LeftButton == ButtonState.Released
 			&& Mouse.GetState().LeftButton == ButtonState.Pressed)
 			{
-				_infoMessage.Update(gameTime, "output: Pressed");
 				_tileController.Update(gameTime, _cursor, true);
 			}
 			else
 			{
 				_tileController.Update(gameTime, _cursor, false);
-				_infoMessage.Update(gameTime, "output: ");
+				output = _tileController.Find();
 			}
+
+			_infoMessage.Update(gameTime, output);
 
 			previousMouseState = Mouse.GetState();
 

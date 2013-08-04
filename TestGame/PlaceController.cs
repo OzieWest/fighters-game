@@ -26,8 +26,49 @@ namespace TestGame
 			}
 		}
 
+		public void ChangePlace(TileObject one, TileObject two)
+		{
+			var onePos = one.Position;
+			var twoPos = two.Position;
+
+			two.SetPosition((int)onePos.X, (int)onePos.Y);
+			one.SetPosition((int)twoPos.X, (int)twoPos.Y);
+
+			_tiles[one.X][one.Y] = two;
+			_tiles[two.X][two.Y] = one;
+		}
+
+		public String FindChain()
+		{
+			var chain = new List<TileObject>();
+
+			var tile = _tiles[0][0];
+
+			this.CheckChain(tile.Type, tile, chain);
+
+			return chain.Count.ToString();
+		}
+
+		public void CheckChain(TileTypes type, TileObject tile, List<TileObject> chain)
+		{
+			foreach (var neir in tile.GetNeighbors())
+			{
+				if (neir.Type == type)
+				{
+					var item = chain.FirstOrDefault(o => o.X == neir.X && o.Y == neir.Y);
+					if (item == null)
+					{
+						chain.Add(neir);
+						this.CheckChain(type, neir, chain);
+					}
+				}
+			}
+		}
+
 		public void SetNeighbors(int x, int y, TileObject obj)
 		{
+			obj.ResetPlace();
+
 			var max = _tiles.Count;
 
 			obj.X = x;

@@ -9,6 +9,7 @@ namespace TestGame
 	{
 		Normal,
 		Focused,
-		Selected
+		Selected,
+		Test
 	}
 }
