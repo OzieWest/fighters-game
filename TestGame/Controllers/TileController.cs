@@ -100,7 +100,7 @@ namespace TestGame.Controllers
 
 		protected TileObject GetRandomTile(Random rnd)
 		{
-			int rInt = rnd.Next(1, 6); // все тайлы, кроме дефолтного
+			int rInt = rnd.Next(1, 8); // все тайлы, кроме дефолтного
 
 			var result = this.CreateTileByType((TileTypes)rInt);
 
@@ -128,6 +128,12 @@ namespace TestGame.Controllers
 				case TileTypes.fifth:
 					fileName = "ntile_4";
 					break;
+				case TileTypes.six:
+					fileName = "ntile_5";
+					break;
+				case TileTypes.seven:
+					fileName = "ntile_6";
+					break;
 			}
 
 			var tex = _content.Load<Texture2D>("set1/" + fileName);
@@ -151,12 +157,10 @@ namespace TestGame.Controllers
 		{
 			this.OtherCheck(isSelect);
 			this.CheckIntersect(gameTime, obj, isSelect);
-
-		}
-
-		public String Find()
-		{
-			return _placeController.FindChain();
+			foreach (var item in _placeController.FindChain())
+			{
+				item.State = TileState.Test;
+			}
 		}
 
 		protected void OtherCheck(Boolean isSelect)

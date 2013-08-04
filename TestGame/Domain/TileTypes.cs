@@ -12,6 +12,8 @@ namespace TestGame.Domain
 		second = 2,
 		third = 3,
 		foth = 4,
-		fifth = 5
+		fifth = 5,
+		six = 6,
+		seven = 7
 	}
 }

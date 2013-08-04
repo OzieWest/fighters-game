@@ -38,15 +38,25 @@ namespace TestGame
 			_tiles[two.X][two.Y] = one;
 		}
 
-		public String FindChain()
+		public List<TileObject> FindChain()
 		{
-			var chain = new List<TileObject>();
+			var mainChain = new List<TileObject>();
 
-			var tile = _tiles[0][0];
+			for (var i = 0; i < _tiles.Count; i++)
+			{
+				for (var j = 0; j < _tiles[i].Count; j++)
+				{
+					var chain = new List<TileObject>();
+					this.CheckChain(_tiles[i][j].Type, _tiles[i][j], chain);
 
-			this.CheckChain(tile.Type, tile, chain);
+					if (chain.Count > 2)
+					{
+						mainChain.AddRange(chain);
+					}
+				}
+			}
 
-			return chain.Count.ToString();
+			return mainChain;
 		}
 
 		public void CheckChain(TileTypes type, TileObject tile, List<TileObject> chain)

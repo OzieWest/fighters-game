@@ -69,7 +69,6 @@ namespace TestGame
 			else
 			{
 				_tileController.Update(gameTime, _cursor, false);
-				output = _tileController.Find();
 			}
 
 			_infoMessage.Update(gameTime, output);

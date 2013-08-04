@@ -21,7 +21,7 @@ namespace TestGame
 			_spriteBatch = spriteBatch;
 			_content = content;
 
-			var texture = content.Load<Texture2D>("back_2");
+			var texture = content.Load<Texture2D>("background");
 			var rectangle = new Rectangle(0, 0, texture.Width, texture.Height);
 
 			var color = new ColorController();
