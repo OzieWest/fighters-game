@@ -25,11 +25,16 @@ namespace TestGame.Domain
 		#endregion
 
 		#region Properties
+		public int X { get; set; }
+		public int Y { get; set; }
 		public TileState State { get; set; }
 		#endregion
 
 		#region Injects
-		public PlaceController Place { get; set; }
+		public TileObject Left { get; set; }
+		public TileObject Top { get; set; }
+		public TileObject Right { get; set; }
+		public TileObject Bottom { get; set; }
 		#endregion
 
 		public TileObject(Texture2D texture, TileTypes type, int frameInterval, int frameOffset)
@@ -42,7 +47,6 @@ namespace TestGame.Domain
 			State = TileState.Normal;
 
 			_rectangle = new Rectangle(0, 0, frameInterval, texture.Height);
-			Place = new PlaceController();
 		}
 
 		public virtual Boolean IsIntersectWith(IPosition obj)
@@ -104,6 +108,30 @@ namespace TestGame.Domain
 					_currentFrame = startFrame;
 				}
 			}
+		}
+
+		public List<TileObject> GetNeighbors()
+		{
+			var result = new List<TileObject>();
+
+			if (Bottom != null)
+			{
+				result.Add(Bottom);
+			}
+			if (Top != null)
+			{
+				result.Add(Top);
+			}
+			if (Right != null)
+			{
+				result.Add(Right);
+			}
+			if (Left != null)
+			{
+				result.Add(Left);
+			}
+
+			return result;
 		}
 	}
 }

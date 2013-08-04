@@ -18,15 +18,21 @@ namespace TestGame.Controllers
 		protected SpriteBatch _spriteBatch;
 		#endregion
 
+		#region Injects
+		protected PlaceController _placeController;
+		#endregion
+
 		public TileController(ContentManager content, SpriteBatch spriteBatch)
 		{
 			_content = content;
 			_spriteBatch = spriteBatch;
 
 			_tiles = new List<List<TileObject>>();
+
+			_placeController = new PlaceController(_tiles);
 		}
 
-		public void SetColors(Color defColor, Color selColor)
+		public void SetColorsOnTiles(Color defColor, Color selColor)
 		{
 			foreach (var row in _tiles)
 			{
@@ -40,8 +46,10 @@ namespace TestGame.Controllers
 		public void Init(int x)
 		{
 			this.CreateGrid(x);
-			this.SearchNeighbors();
-			this.SetColors(Color.White, Color.Gray);
+
+			_placeController.GenerateNeighbors();
+
+			this.SetColorsOnTiles(Color.White, Color.Gray);
 		}
 
 		public void CreateGrid(int x)
@@ -145,6 +153,10 @@ namespace TestGame.Controllers
 							if (cell.IsIntersectWith(obj) && cell.State != TileState.Selected)
 							{
 								cell.State = TileState.Selected;
+								foreach (var item in cell.GetNeighbors())
+								{
+									item.State = TileState.Focused;
+								}
 							}
 							else
 							{
@@ -156,22 +168,6 @@ namespace TestGame.Controllers
 							if (cell.IsIntersectWith(obj) && cell.State != TileState.Selected)
 							{
 								cell.State = TileState.Focused;
-								if (cell.Place.Bottom != null)
-								{
-									cell.Place.Bottom.State = TileState.Focused;
-								}
-								if (cell.Place.Top != null)
-								{
-									cell.Place.Top.State = TileState.Focused;
-								}
-								if (cell.Place.Right != null)
-								{
-									cell.Place.Right.State = TileState.Focused;
-								}
-								if (cell.Place.Left != null)
-								{
-									cell.Place.Left.State = TileState.Focused;
-								}
 							}
 							else if (!cell.IsIntersectWith(obj) && cell.State != TileState.Selected)
 							{
@@ -180,54 +176,6 @@ namespace TestGame.Controllers
 						}
 					}
 				}
-			}
-		}
-
-		protected void SearchNeighbors()
-		{
-			for (var i = 0; i < _tiles.Count; i++)
-			{
-				for (var j = 0; j < _tiles[i].Count; j++)
-				{
-					this.SetNeighbors(i, j, _tiles[i][j]);
-				}
-			}
-		}
-
-		protected void SetNeighbors(int x, int y, TileObject obj)
-		{
-			var tile = obj.Place;
-			var max = _tiles.Count;
-
-			tile.X = x;
-			tile.Y = y;
-
-			if (x > 0)
-			{
-				tile.Left = _tiles[x - 1][y];
-
-				if (x < max - 1)
-				{
-					tile.Right = _tiles[x + 1][y];
-				}
-			}
-			else
-			{
-				tile.Right = _tiles[x + 1][y];
-			}
-
-			if (y > 0)
-			{
-				tile.Top = _tiles[x][y - 1];
-
-				if (y < max - 1)
-				{
-					tile.Bottom = _tiles[x][y + 1];
-				}
-			}
-			else
-			{
-				tile.Bottom = _tiles[x][y + 1];
 			}
 		}
 	}

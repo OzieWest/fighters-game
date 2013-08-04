@@ -8,16 +8,58 @@ namespace TestGame
 {
 	public class PlaceController
 	{
-		#region Properties
-		public int X { get; set; }
-		public int Y { get; set; }
-		#endregion
+		protected List<List<TileObject>> _tiles;
 
-		#region Injects
-		public TileObject Left { get; set; }
-		public TileObject Top { get; set; }
-		public TileObject Right { get; set; }
-		public TileObject Bottom { get; set; }
-		#endregion
+		public PlaceController(List<List<TileObject>> tiles)
+		{
+			_tiles = tiles;
+		}
+
+		public void GenerateNeighbors()
+		{
+			for (var i = 0; i < _tiles.Count; i++)
+			{
+				for (var j = 0; j < _tiles[i].Count; j++)
+				{
+					this.SetNeighbors(i, j, _tiles[i][j]);
+				}
+			}
+		}
+
+		public void SetNeighbors(int x, int y, TileObject obj)
+		{
+			var max = _tiles.Count;
+
+			obj.X = x;
+			obj.Y = y;
+
+			if (x > 0)
+			{
+				obj.Left = _tiles[x - 1][y];
+
+				if (x < max - 1)
+				{
+					obj.Right = _tiles[x + 1][y];
+				}
+			}
+			else
+			{
+				obj.Right = _tiles[x + 1][y];
+			}
+
+			if (y > 0)
+			{
+				obj.Top = _tiles[x][y - 1];
+
+				if (y < max - 1)
+				{
+					obj.Bottom = _tiles[x][y + 1];
+				}
+			}
+			else
+			{
+				obj.Bottom = _tiles[x][y + 1];
+			}
+		}
 	}
 }
