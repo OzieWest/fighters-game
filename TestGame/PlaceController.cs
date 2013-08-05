@@ -8,9 +8,9 @@ namespace TestGame
 {
 	public class PlaceController
 	{
-		protected List<List<TileObject>> _tiles;
+		protected TilesContainer _tiles;
 
-		public PlaceController(List<List<TileObject>> tiles)
+		public PlaceController(TilesContainer tiles)
 		{
 			_tiles = tiles;
 		}

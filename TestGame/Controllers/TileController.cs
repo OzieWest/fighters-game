@@ -13,7 +13,10 @@ namespace TestGame.Controllers
 	public class TileController
 	{
 		#region Values
-		protected List<List<TileObject>> _tiles;
+		protected TilesContainer _tiles;
+
+		protected List<TileObject> _blackList;
+
 		protected ContentManager _content;
 		protected SpriteBatch _spriteBatch;
 		#endregion
@@ -27,30 +30,33 @@ namespace TestGame.Controllers
 			_content = content;
 			_spriteBatch = spriteBatch;
 
-			_tiles = new List<List<TileObject>>();
+			_tiles = new TilesContainer();
 
 			_placeController = new PlaceController(_tiles);
+
+			this.ResetBlackList();
+		}
+
+		public void ResetBlackList()
+		{
+			_blackList = new List<TileObject>();
 		}
 
 		public void SetColorsOnTiles(Color defColor, Color selColor)
 		{
-			foreach (var row in _tiles)
+			foreach (var tile in _tiles.WhichNotNull())
 			{
-				foreach (var cell in row)
-				{
-					cell.SetColors(defColor, selColor);
-				}
+				tile.SetColors(defColor, selColor);
 			}
 		}
 
 		public TileObject GetByState(TileState state)
 		{
-			foreach (var row in _tiles)
+			foreach (var tile in _tiles.WhichNotNull())
 			{
-				foreach (var cell in row)
+				if (tile.State == state)
 				{
-					if (cell.State == state)
-						return cell;
+					return tile;
 				}
 			}
 
@@ -144,22 +150,22 @@ namespace TestGame.Controllers
 
 		public void Draw()
 		{
-			foreach (var row in _tiles)
-			{
-				foreach (var cell in row)
-				{
-					cell.Draw(_spriteBatch);
-				}
-			}
+			_tiles.Draw(_spriteBatch);
 		}
 
 		public void Update(GameTime gameTime, IPosition obj, Boolean isSelect)
 		{
 			this.OtherCheck(isSelect);
+
+			_tiles.Update(gameTime);
+
 			this.CheckIntersect(gameTime, obj, isSelect);
-			foreach (var item in _placeController.FindChain())
+
+			var listDelete = _placeController.FindChain();
+
+			foreach (var tile in listDelete)
 			{
-				item.State = TileState.Test;
+				tile.State = TileState.Test;
 			}
 		}
 
@@ -182,35 +188,30 @@ namespace TestGame.Controllers
 
 		protected void CheckIntersect(GameTime gameTime, IPosition obj, Boolean isSelect)
 		{
-			if (obj != null)
+			foreach (var tile in _tiles.WhichNotNull())
 			{
-				foreach (var row in _tiles)
+				if (obj != null)
 				{
-					foreach (var cell in row)
+					if (isSelect)
 					{
-						cell.Update(gameTime);
-
-						if (isSelect)
+						if (tile.IsIntersectWith(obj) && tile.State != TileState.Selected)
 						{
-							if (cell.IsIntersectWith(obj) && cell.State != TileState.Selected)
-							{
-								cell.State = TileState.Selected;
-							}
-							else
-							{
-								cell.State = TileState.Normal;
-							}
+							tile.State = TileState.Selected;
 						}
 						else
 						{
-							if (cell.IsIntersectWith(obj) && cell.State != TileState.Selected)
-							{
-								cell.State = TileState.Focused;
-							}
-							else if (!cell.IsIntersectWith(obj) && cell.State != TileState.Selected)
-							{
-								cell.State = TileState.Normal;
-							}
+							tile.State = TileState.Normal;
+						}
+					}
+					else
+					{
+						if (tile.IsIntersectWith(obj) && tile.State != TileState.Selected)
+						{
+							tile.State = TileState.Focused;
+						}
+						else if (!tile.IsIntersectWith(obj) && tile.State != TileState.Selected)
+						{
+							tile.State = TileState.Normal;
 						}
 					}
 				}

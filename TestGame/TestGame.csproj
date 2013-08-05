@@ -37,6 +37,8 @@
   <ItemGroup>
     <Compile Include="BackgroundController.cs" />
     <Compile Include="BackgroundTile.cs" />
+    <Compile Include="BlackListController.cs" />
+    <Compile Include="ColumnController.cs" />
     <Compile Include="Controllers\ColorController.cs" />
     <Compile Include="Controllers\TileController.cs" />
     <Compile Include="Domain\TileObject.cs" />
@@ -51,6 +53,7 @@
     <Compile Include="PlaceController.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TilesContainer.cs" />
     <Compile Include="TileState.cs" />
   </ItemGroup>
   <ItemGroup>
