@@ -23,6 +23,43 @@ namespace TestGame
 			get { return List.Count; }
 		}
 
+		public TileObject FirstByState(TileState state)
+		{
+			foreach (var tile in this.WhichNotNull())
+			{
+				if (tile.State == state)
+				{
+					return tile;
+				}
+			}
+
+			return null;
+		}
+
+		public TileObject FirstByPlace(int x, int y)
+		{
+			foreach (var tile in this.WhichNotNull())
+			{
+				if (tile.X == x && tile.Y == y)
+				{
+					return tile;
+				}
+			}
+
+			return null;
+		}
+
+		public IEnumerable<TileObject> AllByState(TileState state)
+		{
+			foreach (var tile in this.WhichNotNull())
+			{
+				if (tile.State == state)
+				{
+					yield return tile;
+				}
+			}
+		}
+
 		public List<TileObject> Column(int x)
 		{
 			var result = new List<TileObject>();

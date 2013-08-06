@@ -54,6 +54,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TilesContainer.cs" />
+    <Compile Include="TilePool.cs" />
     <Compile Include="TileState.cs" />
   </ItemGroup>
   <ItemGroup>

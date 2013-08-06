@@ -157,5 +157,20 @@ namespace TestGame.Domain
 			Right = null;
 			Left = null;
 		}
+
+		public void Erase()
+		{
+			this.ResetPlace();
+
+			X = -1;
+			Y = -1;
+
+			_currentFrame = 0;
+			_timer = 0;
+			_frameInterval = 0;
+			_frameOffset = 0;
+
+			_velocity = Vector2.Zero;
+		}
 	}
 }
