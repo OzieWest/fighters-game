@@ -23,7 +23,7 @@ namespace TestGame.Controllers
 
 		#region Injects
 		protected PlaceController _placeController;
-		protected TilePool _pool;
+		protected TileFactory _factory;
 		#endregion
 
 		public TileController(ContentManager content, SpriteBatch spriteBatch)
@@ -34,7 +34,7 @@ namespace TestGame.Controllers
 			_tiles = new TilesContainer();
 
 			_placeController = new PlaceController(_tiles);
-			_pool = new TilePool(content);
+			_factory = new TileFactory(content);
 
 			this.ResetBlackList();
 		}
@@ -54,8 +54,6 @@ namespace TestGame.Controllers
 
 		public void Init(int x)
 		{
-			_pool.Init(x);
-
 			this.CreateGrid(x);
 
 			_placeController.GenerateNeighbors();
@@ -78,7 +76,7 @@ namespace TestGame.Controllers
 
 				for (var j = 0; j < x; j++)
 				{
-					var cell = _pool.GetRandomTile();
+					var cell = _factory.CreateTile();
 					cell.SetPosition(posX, posY);
 
 					row.Add(cell);
@@ -102,14 +100,23 @@ namespace TestGame.Controllers
 		{
 			_tiles.Update(gameTime);
 
-			this.OtherCheck(isSelect);
+			this.DeleteChains(isSelect);
+
+			this.CreateElement();
 
 			this.CheckIntersect(gameTime, obj, isSelect);
-
-			var listDelete = _placeController.FindChain();
 		}
 
-		protected void OtherCheck(Boolean isSelect)
+		protected void CreateElement()
+		{
+			var delTiles = _tiles.Column(0);
+			if (delTiles.Count != 8)
+			{
+
+			}
+		}
+
+		protected void DeleteChains(Boolean isSelect)
 		{
 			var selected = _tiles.FirstByState(TileState.Selected);
 			var focused = _tiles.FirstByState(TileState.Focused);
@@ -124,6 +131,11 @@ namespace TestGame.Controllers
 					_placeController.GenerateNeighbors();
 				}
 			}
+
+			//foreach (var tile in _placeController.FindChain())
+			//{
+			//	_tiles.RemoveElement(tile);
+			//}
 		}
 
 		protected void CheckIntersect(GameTime gameTime, IPosition obj, Boolean isSelect)
@@ -137,6 +149,7 @@ namespace TestGame.Controllers
 						if (tile.IsIntersectWith(obj) && tile.State != TileState.Selected)
 						{
 							tile.State = TileState.Selected;
+							tile.ToggleCurrentColor();
 						}
 						else
 						{

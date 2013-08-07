@@ -66,7 +66,7 @@ namespace TestGame
 
 			if (x > -1 && x < List.Count - 1)
 			{
-				for (var i = 0; i < List.Count; i++)
+				for (var i = 0; i < List[x].Count; i++)
 				{
 					result.Add(List[x][i]);
 				}
@@ -127,6 +127,21 @@ namespace TestGame
 					return null;
 				}
 			}
+		}
+
+		public Boolean RemoveElement(TileObject tile)
+		{
+			foreach (var row in List)
+			{
+				if (row.Remove(tile))
+				{
+					tile.Dispose();
+
+					return true;
+				}
+			}
+
+			return false;
 		}
 
 		public IEnumerator<TileObject> GetEnumerator()

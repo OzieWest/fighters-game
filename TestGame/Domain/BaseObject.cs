@@ -48,7 +48,7 @@ namespace TestGame.Domain
 
 			_texture = texture;
 
-			this.SetColors(Color.White, Color.Gray);
+			this.SetColors(Color.White, Color.Black);
 		}
 
 		public virtual void SetColors(Color defaultColor, Color selected)

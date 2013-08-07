@@ -11,7 +11,7 @@ using TestGame.Controllers;
 
 namespace TestGame.Domain
 {
-	public class TileObject : BaseObject
+	public class TileObject : BaseObject, IDisposable
 	{
 		#region Values
 		protected int _currentFrame;
@@ -36,6 +36,8 @@ namespace TestGame.Domain
 		public TileObject Right { get; set; }
 		public TileObject Bottom { get; set; }
 		#endregion
+
+		private Boolean disposed = false;
 
 		public TileObject(Texture2D texture, TileTypes type, int frameInterval, int frameOffset)
 			: base(texture)
@@ -165,12 +167,51 @@ namespace TestGame.Domain
 			X = -1;
 			Y = -1;
 
+			this.SetPosition(-100, -100);
+
 			_currentFrame = 0;
 			_timer = 0;
 			_frameInterval = 0;
 			_frameOffset = 0;
 
 			_velocity = Vector2.Zero;
+		}
+
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		protected virtual void Dispose(bool disposing)
+		{
+			if (!disposed)
+			{
+				if (disposing)
+				{
+					this.ResetPlace();
+
+					X = -1;
+					Y = -1;
+
+					this.SetPosition(-100, -100);
+
+					_texture = null;
+				
+					_currentFrame = 0;
+					_timer = 0;
+					_frameInterval = 0;
+					_frameOffset = 0;
+
+					_velocity = Vector2.Zero;
+				}
+				disposed = true;
+			}
+		}
+
+		~TileObject()
+		{
+			Dispose(false);
 		}
 	}
 }
