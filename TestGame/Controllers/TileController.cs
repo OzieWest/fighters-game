@@ -132,10 +132,10 @@ namespace TestGame.Controllers
 				}
 			}
 
-			//foreach (var tile in _placeController.FindChain())
-			//{
-			//	_tiles.RemoveElement(tile);
-			//}
+			foreach (var tile in _placeController.FindChain())
+			{
+				_tiles.RemoveElement(tile);
+			}
 		}
 
 		protected void CheckIntersect(GameTime gameTime, IPosition obj, Boolean isSelect)
@@ -149,7 +149,6 @@ namespace TestGame.Controllers
 						if (tile.IsIntersectWith(obj) && tile.State != TileState.Selected)
 						{
 							tile.State = TileState.Selected;
-							tile.ToggleCurrentColor();
 						}
 						else
 						{

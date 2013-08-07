@@ -53,6 +53,11 @@ namespace TestGame.Domain
 			Text = text;
 		}
 
+		public void Update(GameTime gameTime)
+		{
+			//
+		}
+
 		public void Draw(SpriteBatch spriteBatch)
 		{
 			spriteBatch.DrawString(_font, Text, _position, _color.GetCurrent());

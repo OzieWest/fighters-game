@@ -26,6 +26,7 @@ namespace TestGame
 		MouseObject _cursor;
 
 		MouseState previousMouseState;
+		InputController _inputs;
 		#endregion
 
 		public Game1()
@@ -53,13 +54,18 @@ namespace TestGame
 			_infoMessage.SetPosition(5, 5);
 
 			_cursor = new MouseObject(Content.Load<Texture2D>("cursor"));
+
+			_inputs = new InputController();
 		}
 
 		protected override void Update(GameTime gameTime)
 		{
 			_cursor.Update(gameTime);
 
-			var output = String.Empty;
+			_inputs.Start(Keys.A, delegate() 
+			{
+
+			});
 
 			if (previousMouseState.LeftButton == ButtonState.Released
 			&& Mouse.GetState().LeftButton == ButtonState.Pressed)
@@ -71,9 +77,12 @@ namespace TestGame
 				_tileController.Update(gameTime, _cursor, false);
 			}
 
-			_infoMessage.Update(gameTime, output);
+			_infoMessage.Text = TileObject.Count.ToString();
+
+			_infoMessage.Update(gameTime);
 
 			previousMouseState = Mouse.GetState();
+			_inputs.End();
 
 			base.Update(gameTime);
 		}

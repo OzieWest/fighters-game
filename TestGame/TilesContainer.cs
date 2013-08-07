@@ -136,7 +136,6 @@ namespace TestGame
 				if (row.Remove(tile))
 				{
 					tile.Dispose();
-
 					return true;
 				}
 			}

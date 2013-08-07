@@ -13,6 +13,7 @@ namespace TestGame.Domain
 {
 	public class TileObject : BaseObject, IDisposable
 	{
+		public static int Count;
 		#region Values
 		protected int _currentFrame;
 		protected float _timer;
@@ -42,6 +43,8 @@ namespace TestGame.Domain
 		public TileObject(Texture2D texture, TileTypes type, int frameInterval, int frameOffset)
 			: base(texture)
 		{
+			Count++;
+
 			_frameInterval = frameInterval;
 			_frameOffset = frameOffset;
 			Type = type;
@@ -211,6 +214,7 @@ namespace TestGame.Domain
 
 		~TileObject()
 		{
+			Count--;
 			Dispose(false);
 		}
 	}
