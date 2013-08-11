@@ -11,7 +11,10 @@ namespace TestGame
 		protected KeyboardState _currentState;
 		protected KeyboardState _previousState;
 
-		public void Start(Keys key, Action del)
+		protected MouseState _currentMouseState;
+		protected MouseState _previousMouseState;
+
+		public void isKeyDown(Keys key, Action del)
 		{
 			_currentState = Keyboard.GetState();
 
@@ -19,11 +22,19 @@ namespace TestGame
 			{
 				del.Invoke();
 			}
+
+			_previousState = Keyboard.GetState();
 		}
 
-		public void End()
+		public void isLeftMouseDown(Action del)
 		{
-			_previousState = Keyboard.GetState();
+			if (_previousMouseState.LeftButton == ButtonState.Released
+			&& Mouse.GetState().LeftButton == ButtonState.Pressed)
+			{
+				del.Invoke();
+			}
+
+			_previousMouseState = Mouse.GetState();
 		}
 	}
 }

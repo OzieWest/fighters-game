@@ -23,6 +23,9 @@ namespace TestGame.Domain
 		public TileTypes Type;
 
 		protected Vector2 _velocity;
+		protected Vector2 _destination;
+
+		protected float _speed;
 		#endregion
 
 		#region Properties
@@ -52,6 +55,8 @@ namespace TestGame.Domain
 			State = TileState.Normal;
 
 			_rectangle = new Rectangle(0, 0, frameInterval, texture.Height);
+
+			_speed = 10;
 		}
 
 		public virtual Boolean IsIntersectWith(IPosition obj)
@@ -75,6 +80,12 @@ namespace TestGame.Domain
 			}
 		}
 
+		public virtual void SetDestination(float x, float y)
+		{
+			_destination = new Vector2(x, y);
+			State = TileState.Normal;
+		}
+
 		public void Update(GameTime gameTime)
 		{
 			_rectangle.X = _currentFrame * (int)_frameInterval;
@@ -95,6 +106,40 @@ namespace TestGame.Domain
 					_currentFrame = 0;
 					break;
 			}
+
+			var y = _position.Y - _destination.Y;
+			var x = _position.X - _destination.X;
+
+			var slowSpeed = 1;
+			var speedX = _speed;
+			var speedY = _speed;
+
+			if (Math.Abs(y) < _speed)
+			{
+				speedY = slowSpeed;
+			}
+			if (Math.Abs(x) < _speed)
+			{
+				speedX = slowSpeed;
+			}
+
+			if (y > 0)
+			{
+				_position.Y -= speedY;
+			}
+			else if (y < 0)
+			{
+				_position.Y += speedY;
+			}
+
+			if (x > 0)
+			{
+				_position.X -= speedX;
+			}
+			else if (x < 0)
+			{
+				_position.X += speedX;
+			}
 		}
 
 		public void Update(GameTime gameTime, int x, int y)
@@ -103,7 +148,6 @@ namespace TestGame.Domain
 			this.Update(gameTime);
 		}
 
-		//0, 3
 		public void Animate(GameTime gameTime, int startFrame, int endFrame, int speed)
 		{
 			_timer += (float)gameTime.ElapsedGameTime.TotalMilliseconds / 2;

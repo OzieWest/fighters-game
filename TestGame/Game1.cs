@@ -23,9 +23,10 @@ namespace TestGame
 		TileController _tileController;
 
 		FontObject _infoMessage;
+		ScoreController _scoreController;
+
 		MouseObject _cursor;
 
-		MouseState previousMouseState;
 		InputController _inputs;
 		#endregion
 
@@ -35,23 +36,22 @@ namespace TestGame
 			graphics = new GraphicsDeviceManager(this);
 			Content.RootDirectory = "Content";
 
-			previousMouseState = Mouse.GetState();
-
-			this.SetResoluton(800, 600, false);
+			this.SetResoluton(800, 550, false);
 			this.IsMouseVisible = false;
 		}
 
 		protected override void LoadContent()
 		{
 			spriteBatch = new SpriteBatch(GraphicsDevice);
+			_scoreController = new ScoreController(Content.Load<SpriteFont>("font1"), 100, 200);
 
 			_backController = new BackgroundController(Content, spriteBatch);
 
-			_tileController = new TileController(Content, spriteBatch);
+			_tileController = new TileController(Content, spriteBatch, _scoreController);
 			_tileController.Init(8);
 
 			_infoMessage = new FontObject(Content.Load<SpriteFont>("MainFont"));
-			_infoMessage.SetPosition(5, 5);
+			_infoMessage.SetPosition(5, 500);
 
 			_cursor = new MouseObject(Content.Load<Texture2D>("cursor"));
 
@@ -60,29 +60,38 @@ namespace TestGame
 
 		protected override void Update(GameTime gameTime)
 		{
-			_cursor.Update(gameTime);
+			var wasMouseDown = false;
 
-			_inputs.Start(Keys.A, delegate() 
+			//keyboard================================================
+			_inputs.isKeyDown(Keys.A, delegate() 
 			{
-
+				_tileController._tiles.FirstByState(TileState.Selected).State = TileState.Normal;
 			});
 
-			if (previousMouseState.LeftButton == ButtonState.Released
-			&& Mouse.GetState().LeftButton == ButtonState.Pressed)
+			//mouse===================================================
+			_inputs.isLeftMouseDown(delegate() 
 			{
-				_tileController.Update(gameTime, _cursor, true);
+				wasMouseDown = true;
+			});
+
+			//Update==================================================
+			_cursor.Update(gameTime);
+
+			_tileController.Update(gameTime, _cursor, wasMouseDown);
+
+			var tile = _tileController._tiles.FirstByState(TileState.Focused);
+
+			if (tile != null)
+			{
+				_infoMessage.Text(tile.X + "-" + tile.Y)
+							.AddText("||" + tile.Position.X + "-" + tile.Position.Y);
 			}
 			else
 			{
-				_tileController.Update(gameTime, _cursor, false);
+				_infoMessage.Text("");
 			}
 
-			_infoMessage.Text = TileObject.Count.ToString();
-
-			_infoMessage.Update(gameTime);
-
-			previousMouseState = Mouse.GetState();
-			_inputs.End();
+			_scoreController.Update(80, 60);
 
 			base.Update(gameTime);
 		}
@@ -95,6 +104,7 @@ namespace TestGame
 
 			_backController.Draw();
 			_tileController.Draw();
+			_scoreController.Draw(spriteBatch);
 
 			_infoMessage.Draw(spriteBatch);
 			_cursor.Draw(spriteBatch);

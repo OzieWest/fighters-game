@@ -36,7 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="CloneObject.cs" />
-    <Compile Include="Content\TextureController.cs" />
+    <Compile Include="Controllers\TextureController.cs" />
     <Compile Include="Controllers\BackgroundController.cs" />
     <Compile Include="Domain\BackgroundTile.cs" />
     <Compile Include="Controllers\ColorController.cs" />
@@ -48,11 +48,14 @@
     <Compile Include="Domain\BaseTileObject.cs" />
     <Compile Include="Domain\TileTypes.cs" />
     <Compile Include="Game1.cs" />
+    <Compile Include="GridController.cs" />
     <Compile Include="IColorController.cs" />
+    <Compile Include="InputController.cs" />
     <Compile Include="IPosition.cs" />
     <Compile Include="Controllers\PlaceController.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScoreController.cs" />
     <Compile Include="TilesContainer.cs" />
     <Compile Include="TileFactory.cs" />
     <Compile Include="TileState.cs" />
@@ -79,6 +82,15 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\background.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Background\back1.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Background\back2.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Background\back3.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\cursor.png">
@@ -109,6 +121,9 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <None Include="Content\font1.xnb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Content\MainFont.xnb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

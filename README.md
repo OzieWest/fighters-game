@@ -3,4 +3,4 @@
 
 Тестируем Monogame framework, создаем пробную игру
 
-![Alt text](http://farm3.staticflickr.com/2842/9385050458_be8581dd9c_b.jpg "First screen")
+![Alt text](http://farm8.staticflickr.com/7341/9488547846_5a92a0748b_b.jpg "Second screen")

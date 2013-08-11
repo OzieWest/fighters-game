@@ -14,10 +14,7 @@ namespace TestGame.Domain
 		#region Values
 		protected SpriteFont _font;
 		protected Vector2 _position;
-		#endregion
-
-		#region Property
-		public String Text { get; set; }
+		public String _text;
 		#endregion
 
 		#region Injects
@@ -32,7 +29,7 @@ namespace TestGame.Domain
 			_color = new ColorController();
 			_color.SetColors(Color.Black, Color.Gray);
 
-			Text = String.Empty;
+			_text = String.Empty;
 		}
 
 		public void SetPosition(int x, int y)
@@ -50,17 +47,24 @@ namespace TestGame.Domain
 
 		public void Update(GameTime gameTime, String text)
 		{
-			Text = text;
+			_text = text;
 		}
 
-		public void Update(GameTime gameTime)
+		public FontObject Text(String value)
 		{
-			//
+			_text = value;
+			return this;
+		}
+
+		public FontObject AddText(String value)
+		{
+			_text += value;
+			return this;
 		}
 
 		public void Draw(SpriteBatch spriteBatch)
 		{
-			spriteBatch.DrawString(_font, Text, _position, _color.GetCurrent());
+			spriteBatch.DrawString(_font, _text, _position, _color.GetCurrent());
 		}
 	}
 }

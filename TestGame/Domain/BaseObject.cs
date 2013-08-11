@@ -61,7 +61,7 @@ namespace TestGame.Domain
 			_color.Toggle();
 		}
 
-		public virtual void SetPosition(int x, int y)
+		public virtual void SetPosition(float x, float y)
 		{
 			_position.X = x;
 			_position.Y = y;

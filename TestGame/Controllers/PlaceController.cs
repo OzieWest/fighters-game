@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,7 +22,10 @@ namespace TestGame
 			{
 				for (var j = 0; j < _tiles[i].Count; j++)
 				{
-					this.SetNeighbors(i, j, _tiles[i][j]);
+					if (_tiles[i][j] != null)
+					{
+						this.SetNeighbors(i, j, _tiles[i][j]);
+					}
 				}
 			}
 		}
@@ -31,11 +35,59 @@ namespace TestGame
 			var onePos = one.Position;
 			var twoPos = two.Position;
 
-			two.SetPosition((int)onePos.X, (int)onePos.Y);
-			one.SetPosition((int)twoPos.X, (int)twoPos.Y);
+			two.SetDestination(onePos.X, onePos.Y);
+			one.SetDestination(twoPos.X, twoPos.Y);
 
 			_tiles[one.X][one.Y] = two;
 			_tiles[two.X][two.Y] = one;
+		}
+
+		public void MoveColumns(TileFactory factory, GridController grid)
+		{
+			for (var e = 0; e < _tiles.Count; e++)
+			{
+				var list = _tiles.Column(e);
+
+				for (var i = list.Count - 1; i > -1; i--)
+				{
+					if (list[i] == null)
+					{
+						var nextTile = this.GetNextNotNull(list, i);
+
+						if (nextTile != null)
+						{
+							nextTile.SetDestination(grid[i, e].X, grid[i, e].Y);
+
+							var index = list.IndexOf(nextTile);
+
+							list[index] = null;
+							_tiles[index, e] = null;
+						}
+						else
+						{
+							nextTile = factory.CreateTile();
+							nextTile.SetPosition(-100, -100);
+							nextTile.SetDestination(grid[i, e].X, grid[i, e].Y);
+						}
+
+						list[i] = nextTile;
+						_tiles[i, e] = nextTile;
+					}
+				}
+			}
+		}
+
+		protected TileObject GetNextNotNull(List<TileObject> list, int startIndex)
+		{
+			for (var i = startIndex; i > -1; i--)
+			{
+				if (list[i] != null)
+				{
+					return list[i];
+				}
+			}
+
+			return null;
 		}
 
 		public List<TileObject> FindChain()
@@ -47,11 +99,14 @@ namespace TestGame
 				for (var j = 0; j < _tiles[i].Count; j++)
 				{
 					var chain = new List<TileObject>();
-					this.CheckChain(_tiles[i][j].Type, _tiles[i][j], chain);
-
-					if (chain.Count > 2)
+					if (_tiles[i][j] != null)
 					{
-						mainChain.AddRange(chain);
+						this.CheckChain(_tiles[i][j].Type, _tiles[i][j], chain);
+
+						if (chain.Count > 2)
+						{
+							mainChain.AddRange(chain);
+						}
 					}
 				}
 			}
@@ -86,30 +141,30 @@ namespace TestGame
 
 			if (x > 0)
 			{
-				obj.Left = _tiles[x - 1][y];
+				obj.Top = _tiles[x - 1][y];
 
 				if (x < max - 1)
 				{
-					obj.Right = _tiles[x + 1][y];
+					obj.Bottom = _tiles[x + 1][y];
 				}
 			}
 			else
 			{
-				obj.Right = _tiles[x + 1][y];
+				obj.Bottom = _tiles[x + 1][y];
 			}
 
 			if (y > 0)
 			{
-				obj.Top = _tiles[x][y - 1];
+				obj.Left = _tiles[x][y - 1];
 
 				if (y < max - 1)
 				{
-					obj.Bottom = _tiles[x][y + 1];
+					obj.Right = _tiles[x][y + 1];
 				}
 			}
 			else
 			{
-				obj.Bottom = _tiles[x][y + 1];
+				obj.Right = _tiles[x][y + 1];
 			}
 		}
 	}

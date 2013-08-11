@@ -36,6 +36,17 @@ namespace TestGame
 			return null;
 		}
 
+		public void ChangeState(TileState currentState, TileState newState)
+		{
+			foreach (var tile in this.WhichNotNull())
+			{
+				if (tile.State == currentState)
+				{
+					tile.State = newState;
+				}
+			}
+		}
+
 		public TileObject FirstByPlace(int x, int y)
 		{
 			foreach (var tile in this.WhichNotNull())
@@ -60,15 +71,15 @@ namespace TestGame
 			}
 		}
 
-		public List<TileObject> Column(int x)
+		public List<TileObject> Column(int index)
 		{
 			var result = new List<TileObject>();
 
-			if (x > -1 && x < List.Count - 1)
+			if (index > -1 && index <= List.Count - 1)
 			{
-				for (var i = 0; i < List[x].Count; i++)
+				foreach (var tile in List)
 				{
-					result.Add(List[x][i]);
+					result.Add(tile[index]);
 				}
 			}
 			else
@@ -133,8 +144,11 @@ namespace TestGame
 		{
 			foreach (var row in List)
 			{
-				if (row.Remove(tile))
+				var index = row.IndexOf(tile);
+
+				if (index > -1)
 				{
+					row[index] = null;
 					tile.Dispose();
 					return true;
 				}

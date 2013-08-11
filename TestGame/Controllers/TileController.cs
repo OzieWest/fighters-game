@@ -12,36 +12,30 @@ namespace TestGame.Controllers
 {
 	public class TileController
 	{
-		#region Values
-		protected TilesContainer _tiles;
-
-		protected List<TileObject> _blackList;
-
-		protected ContentManager _content;
-		protected SpriteBatch _spriteBatch;
-		#endregion
-
+		//todo: public while testing 
 		#region Injects
-		protected PlaceController _placeController;
-		protected TileFactory _factory;
+		public ScoreController _score;
+		public SpriteBatch _spriteBatch;
+		public ContentManager _content;
+		#endregion Values
+
+		#region Values
+		public TilesContainer _tiles;
+		public PlaceController _placeController;
+		public TileFactory _factory;
+		public GridController _grid;
 		#endregion
 
-		public TileController(ContentManager content, SpriteBatch spriteBatch)
+		public TileController(ContentManager content, SpriteBatch spriteBatch, ScoreController score)
 		{
 			_content = content;
 			_spriteBatch = spriteBatch;
+			_score = score;
 
 			_tiles = new TilesContainer();
 
 			_placeController = new PlaceController(_tiles);
 			_factory = new TileFactory(content);
-
-			this.ResetBlackList();
-		}
-
-		public void ResetBlackList()
-		{
-			_blackList = new List<TileObject>();
 		}
 
 		public void SetColorsOnTiles(Color defColor, Color selColor)
@@ -54,6 +48,8 @@ namespace TestGame.Controllers
 
 		public void Init(int x)
 		{
+			_grid = new GridController(x);
+
 			this.CreateGrid(x);
 
 			_placeController.GenerateNeighbors();
@@ -63,31 +59,20 @@ namespace TestGame.Controllers
 
 		public void CreateGrid(int x)
 		{
-			var constPosX = 135;
-			var constPosY = 40;
-			var step = 60 + 5;
-
-			var posX = constPosX;
-			var posY = constPosY;
-
 			for (var i = 0; i < x; i++)
 			{
 				var row = new List<TileObject>();
 
 				for (var j = 0; j < x; j++)
 				{
+					var pos = _grid[i, j];
 					var cell = _factory.CreateTile();
-					cell.SetPosition(posX, posY);
+					cell.SetDestination(pos.X, pos.Y);
 
 					row.Add(cell);
-
-					posX += step;
 				}
 
 				_tiles.Add(row);
-
-				posX = constPosX;
-				posY += step;
 			}
 		}
 
@@ -99,21 +84,11 @@ namespace TestGame.Controllers
 		public void Update(GameTime gameTime, IPosition obj, Boolean isSelect)
 		{
 			_tiles.Update(gameTime);
-
 			this.DeleteChains(isSelect);
-
-			this.CreateElement();
-
 			this.CheckIntersect(gameTime, obj, isSelect);
-		}
 
-		protected void CreateElement()
-		{
-			var delTiles = _tiles.Column(0);
-			if (delTiles.Count != 8)
-			{
-
-			}
+			_placeController.MoveColumns(_factory, _grid);
+			_placeController.GenerateNeighbors();
 		}
 
 		protected void DeleteChains(Boolean isSelect)
@@ -129,12 +104,19 @@ namespace TestGame.Controllers
 				{
 					_placeController.ChangePlace(selected, focused);
 					_placeController.GenerateNeighbors();
+					_score.Down();
 				}
 			}
 
-			foreach (var tile in _placeController.FindChain())
+			if (_placeController.FindChain().Count > 0)
 			{
-				_tiles.RemoveElement(tile);
+				foreach (var tile in _placeController.FindChain())
+				{
+					if (_tiles.RemoveElement(tile))
+					{
+						_score.Up();
+					}
+				}
 			}
 		}
 
