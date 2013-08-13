@@ -22,8 +22,6 @@ namespace TestGame
 			{
 				del.Invoke();
 			}
-
-			_previousState = Keyboard.GetState();
 		}
 
 		public void isLeftMouseDown(Action del)
@@ -35,6 +33,11 @@ namespace TestGame
 			}
 
 			_previousMouseState = Mouse.GetState();
+		}
+
+		public void End()
+		{
+			_previousState = Keyboard.GetState();
 		}
 	}
 }

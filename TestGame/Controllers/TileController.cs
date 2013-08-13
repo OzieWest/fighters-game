@@ -59,6 +59,9 @@ namespace TestGame.Controllers
 
 		public void CreateGrid(int x)
 		{
+			var startPos = -50;
+			var stepPos = -50;
+
 			for (var i = 0; i < x; i++)
 			{
 				var row = new List<TileObject>();
@@ -67,10 +70,13 @@ namespace TestGame.Controllers
 				{
 					var pos = _grid[i, j];
 					var cell = _factory.CreateTile();
-					cell.SetDestination(pos.X, pos.Y);
+					cell.SetPosition(pos.X, startPos);
+					cell.MoveTo(pos.X, pos.Y);
 
 					row.Add(cell);
 				}
+
+				startPos += stepPos;
 
 				_tiles.Add(row);
 			}
@@ -84,38 +90,48 @@ namespace TestGame.Controllers
 		public void Update(GameTime gameTime, IPosition obj, Boolean isSelect)
 		{
 			_tiles.Update(gameTime);
-			this.DeleteChains(isSelect);
-			this.CheckIntersect(gameTime, obj, isSelect);
 
-			_placeController.MoveColumns(_factory, _grid);
-			_placeController.GenerateNeighbors();
+			this.ChangeTwoElemnts(isSelect);
+
+			if (_placeController.IsMoveComplete())
+			{
+				this.DeleteChains();
+				this.CheckIntersect(gameTime, obj, isSelect);
+				_placeController.MoveColumns(_factory, _grid);
+				_placeController.GenerateNeighbors();
+			}
 		}
 
-		protected void DeleteChains(Boolean isSelect)
+		public void DeleteChains()
+		{
+			var list = _placeController.FindChain();
+
+			if (list.Count > 0)
+			{
+				foreach (var tile in list)
+				{
+					if (_tiles.RemoveElement(tile))
+					{
+						_score.Down();
+					}
+				}
+			}
+		}
+
+		public void ChangeTwoElemnts(Boolean isSelect)
 		{
 			var selected = _tiles.FirstByState(TileState.Selected);
 			var focused = _tiles.FirstByState(TileState.Focused);
 
 			if (selected != null && focused != null && !selected.IsSame(focused))
 			{
-				var neighbor = selected.GetNeighbors().SingleOrDefault(o => o == focused);
+				var neighbor = selected.Neighbors.GetAll().SingleOrDefault(o => o == focused); //todo: возможно стоит перенести в класс Neibors
 
 				if (isSelect && neighbor != null)
 				{
 					_placeController.ChangePlace(selected, focused);
 					_placeController.GenerateNeighbors();
-					_score.Down();
-				}
-			}
-
-			if (_placeController.FindChain().Count > 0)
-			{
-				foreach (var tile in _placeController.FindChain())
-				{
-					if (_tiles.RemoveElement(tile))
-					{
-						_score.Up();
-					}
+					selected.State = TileState.Normal;
 				}
 			}
 		}
@@ -128,7 +144,7 @@ namespace TestGame.Controllers
 				{
 					if (isSelect)
 					{
-						if (tile.IsIntersectWith(obj) && tile.State != TileState.Selected)
+						if (tile.IsIntersect(obj) && tile.State != TileState.Selected)
 						{
 							tile.State = TileState.Selected;
 						}
@@ -139,11 +155,11 @@ namespace TestGame.Controllers
 					}
 					else
 					{
-						if (tile.IsIntersectWith(obj) && tile.State != TileState.Selected)
+						if (tile.IsIntersect(obj) && tile.State != TileState.Selected)
 						{
 							tile.State = TileState.Focused;
 						}
-						else if (!tile.IsIntersectWith(obj) && tile.State != TileState.Selected)
+						else if (!tile.IsIntersect(obj) && tile.State != TileState.Selected)
 						{
 							tile.State = TileState.Normal;
 						}

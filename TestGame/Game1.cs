@@ -43,7 +43,7 @@ namespace TestGame
 		protected override void LoadContent()
 		{
 			spriteBatch = new SpriteBatch(GraphicsDevice);
-			_scoreController = new ScoreController(Content.Load<SpriteFont>("font1"), 100, 200);
+			_scoreController = new ScoreController(Content.Load<SpriteFont>("font1"), 1, 2);
 
 			_backController = new BackgroundController(Content, spriteBatch);
 
@@ -62,37 +62,39 @@ namespace TestGame
 		{
 			var wasMouseDown = false;
 
-			//keyboard================================================
-			_inputs.isKeyDown(Keys.A, delegate() 
-			{
-				_tileController._tiles.FirstByState(TileState.Selected).State = TileState.Normal;
-			});
-
 			//mouse===================================================
-			_inputs.isLeftMouseDown(delegate() 
+			_inputs.isLeftMouseDown(delegate()
 			{
 				wasMouseDown = true;
+			});
+
+			//keyboard================================================
+			_inputs.isKeyDown(Keys.A, delegate()
+			{
+				_tileController.DeleteChains();
+			});
+
+			//keyboard================================================
+			_inputs.isKeyDown(Keys.S, delegate()
+			{
+				var list = _tileController._placeController.FindChain();
+				if (list != null && list.Count > 0)
+				{
+					foreach (var t in list)
+					{
+						t.SetColors(Color.DarkRed, Color.DarkRed);
+					}
+				}
 			});
 
 			//Update==================================================
 			_cursor.Update(gameTime);
 
-			_tileController.Update(gameTime, _cursor, wasMouseDown);
-
-			var tile = _tileController._tiles.FirstByState(TileState.Focused);
-
-			if (tile != null)
-			{
-				_infoMessage.Text(tile.X + "-" + tile.Y)
-							.AddText("||" + tile.Position.X + "-" + tile.Position.Y);
-			}
-			else
-			{
-				_infoMessage.Text("");
-			}
+			_tileController.Update(gameTime, _cursor.Position, wasMouseDown);
 
 			_scoreController.Update(80, 60);
 
+			_inputs.End();
 			base.Update(gameTime);
 		}
 

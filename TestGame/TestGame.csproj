@@ -47,18 +47,22 @@
     <Compile Include="Domain\FontObject.cs" />
     <Compile Include="Domain\BaseTileObject.cs" />
     <Compile Include="Domain\TileTypes.cs" />
+    <Compile Include="Frame.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="GridController.cs" />
     <Compile Include="IColorController.cs" />
     <Compile Include="InputController.cs" />
     <Compile Include="IPosition.cs" />
     <Compile Include="Controllers\PlaceController.cs" />
+    <Compile Include="Position.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScoreController.cs" />
+    <Compile Include="TileNeighbor.cs" />
     <Compile Include="TilesContainer.cs" />
     <Compile Include="TileFactory.cs" />
     <Compile Include="TileState.cs" />
+    <Compile Include="TileClass.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="OpenTK">
@@ -115,6 +119,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\set1\ntile_6.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\set1\ntile_7.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Icon.ico" />

@@ -22,7 +22,7 @@ namespace TestGame
 
 			_firstLaunch = true;
 
-			_score = 0;
+			_score = 1000;
 			_step = step;
 			_penalty = penalty;
 		}
@@ -43,7 +43,7 @@ namespace TestGame
 
 			if (_firstLaunch)
 			{
-				_score = 0;
+				_score = 1000;
 				_firstLaunch = false;
 			}
 

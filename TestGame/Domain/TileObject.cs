@@ -13,64 +13,35 @@ namespace TestGame.Domain
 {
 	public class TileObject : BaseObject, IDisposable
 	{
-		public static int Count;
-		#region Values
-		protected int _currentFrame;
-		protected float _timer;
-		protected float _frameInterval;
-		protected int _frameOffset;
-
-		public TileTypes Type;
-
-		protected Vector2 _velocity;
-		protected Vector2 _destination;
-
-		protected float _speed;
-		#endregion
-
-		#region Properties
-		public int X { get; set; }
-		public int Y { get; set; }
+		public int GridX { get; set; }
+		public int GridY { get; set; }
 		public TileState State { get; set; }
-		#endregion
-
-		#region Injects
-		public TileObject Left { get; set; }
-		public TileObject Top { get; set; }
-		public TileObject Right { get; set; }
-		public TileObject Bottom { get; set; }
-		#endregion
+		public TileNeighbor Neighbors { get; set; }
 
 		private Boolean disposed = false;
 
 		public TileObject(Texture2D texture, TileTypes type, int frameInterval, int frameOffset)
 			: base(texture)
 		{
-			Count++;
+			Neighbors = new TileNeighbor();
 
-			_frameInterval = frameInterval;
-			_frameOffset = frameOffset;
-			Type = type;
+			_frame.Interval = frameInterval;
+			_frame.Offset = frameOffset;
+
+			Class.Type = type;
 
 			State = TileState.Normal;
 
-			_rectangle = new Rectangle(0, 0, frameInterval, texture.Height);
-
-			_speed = 10;
+			Position.Rectangle = new Rectangle(0, 0, frameInterval, texture.Height);
+			Position.Speed = 10;
 		}
 
-		public virtual Boolean IsIntersectWith(IPosition obj)
+		public virtual Boolean IsIntersect(IPosition obj)
 		{
-			var objX = obj.Position.X;
-			var objY = obj.Position.Y;
-
-			var thisX = _position.X;
-			var thisY = _position.Y;
-
-			if (objX > (thisX + _frameOffset) &&
-				objX < (thisX + _frameInterval) - _frameOffset &&
-				objY > (thisY + _frameOffset) &&
-				objY < (thisY + _frameInterval) - _frameOffset)
+			if (obj.X > (this.Position.X + _frame.Offset) &&
+				obj.X < (this.Position.X + _frame.Interval) - _frame.Offset &&
+				obj.Y > (this.Position.Y + _frame.Offset) &&
+				obj.Y < (this.Position.Y + _frame.Interval) - _frame.Offset)
 			{
 				return true;
 			}
@@ -80,16 +51,16 @@ namespace TestGame.Domain
 			}
 		}
 
-		public virtual void SetDestination(float x, float y)
+		public virtual void MoveTo(float x, float y)
 		{
-			_destination = new Vector2(x, y);
-			State = TileState.Normal;
+			Position.toX = x;
+			Position.toY = y;
 		}
 
-		public void Update(GameTime gameTime)
+		public virtual void Update(GameTime gameTime)
 		{
-			_rectangle.X = _currentFrame * (int)_frameInterval;
-			_rectangle.Y = 0;
+			Position.rX = _frame.Current * (int)_frame.Interval;
+			Position.rY = 0;
 
 			switch (State)
 			{
@@ -103,69 +74,63 @@ namespace TestGame.Domain
 					Animate(gameTime, 0, 4, 2);
 					break;
 				default:
-					_currentFrame = 0;
+					_frame.Current = 0;
 					break;
 			}
 
-			var y = _position.Y - _destination.Y;
-			var x = _position.X - _destination.X;
+			var x = Position.X - Position.toX;
+			var y = Position.Y - Position.toY;
 
 			var slowSpeed = 1;
-			var speedX = _speed;
-			var speedY = _speed;
+			var speedX = Position.Speed;
+			var speedY = Position.Speed;
 
-			if (Math.Abs(y) < _speed)
+			if (Math.Abs(y) < Position.Speed)
 			{
 				speedY = slowSpeed;
 			}
-			if (Math.Abs(x) < _speed)
+			if (Math.Abs(x) < Position.Speed)
 			{
 				speedX = slowSpeed;
 			}
 
 			if (y > 0)
 			{
-				_position.Y -= speedY;
+				Position.Y -= speedY;
 			}
 			else if (y < 0)
 			{
-				_position.Y += speedY;
+				Position.Y += speedY;
 			}
 
 			if (x > 0)
 			{
-				_position.X -= speedX;
+				Position.X -= speedX;
 			}
 			else if (x < 0)
 			{
-				_position.X += speedX;
+				Position.X += speedX;
 			}
 		}
 
-		public void Update(GameTime gameTime, int x, int y)
+		public virtual void Animate(GameTime gameTime, int startFrame, int endFrame, int speed)
 		{
-			this.SetPosition(x, y);
-			this.Update(gameTime);
-		}
-
-		public void Animate(GameTime gameTime, int startFrame, int endFrame, int speed)
-		{
-			_timer += (float)gameTime.ElapsedGameTime.TotalMilliseconds / 2;
-			if (_timer > _frameInterval / speed)
+			_frame.Timer += (float)gameTime.ElapsedGameTime.TotalMilliseconds / 2;
+			if (_frame.Timer > _frame.Interval / speed)
 			{
-				_currentFrame++;
-				_timer = 0;
-				if (_currentFrame > endFrame)
+				_frame.Current++;
+				_frame.Timer = 0;
+				if (_frame.Current > endFrame)
 				{
-					_currentFrame = startFrame;
+					_frame.Current = startFrame;
 				}
 			}
 		}
 
-		public Boolean IsSame(TileObject obj)
+		public virtual Boolean IsSame(TileObject obj)
 		{
-			if (this.X == obj.X &&
-				this.Y == obj.Y &&
+			if (this.GridX == obj.GridX &&
+				this.GridY == obj.GridY &&
 				this.Position.X == obj.Position.X &&
 				this.Position.Y == obj.Position.Y)
 			{
@@ -175,55 +140,19 @@ namespace TestGame.Domain
 			return false;
 		}
 
-		public List<TileObject> GetNeighbors()
+		public virtual void Default()
 		{
-			var result = new List<TileObject>();
+			Neighbors.Null();
 
-			if (Bottom != null)
-			{
-				result.Add(Bottom);
-			}
-			if (Top != null)
-			{
-				result.Add(Top);
-			}
-			if (Right != null)
-			{
-				result.Add(Right);
-			}
-			if (Left != null)
-			{
-				result.Add(Left);
-			}
-
-			return result;
-		}
-
-		public void ResetPlace()
-		{
-			Bottom = null;
-			Top = null;
-			Right = null;
-			Left = null;
-		}
-
-		public void Erase()
-		{
-			this.ResetPlace();
-
-			X = -1;
-			Y = -1;
+			GridX = -1;
+			GridY = -1;
 
 			this.SetPosition(-100, -100);
 
-			_currentFrame = 0;
-			_timer = 0;
-			_frameInterval = 0;
-			_frameOffset = 0;
-
-			_velocity = Vector2.Zero;
+			_frame.DefaultValue();
 		}
 
+		#region Dispose
 		public void Dispose()
 		{
 			Dispose(true);
@@ -236,21 +165,13 @@ namespace TestGame.Domain
 			{
 				if (disposing)
 				{
-					this.ResetPlace();
-
-					X = -1;
-					Y = -1;
-
+					GridX = -1;
+					GridY = -1;
 					this.SetPosition(-100, -100);
 
-					_texture = null;
-				
-					_currentFrame = 0;
-					_timer = 0;
-					_frameInterval = 0;
-					_frameOffset = 0;
-
-					_velocity = Vector2.Zero;
+					Neighbors = null;
+					Class = null;
+					_frame = null;
 				}
 				disposed = true;
 			}
@@ -258,8 +179,8 @@ namespace TestGame.Domain
 
 		~TileObject()
 		{
-			Count--;
 			Dispose(false);
 		}
+		#endregion
 	}
 }

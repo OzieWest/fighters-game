@@ -36,7 +36,7 @@ namespace TestGame
 
 		public TileObject CreateTile()
 		{
-			int rInt = _rnd.Next(1, 8); // все тайлы, кроме дефолтного
+			int rInt = _rnd.Next(1, 9); // все тайлы, кроме дефолтного
 
 			var result = this.CreateTileByType((TileTypes)rInt);
 

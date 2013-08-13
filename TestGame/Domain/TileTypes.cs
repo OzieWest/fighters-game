@@ -14,6 +14,7 @@ namespace TestGame.Domain
 		foth = 4,
 		fifth = 5,
 		six = 6,
-		seven = 7
+		seven = 7,
+		eight = 8
 	}
 }

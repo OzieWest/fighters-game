@@ -35,11 +35,11 @@ namespace TestGame
 			var onePos = one.Position;
 			var twoPos = two.Position;
 
-			two.SetDestination(onePos.X, onePos.Y);
-			one.SetDestination(twoPos.X, twoPos.Y);
+			two.MoveTo(onePos.X, onePos.Y);
+			one.MoveTo(twoPos.X, twoPos.Y);
 
-			_tiles[one.X][one.Y] = two;
-			_tiles[two.X][two.Y] = one;
+			_tiles[one.GridX][one.GridY] = two;
+			_tiles[two.GridX][two.GridY] = one;
 		}
 
 		public void MoveColumns(TileFactory factory, GridController grid)
@@ -56,22 +56,22 @@ namespace TestGame
 
 						if (nextTile != null)
 						{
-							nextTile.SetDestination(grid[i, e].X, grid[i, e].Y);
+							nextTile.MoveTo(grid[i, e].X, grid[i, e].Y);
 
 							var index = list.IndexOf(nextTile);
 
 							list[index] = null;
-							_tiles[index, e] = null;
+							_tiles[index][e] = null;
 						}
 						else
 						{
 							nextTile = factory.CreateTile();
-							nextTile.SetPosition(-100, -100);
-							nextTile.SetDestination(grid[i, e].X, grid[i, e].Y);
+							nextTile.SetPosition(grid[i, e].X, -100);
+							nextTile.MoveTo(grid[i, e].X, grid[i, e].Y);
 						}
 
 						list[i] = nextTile;
-						_tiles[i, e] = nextTile;
+						_tiles[i][e] = nextTile;
 					}
 				}
 			}
@@ -101,7 +101,7 @@ namespace TestGame
 					var chain = new List<TileObject>();
 					if (_tiles[i][j] != null)
 					{
-						this.CheckChain(_tiles[i][j].Type, _tiles[i][j], chain);
+						this.CheckChain(_tiles[i][j].Class.Type, _tiles[i][j], chain);
 
 						if (chain.Count > 2)
 						{
@@ -114,17 +114,29 @@ namespace TestGame
 			return mainChain;
 		}
 
+		public Boolean IsMoveComplete()
+		{
+			foreach (var tile in _tiles)
+			{
+				if (!tile.Position.IsMoveComplete())
+					return false;
+			}
+
+			return true;
+		}
+
 		public void CheckChain(TileTypes type, TileObject tile, List<TileObject> chain)
 		{
-			foreach (var neir in tile.GetNeighbors())
+			foreach (var elm in tile.Neighbors.GetAll())
 			{
-				if (neir.Type == type)
+				if (elm.Class.Type == type)
 				{
-					var item = chain.FirstOrDefault(o => o.X == neir.X && o.Y == neir.Y);
+					var item = chain.FirstOrDefault(o => o.GridX == elm.GridX && o.GridY == elm.GridY);
+
 					if (item == null)
 					{
-						chain.Add(neir);
-						this.CheckChain(type, neir, chain);
+						chain.Add(elm);
+						this.CheckChain(type, elm, chain);
 					}
 				}
 			}
@@ -132,39 +144,37 @@ namespace TestGame
 
 		public void SetNeighbors(int x, int y, TileObject obj)
 		{
-			obj.ResetPlace();
+			obj.GridX = x;
+			obj.GridY = y;
+
+			var neighbors = obj.Neighbors;
+			neighbors.Null();
 
 			var max = _tiles.Count;
-
-			obj.X = x;
-			obj.Y = y;
-
 			if (x > 0)
 			{
-				obj.Top = _tiles[x - 1][y];
-
+				neighbors.T = _tiles[x - 1][y];
 				if (x < max - 1)
 				{
-					obj.Bottom = _tiles[x + 1][y];
+					neighbors.B = _tiles[x + 1][y];
 				}
 			}
 			else
 			{
-				obj.Bottom = _tiles[x + 1][y];
+				neighbors.B = _tiles[x + 1][y];
 			}
 
 			if (y > 0)
 			{
-				obj.Left = _tiles[x][y - 1];
-
+				neighbors.L = _tiles[x][y - 1];
 				if (y < max - 1)
 				{
-					obj.Right = _tiles[x][y + 1];
+					neighbors.R = _tiles[x][y + 1];
 				}
 			}
 			else
 			{
-				obj.Right = _tiles[x][y + 1];
+				neighbors.R = _tiles[x][y + 1];
 			}
 		}
 	}

@@ -39,6 +39,7 @@ namespace TestGame.Content
 			_textures[TileTypes.fifth] = _contentManager.Load<Texture2D>(folder + "/" + "ntile_4");
 			_textures[TileTypes.six] = _contentManager.Load<Texture2D>(folder + "/" + "ntile_5");
 			_textures[TileTypes.seven] = _contentManager.Load<Texture2D>(folder + "/" + "ntile_6");
+			_textures[TileTypes.eight] = _contentManager.Load<Texture2D>(folder + "/" + "ntile_7");
 		}
 
 		public Texture2D GetTextureByType(TileTypes type)

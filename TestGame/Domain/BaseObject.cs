@@ -8,47 +8,32 @@ using TestGame.Controllers;
 
 namespace TestGame.Domain
 {
-	public class BaseObject : IPosition
+	public class BaseObject
 	{
-		#region Values
-		protected Rectangle _rectangle;
-		protected Vector2 _position;
-		protected Vector2 _originalPosition;
-		protected Texture2D _texture;
-		#endregion
-
-		#region Property
-		public Vector2 Position
-		{
-			get
-			{
-				return _position;
-			}
-		}
-		public Rectangle Rectangle
-		{
-			get
-			{
-				return _rectangle;
-			}
-		}
-		#endregion
-
 		#region Injects
+		public Position Position { get; set; }
+		public TileClass Class { get; set; }
+		protected Frame _frame;
+
 		protected IColorController _color;
 		#endregion
 
 		public BaseObject(Texture2D texture)
 		{
+			Position = new Position()
+			{
+				Real = new Vector2(0, 0)
+			};
+
+			Class = new TileClass() 
+			{
+				Texture = texture
+			};
+
+			_frame = new Frame();
+
 			_color = new ColorController();
-
-			_originalPosition = new Vector2();
-
-			_position = new Vector2(0, 0);
-
-			_texture = texture;
-
-			this.SetColors(Color.White, Color.Black);
+			_color.SetColors(Color.White, Color.Black);
 		}
 
 		public virtual void SetColors(Color defaultColor, Color selected)
@@ -63,13 +48,13 @@ namespace TestGame.Domain
 
 		public virtual void SetPosition(float x, float y)
 		{
-			_position.X = x;
-			_position.Y = y;
+			Position.X = x;
+			Position.Y = y;
 		}
 
 		public virtual void Draw(SpriteBatch spriteBatch)
 		{
-			spriteBatch.Draw(_texture, _position, _rectangle, _color.GetCurrent(), 0f, _originalPosition, 1.0f, SpriteEffects.None, 0);
+			spriteBatch.Draw(Class.Texture, Position.Real, Position.Rectangle, _color.GetCurrent(), 0f, Position.Original, 1.0f, SpriteEffects.None, 0);
 		}
 	}
 }
