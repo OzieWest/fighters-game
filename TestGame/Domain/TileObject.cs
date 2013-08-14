@@ -57,26 +57,36 @@ namespace TestGame.Domain
 			Position.toY = y;
 		}
 
+		public Boolean IsMoveComplete()
+		{
+			return Position.IsMoveComplete();
+		}
+
+		protected virtual void Animation(GameTime gameTime)
+		{
+			switch (State)
+			{
+				case TileState.Focused:
+					_frame.Animate(gameTime, 0, 4, 2);
+					break;
+				case TileState.Selected:
+					_frame.Animate(gameTime, 5, 9, 2);
+					break;
+				case TileState.Test:
+					_frame.Animate(gameTime, 0, 4, 2);
+					break;
+				default:
+					_frame.ResetCurrent();
+					break;
+			}
+		}
+
 		public virtual void Update(GameTime gameTime)
 		{
 			Position.rX = _frame.Current * (int)_frame.Interval;
 			Position.rY = 0;
 
-			switch (State)
-			{
-				case TileState.Focused:
-					Animate(gameTime, 0, 4, 2);
-					break;
-				case TileState.Selected:
-					Animate(gameTime, 5, 9, 2);
-					break;
-				case TileState.Test:
-					Animate(gameTime, 0, 4, 2);
-					break;
-				default:
-					_frame.Current = 0;
-					break;
-			}
+			this.Animation(gameTime);
 
 			var x = Position.X - Position.toX;
 			var y = Position.Y - Position.toY;
@@ -110,20 +120,6 @@ namespace TestGame.Domain
 			else if (x < 0)
 			{
 				Position.X += speedX;
-			}
-		}
-
-		public virtual void Animate(GameTime gameTime, int startFrame, int endFrame, int speed)
-		{
-			_frame.Timer += (float)gameTime.ElapsedGameTime.TotalMilliseconds / 2;
-			if (_frame.Timer > _frame.Interval / speed)
-			{
-				_frame.Current++;
-				_frame.Timer = 0;
-				if (_frame.Current > endFrame)
-				{
-					_frame.Current = startFrame;
-				}
 			}
 		}
 

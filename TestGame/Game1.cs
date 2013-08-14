@@ -43,7 +43,8 @@ namespace TestGame
 		protected override void LoadContent()
 		{
 			spriteBatch = new SpriteBatch(GraphicsDevice);
-			_scoreController = new ScoreController(Content.Load<SpriteFont>("font1"), 1, 2);
+			_scoreController = new ScoreController(Content.Load<Texture2D>("plus"), Content.Load<SpriteFont>("font1"), 1, 2)
+								.SetMessagePosition(50, 50);
 
 			_backController = new BackgroundController(Content, spriteBatch);
 
@@ -71,20 +72,13 @@ namespace TestGame
 			//keyboard================================================
 			_inputs.isKeyDown(Keys.A, delegate()
 			{
-				_tileController.DeleteChains();
+				//
 			});
 
 			//keyboard================================================
 			_inputs.isKeyDown(Keys.S, delegate()
 			{
-				var list = _tileController._placeController.FindChain();
-				if (list != null && list.Count > 0)
-				{
-					foreach (var t in list)
-					{
-						t.SetColors(Color.DarkRed, Color.DarkRed);
-					}
-				}
+				//
 			});
 
 			//Update==================================================
@@ -92,7 +86,7 @@ namespace TestGame
 
 			_tileController.Update(gameTime, _cursor.Position, wasMouseDown);
 
-			_scoreController.Update(80, 60);
+			_scoreController.Update(gameTime, _cursor.Position.X, _cursor.Position.Y);
 
 			_inputs.End();
 			base.Update(gameTime);

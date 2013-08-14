@@ -47,6 +47,7 @@
     <Compile Include="Domain\FontObject.cs" />
     <Compile Include="Domain\BaseTileObject.cs" />
     <Compile Include="Domain\TileTypes.cs" />
+    <Compile Include="EnemyController.cs" />
     <Compile Include="Frame.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="GridController.cs" />
@@ -59,6 +60,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScoreController.cs" />
     <Compile Include="TileNeighbor.cs" />
+    <Compile Include="TilePool.cs" />
     <Compile Include="TilesContainer.cs" />
     <Compile Include="TileFactory.cs" />
     <Compile Include="TileState.cs" />
@@ -98,6 +100,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\cursor.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\plus.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\santa.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\set1\ntile_0.png">

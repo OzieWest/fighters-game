@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,8 +17,15 @@ namespace TestGame
 		protected int _penalty;
 		protected Boolean _firstLaunch;
 
-		public ScoreController(SpriteFont font, int step, int penalty)
+		protected TilePool _tiles;
+
+		public float X { get; set; }
+		public float Y { get; set; }
+
+		public ScoreController(Texture2D texture, SpriteFont font, int step, int penalty)
 		{
+			_tiles = new TilePool(texture, 20);
+
 			_message = new FontObject(font);
 
 			_firstLaunch = true;
@@ -32,26 +40,33 @@ namespace TestGame
 			_score += _step;
 		}
 
-		public void Down()
+		public void Down(float x, float y)
 		{
 			_score -= _penalty;
+			_tiles.Take(x, y, _message.X, _message.Y);
 		}
 
-		public void Update(int x, int y)
+		public ScoreController SetMessagePosition(int x, int y)
 		{
 			_message.SetPosition(x, y);
 
-			if (_firstLaunch)
-			{
-				_score = 1000;
-				_firstLaunch = false;
-			}
+			return this;
+		}
+
+		public void Update(GameTime gameTime, float toX, float toY)
+		{
+			X = toX;
+			Y = toY;
+
+			_tiles.Update(gameTime);
 
 			_message.Text(_score.ToString());
 		}
 
 		public void Draw(SpriteBatch spriteBatch)
 		{
+			_tiles.Draw(spriteBatch);
+
 			_message.Draw(spriteBatch);
 		}
 	}

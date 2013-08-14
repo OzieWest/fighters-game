@@ -17,37 +17,54 @@ namespace TestGame.Domain
 		public String _text;
 		#endregion
 
-		#region Injects
-		protected IColorController _color;
-		#endregion
+		public IColorController Colors { get; set; }
 
 		public FontObject(SpriteFont font)
 		{
 			_font = font;
 			_position = new Vector2();
 
-			_color = new ColorController();
-			_color.SetColors(Color.Black, Color.Gray);
+			Colors = new ColorController();
+			Colors.SetColors(Color.Black, Color.Gray);
 
 			_text = String.Empty;
 		}
 
-		public void SetPosition(int x, int y)
+		public FontObject SetPosition(int x, int y)
 		{
 			_position.X = x;
 			_position.Y = y;
+
+			return this;
 		}
 
-		public void Update(GameTime gameTime, String text, int x, int y)
+		public float X
 		{
-			this.SetPosition(x, y);
-
-			this.Update(gameTime, text);
+			get
+			{
+				return _position.X;
+			}
+			set
+			{
+				_position.X = value;
+			}
 		}
 
-		public void Update(GameTime gameTime, String text)
+		public float Y
 		{
-			_text = text;
+			get
+			{
+				return _position.Y;
+			}
+			set
+			{
+				_position.Y = value;
+			}
+		}
+
+		public void Update(GameTime gameTime)
+		{
+			//
 		}
 
 		public FontObject Text(String value)
@@ -64,7 +81,7 @@ namespace TestGame.Domain
 
 		public void Draw(SpriteBatch spriteBatch)
 		{
-			spriteBatch.DrawString(_font, _text, _position, _color.GetCurrent());
+			spriteBatch.DrawString(_font, _text, _position, Colors.GetCurrent());
 		}
 	}
 }

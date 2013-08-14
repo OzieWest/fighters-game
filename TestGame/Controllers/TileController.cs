@@ -59,8 +59,7 @@ namespace TestGame.Controllers
 
 		public void CreateGrid(int x)
 		{
-			var startPos = -50;
-			var stepPos = -50;
+			var startPos = 800;
 
 			for (var i = 0; i < x; i++)
 			{
@@ -76,8 +75,6 @@ namespace TestGame.Controllers
 					row.Add(cell);
 				}
 
-				startPos += stepPos;
-
 				_tiles.Add(row);
 			}
 		}
@@ -91,7 +88,7 @@ namespace TestGame.Controllers
 		{
 			_tiles.Update(gameTime);
 
-			this.ChangeTwoElemnts(isSelect);
+			this.ChangeTwoElements(isSelect);
 
 			if (_placeController.IsMoveComplete())
 			{
@@ -110,15 +107,18 @@ namespace TestGame.Controllers
 			{
 				foreach (var tile in list)
 				{
+					float x = tile.Position.X;
+					float y = tile.Position.Y;
+
 					if (_tiles.RemoveElement(tile))
 					{
-						_score.Down();
+						_score.Down(x, y);
 					}
 				}
 			}
 		}
 
-		public void ChangeTwoElemnts(Boolean isSelect)
+		public void ChangeTwoElements(Boolean isSelect)
 		{
 			var selected = _tiles.FirstByState(TileState.Selected);
 			var focused = _tiles.FirstByState(TileState.Focused);

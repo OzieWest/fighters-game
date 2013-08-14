@@ -44,6 +44,7 @@ namespace TestGame
 
 		public void MoveColumns(TileFactory factory, GridController grid)
 		{
+			var start = -100;
 			for (var e = 0; e < _tiles.Count; e++)
 			{
 				var list = _tiles.Column(e);
@@ -66,8 +67,9 @@ namespace TestGame
 						else
 						{
 							nextTile = factory.CreateTile();
-							nextTile.SetPosition(grid[i, e].X, -100);
+							nextTile.SetPosition(grid[i, e].X, start);
 							nextTile.MoveTo(grid[i, e].X, grid[i, e].Y);
+							start -= 100;
 						}
 
 						list[i] = nextTile;
@@ -125,7 +127,7 @@ namespace TestGame
 			return true;
 		}
 
-		public void CheckChain(TileTypes type, TileObject tile, List<TileObject> chain)
+		protected void CheckChain(TileTypes type, TileObject tile, List<TileObject> chain)
 		{
 			foreach (var elm in tile.Neighbors.GetAll())
 			{
