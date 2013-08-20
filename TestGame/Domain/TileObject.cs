@@ -32,11 +32,18 @@ namespace TestGame.Domain
 
 			State = TileState.Normal;
 
-			Position.Rectangle = new Rectangle(0, 0, frameInterval, texture.Height);
+			Position.Rectangle = new Rectangle()
+					{
+						X = 0,
+						Y = 0,
+						Width = frameInterval,
+						Height = texture.Height
+					};
+
 			Position.Speed = 10;
 		}
 
-		public virtual Boolean IsIntersect(IPosition obj)
+		public virtual Boolean IsIntersect(Position obj)
 		{
 			if (obj.X > (this.Position.X + _frame.Offset) &&
 				obj.X < (this.Position.X + _frame.Interval) - _frame.Offset &&
@@ -136,9 +143,9 @@ namespace TestGame.Domain
 			return false;
 		}
 
-		public virtual void Default()
+		public virtual void ToDefault()
 		{
-			Neighbors.Null();
+			Neighbors.Erase();
 
 			GridX = -1;
 			GridY = -1;

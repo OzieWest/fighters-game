@@ -13,21 +13,20 @@ namespace TestGame
 	{
 		protected BackgroundTile _tile;
 
-		protected ContentManager _content;
-		protected SpriteBatch _spriteBatch;
-
-		public BackgroundController(ContentManager content, SpriteBatch spriteBatch)
+		public BackgroundController(Texture2D texture)
 		{
-			_spriteBatch = spriteBatch;
-			_content = content;
-
-			var texture = content.Load<Texture2D>("background");
-			var rectangle = new Rectangle(0, 0, texture.Width, texture.Height);
-
-			var color = new ColorController();
-			color.SetColors(Color.White, Color.Gray);
-
-			_tile = new BackgroundTile(texture, rectangle, color);
+			_tile = new BackgroundTile()
+			{
+				Texture = texture,
+				Rectangle = new Rectangle()
+				{
+					X = 0,
+					Y = 0,
+					Width = texture.Width,
+					Height = texture.Height
+				},
+				Color = Color.White
+			};
 		}
 
 		public virtual void Update(GameTime gameTime)
@@ -35,9 +34,9 @@ namespace TestGame
 			_tile.Update(gameTime);
 		}
 
-		public virtual void Draw()
+		public virtual void Draw(SpriteBatch spriteBatch)
 		{
-			_tile.Draw(_spriteBatch);
+			_tile.Draw(spriteBatch);
 		}
 	}
 }

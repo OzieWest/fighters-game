@@ -6,10 +6,7 @@ using System.Text;
 
 namespace TestGame
 {
-	/// <summary>
-	/// Class container
-	/// </summary>
-	public class Position : IPosition
+	public class Position
 	{
 		protected Vector2 _realPosition;
 		protected Vector2 _originalPosition;
@@ -17,6 +14,7 @@ namespace TestGame
 		protected Rectangle _rectangle;
 
 		public float Speed { get; set; }
+
 		public Vector2 Original
 		{
 			get

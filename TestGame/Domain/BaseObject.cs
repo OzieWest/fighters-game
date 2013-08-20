@@ -13,37 +13,26 @@ namespace TestGame.Domain
 		#region Injects
 		public Position Position { get; set; }
 		public TileClass Class { get; set; }
-		protected Frame _frame;
+		public Color Color { get; set; }
 
-		protected IColorController _color;
+		protected Frame _frame;
 		#endregion
 
 		public BaseObject(Texture2D texture)
 		{
 			Position = new Position()
-			{
-				Real = new Vector2(0, 0)
-			};
+				{
+					Real = new Vector2(0, 0)
+				};
 
-			Class = new TileClass() 
-			{
-				Texture = texture
-			};
+			Class = new TileClass()
+				{
+					Texture = texture
+				};
 
 			_frame = new Frame();
 
-			_color = new ColorController();
-			_color.SetColors(Color.White, Color.Black);
-		}
-
-		public virtual void SetColors(Color defaultColor, Color selected)
-		{
-			_color.SetColors(defaultColor, selected);
-		}
-
-		public virtual void ToggleCurrentColor()
-		{
-			_color.Toggle();
+			Color = Color.White;
 		}
 
 		public virtual void SetPosition(float x, float y)
@@ -54,7 +43,7 @@ namespace TestGame.Domain
 
 		public virtual void Draw(SpriteBatch spriteBatch)
 		{
-			spriteBatch.Draw(Class.Texture, Position.Real, Position.Rectangle, _color.GetCurrent(), 0f, Position.Original, 1.0f, SpriteEffects.None, 0);
+			spriteBatch.Draw(Class.Texture, Position.Real, Position.Rectangle, Color, 0f, Position.Original, 1.0f, SpriteEffects.None, 0);
 		}
 	}
 }

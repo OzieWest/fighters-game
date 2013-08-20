@@ -14,18 +14,17 @@ namespace TestGame.Domain
 		#region Values
 		protected SpriteFont _font;
 		protected Vector2 _position;
-		public String _text;
+		protected String _text;
 		#endregion
 
-		public IColorController Colors { get; set; }
+		public Color Color { get; set; }
 
 		public FontObject(SpriteFont font)
 		{
 			_font = font;
 			_position = new Vector2();
 
-			Colors = new ColorController();
-			Colors.SetColors(Color.Black, Color.Gray);
+			Color = Color.Black;
 
 			_text = String.Empty;
 		}
@@ -81,7 +80,7 @@ namespace TestGame.Domain
 
 		public void Draw(SpriteBatch spriteBatch)
 		{
-			spriteBatch.DrawString(_font, _text, _position, Colors.GetCurrent());
+			spriteBatch.DrawString(_font, _text, _position, Color);
 		}
 	}
 }

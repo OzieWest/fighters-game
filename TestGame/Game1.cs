@@ -46,10 +46,10 @@ namespace TestGame
 			_scoreController = new ScoreController(Content.Load<Texture2D>("plus"), Content.Load<SpriteFont>("font1"), 1, 2)
 								.SetMessagePosition(50, 50);
 
-			_backController = new BackgroundController(Content, spriteBatch);
+			_backController = new BackgroundController(Content.Load<Texture2D>("background"));
 
-			_tileController = new TileController(Content, spriteBatch, _scoreController);
-			_tileController.Init(8);
+			_tileController = new TileController(Content, _scoreController)
+												.Init(8);
 
 			_infoMessage = new FontObject(Content.Load<SpriteFont>("MainFont"));
 			_infoMessage.SetPosition(5, 500);
@@ -98,8 +98,8 @@ namespace TestGame
 			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied);
 			//=====================
 
-			_backController.Draw();
-			_tileController.Draw();
+			_backController.Draw(spriteBatch);
+			_tileController.Draw(spriteBatch);
 			_scoreController.Draw(spriteBatch);
 
 			_infoMessage.Draw(spriteBatch);

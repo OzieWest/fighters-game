@@ -4,49 +4,34 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using TestGame.Controllers;
 
 namespace TestGame
 {
 	public class BackgroundTile
 	{
 		protected Rectangle _rectangle;
-		protected Texture2D _texture;
+		public Rectangle Rectangle { get { return _rectangle; } set { _rectangle = value; } }
+		public Texture2D Texture { get; set; }
 
-		protected IColorController _color;
-
-		public BackgroundTile(Texture2D texture, Rectangle rectangle, IColorController color)
-		{
-			_rectangle = rectangle;
-			_texture = texture;
-			_color = color;
-		}
+		public Color Color { get; set; }
 
 		public virtual void Update(GameTime gameTime)
 		{
 			//
 		}
 
-		protected virtual void SetPosition(int x, int y)
+		protected virtual BackgroundTile SetPosition(int x, int y)
 		{
 			_rectangle.X = x;
 			_rectangle.Y = y;
+
+			return this;
 		}
 
 		public virtual void Draw(SpriteBatch spriteBatch)
 		{
-			spriteBatch.Draw(_texture, _rectangle, _color.GetCurrent());
+			spriteBatch.Draw(Texture, Rectangle, Color);
 		}
-
-		#region Colors
-		public virtual void SetColors(Color defaultColor, Color selected)
-		{
-			_color.SetColors(defaultColor, selected);
-		}
-
-		public virtual void ToggleCurrentColor()
-		{
-			_color.Toggle();
-		}
-		#endregion
 	}
 }

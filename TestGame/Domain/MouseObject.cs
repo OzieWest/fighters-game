@@ -13,25 +13,21 @@ namespace TestGame.Domain
 	public class MouseObject
 	{
 		protected Texture2D _texture;
+		
 		public Position Position { get; set; }
-
-		/// <summary>
-		/// Color
-		/// </summary>
-		public IColorController Clr { get; set; }
+		public Color Color { get; set; }
 
 		public MouseObject(Texture2D texture)
 		{
+			_texture = texture;
+
 			Position = new Position()
 			{
 				Rectangle = new Rectangle(0, 0, 1, 1),
 				Real = new Vector2(0, 0)
 			};
 
-			_texture = texture;
-
-			Clr = new ColorController();
-			Clr.SetColors(Color.White, Color.Gray);
+			Color = Color.White;
 		}
 
 		public void Update(GameTime gameTime)
@@ -51,7 +47,7 @@ namespace TestGame.Domain
 
 		public void Draw(SpriteBatch spriteBatch)
 		{
-			spriteBatch.Draw(_texture, Position.Real, Clr.GetCurrent());
+			spriteBatch.Draw(_texture, Position.Real, Color);
 		}
 	}
 }

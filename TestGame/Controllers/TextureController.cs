@@ -23,11 +23,9 @@ namespace TestGame.Content
 			_contentManager = contentManager;
 
 			_textures = new Dictionary<TileTypes, Texture2D>();
-
-			this._init();
 		}
 
-		protected virtual void _init()
+		public virtual TextureController Init()
 		{
 			// todo: имена брать из конфига
 			var folder = "set1";
@@ -40,6 +38,8 @@ namespace TestGame.Content
 			_textures[TileTypes.six] = _contentManager.Load<Texture2D>(folder + "/" + "ntile_5");
 			_textures[TileTypes.seven] = _contentManager.Load<Texture2D>(folder + "/" + "ntile_6");
 			_textures[TileTypes.eight] = _contentManager.Load<Texture2D>(folder + "/" + "ntile_7");
+
+			return this;
 		}
 
 		public Texture2D GetTextureByType(TileTypes type)

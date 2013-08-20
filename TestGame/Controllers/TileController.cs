@@ -14,22 +14,17 @@ namespace TestGame.Controllers
 	{
 		//todo: public while testing 
 		#region Injects
-		public ScoreController _score;
-		public SpriteBatch _spriteBatch;
-		public ContentManager _content;
-		#endregion Values
-
-		#region Values
-		public TilesContainer _tiles;
-		public PlaceController _placeController;
-		public TileFactory _factory;
-		public GridController _grid;
+		protected ScoreController _score;
+		protected ContentManager _content;
+		protected TilesContainer _tiles;
+		protected PlaceController _placeController;
+		protected TileFactory _factory;
+		protected GridController _grid;
 		#endregion
 
-		public TileController(ContentManager content, SpriteBatch spriteBatch, ScoreController score)
+		public TileController(ContentManager content, ScoreController score)
 		{
 			_content = content;
-			_spriteBatch = spriteBatch;
 			_score = score;
 
 			_tiles = new TilesContainer();
@@ -38,26 +33,19 @@ namespace TestGame.Controllers
 			_factory = new TileFactory(content);
 		}
 
-		public void SetColorsOnTiles(Color defColor, Color selColor)
+		public TileController Init(int x)
 		{
-			foreach (var tile in _tiles.WhichNotNull())
-			{
-				tile.SetColors(defColor, selColor);
-			}
-		}
+			_grid = new GridController()
+						.CreateGrid(x);
 
-		public void Init(int x)
-		{
-			_grid = new GridController(x);
-
-			this.CreateGrid(x);
+			_fillGrid(x);
 
 			_placeController.GenerateNeighbors();
 
-			this.SetColorsOnTiles(Color.White, Color.Gray);
+			return this;
 		}
 
-		public void CreateGrid(int x)
+		protected void _fillGrid(int x)
 		{
 			var startPos = 800;
 
@@ -79,27 +67,27 @@ namespace TestGame.Controllers
 			}
 		}
 
-		public void Draw()
+		public void Draw(SpriteBatch spriteBatch)
 		{
-			_tiles.Draw(_spriteBatch);
+			_tiles.Draw(spriteBatch);
 		}
 
-		public void Update(GameTime gameTime, IPosition obj, Boolean isSelect)
+		public void Update(GameTime gameTime, Position obj, Boolean isSelect)
 		{
 			_tiles.Update(gameTime);
 
-			this.ChangeTwoElements(isSelect);
+			_changeTwoElements(isSelect);
 
 			if (_placeController.IsMoveComplete())
 			{
-				this.DeleteChains();
-				this.CheckIntersect(gameTime, obj, isSelect);
+				_deleteChains();
+				_checkIntersect(gameTime, obj, isSelect);
 				_placeController.MoveColumns(_factory, _grid);
 				_placeController.GenerateNeighbors();
 			}
 		}
 
-		public void DeleteChains()
+		protected void _deleteChains()
 		{
 			var list = _placeController.FindChain();
 
@@ -107,18 +95,16 @@ namespace TestGame.Controllers
 			{
 				foreach (var tile in list)
 				{
-					float x = tile.Position.X;
-					float y = tile.Position.Y;
+					var x = tile.Position.X;
+					var y = tile.Position.Y;
 
 					if (_tiles.RemoveElement(tile))
-					{
 						_score.Down(x, y);
-					}
 				}
 			}
 		}
 
-		public void ChangeTwoElements(Boolean isSelect)
+		protected void _changeTwoElements(Boolean isSelect)
 		{
 			var selected = _tiles.FirstByState(TileState.Selected);
 			var focused = _tiles.FirstByState(TileState.Focused);
@@ -136,7 +122,7 @@ namespace TestGame.Controllers
 			}
 		}
 
-		protected void CheckIntersect(GameTime gameTime, IPosition obj, Boolean isSelect)
+		protected void _checkIntersect(GameTime gameTime, Position obj, Boolean isSelect)
 		{
 			foreach (var tile in _tiles.WhichNotNull())
 			{
@@ -145,24 +131,16 @@ namespace TestGame.Controllers
 					if (isSelect)
 					{
 						if (tile.IsIntersect(obj) && tile.State != TileState.Selected)
-						{
 							tile.State = TileState.Selected;
-						}
 						else
-						{
 							tile.State = TileState.Normal;
-						}
 					}
 					else
 					{
 						if (tile.IsIntersect(obj) && tile.State != TileState.Selected)
-						{
 							tile.State = TileState.Focused;
-						}
 						else if (!tile.IsIntersect(obj) && tile.State != TileState.Selected)
-						{
 							tile.State = TileState.Normal;
-						}
 					}
 				}
 			}

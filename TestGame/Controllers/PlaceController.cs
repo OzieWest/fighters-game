@@ -23,9 +23,7 @@ namespace TestGame
 				for (var j = 0; j < _tiles[i].Count; j++)
 				{
 					if (_tiles[i][j] != null)
-					{
-						this.SetNeighbors(i, j, _tiles[i][j]);
-					}
+						_setNeighbors(i, j, _tiles[i][j]);
 				}
 			}
 		}
@@ -53,7 +51,7 @@ namespace TestGame
 				{
 					if (list[i] == null)
 					{
-						var nextTile = this.GetNextNotNull(list, i);
+						var nextTile = this._getNextNotNull(list, i);
 
 						if (nextTile != null)
 						{
@@ -79,14 +77,12 @@ namespace TestGame
 			}
 		}
 
-		protected TileObject GetNextNotNull(List<TileObject> list, int startIndex)
+		protected TileObject _getNextNotNull(List<TileObject> list, int startIndex)
 		{
 			for (var i = startIndex; i > -1; i--)
 			{
 				if (list[i] != null)
-				{
 					return list[i];
-				}
 			}
 
 			return null;
@@ -103,7 +99,7 @@ namespace TestGame
 					var chain = new List<TileObject>();
 					if (_tiles[i][j] != null)
 					{
-						this.CheckChain(_tiles[i][j].Class.Type, _tiles[i][j], chain);
+						_checkChain(_tiles[i][j].Class.Type, _tiles[i][j], chain);
 
 						if (chain.Count > 2)
 						{
@@ -120,14 +116,14 @@ namespace TestGame
 		{
 			foreach (var tile in _tiles)
 			{
-				if (!tile.Position.IsMoveComplete())
+				if (!tile.IsMoveComplete())
 					return false;
 			}
 
 			return true;
 		}
 
-		protected void CheckChain(TileTypes type, TileObject tile, List<TileObject> chain)
+		protected void _checkChain(TileTypes type, TileObject tile, List<TileObject> chain)
 		{
 			foreach (var elm in tile.Neighbors.GetAll())
 			{
@@ -138,19 +134,19 @@ namespace TestGame
 					if (item == null)
 					{
 						chain.Add(elm);
-						this.CheckChain(type, elm, chain);
+						_checkChain(type, elm, chain);
 					}
 				}
 			}
 		}
 
-		public void SetNeighbors(int x, int y, TileObject obj)
+		protected void _setNeighbors(int x, int y, TileObject obj)
 		{
 			obj.GridX = x;
 			obj.GridY = y;
 
-			var neighbors = obj.Neighbors;
-			neighbors.Null();
+			var neighbors = obj.Neighbors
+								.Erase();
 
 			var max = _tiles.Count;
 			if (x > 0)
