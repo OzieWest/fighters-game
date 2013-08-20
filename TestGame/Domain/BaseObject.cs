@@ -14,7 +14,6 @@ namespace TestGame.Domain
 		public Position Position { get; set; }
 		public TileClass Class { get; set; }
 		public Color Color { get; set; }
-
 		protected Frame _frame;
 		#endregion
 
