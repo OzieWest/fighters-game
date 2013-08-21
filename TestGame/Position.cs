@@ -13,7 +13,14 @@ namespace TestGame
 		protected Vector2 _destinationPosition;
 		protected Rectangle _rectangle;
 
-		public float Speed { get; set; }
+		public float SpeedX { get; set; }
+		public float SpeedY { get; set; }
+
+		public void SetSpeed(float x, float y)
+		{
+			SpeedX = x;
+			SpeedY = y;
+		}
 
 		public Vector2 Original
 		{
@@ -57,6 +64,8 @@ namespace TestGame
 			Original = new Vector2(0, 0);
 			Real = new Vector2(0, 0);
 			Destination = new Vector2(0, 0);
+
+			SetSpeed(0, 0);
 		}
 
 		public Boolean IsMoveComplete()

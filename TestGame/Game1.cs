@@ -27,8 +27,6 @@ namespace TestGame
 
 		MouseObject _cursor;
 
-		TileObject _santa;
-
 		InputController _inputs;
 		#endregion
 
@@ -52,9 +50,6 @@ namespace TestGame
 
 			_tileController = new TileController(Content, _scoreController)
 												.Init(8);
-
-			_santa = new TileObject(Content.Load<Texture2D>("santa"), TileTypes.def, 128, 15);
-			_santa.MoveTo(50, 60);
 
 			_infoMessage = new FontObject(Content.Load<SpriteFont>("MainFont"));
 			_infoMessage.SetPosition(5, 500);
@@ -93,8 +88,6 @@ namespace TestGame
 
 			_scoreController.Update(gameTime, _cursor.Position.X, _cursor.Position.Y);
 
-			_santa.Update(gameTime);
-
 			_inputs.End();
 			base.Update(gameTime);
 		}
@@ -108,8 +101,6 @@ namespace TestGame
 			_backController.Draw(spriteBatch);
 			_tileController.Draw(spriteBatch);
 			_scoreController.Draw(spriteBatch);
-
-			_santa.Draw(spriteBatch);
 
 			_infoMessage.Draw(spriteBatch);
 			_cursor.Draw(spriteBatch);

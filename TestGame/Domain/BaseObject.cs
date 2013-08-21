@@ -29,8 +29,6 @@ namespace TestGame.Domain
 					Texture = texture
 				};
 
-			_frame = new Frame();
-
 			Color = Color.White;
 		}
 

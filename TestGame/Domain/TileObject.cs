@@ -25,12 +25,15 @@ namespace TestGame.Domain
 		{
 			Neighbors = new TileNeighbor();
 
-			_frame.Interval = frameInterval;
-			_frame.Offset = frameOffset;
-
 			Class.Type = type;
 
 			State = TileState.Normal;
+
+			_frame = new Frame()
+				{
+					Interval = frameInterval,
+					Offset = frameOffset
+				};
 
 			Position.Rectangle = new Rectangle()
 					{
@@ -39,8 +42,6 @@ namespace TestGame.Domain
 						Width = frameInterval,
 						Height = texture.Height
 					};
-
-			Position.Speed = 10;
 		}
 
 		public virtual Boolean IsIntersect(Position obj)
@@ -62,6 +63,7 @@ namespace TestGame.Domain
 		{
 			Position.toX = x;
 			Position.toY = y;
+			Position.SetSpeed(16, 16);
 		}
 
 		public Boolean IsMoveComplete()
@@ -69,7 +71,7 @@ namespace TestGame.Domain
 			return Position.IsMoveComplete();
 		}
 
-		protected virtual void Animation(GameTime gameTime)
+		protected virtual void _animate(GameTime gameTime)
 		{
 			switch (State)
 			{
@@ -93,40 +95,37 @@ namespace TestGame.Domain
 			Position.rX = _frame.Current * (int)_frame.Interval;
 			Position.rY = 0;
 
-			this.Animation(gameTime);
+			_animate(gameTime);
 
-			var x = Position.X - Position.toX;
-			var y = Position.Y - Position.toY;
+			var distanceX = Position.X - Position.toX;
+			var distanceY = Position.Y - Position.toY;
 
-			var slowSpeed = 1;
-			var speedX = Position.Speed;
-			var speedY = Position.Speed;
-
-			if (Math.Abs(y) < Position.Speed)
+			if (Math.Abs(distanceX) < Position.SpeedX)
 			{
-				speedY = slowSpeed;
-			}
-			if (Math.Abs(x) < Position.Speed)
-			{
-				speedX = slowSpeed;
+				Position.SpeedX  = Position.SpeedX / 2;
 			}
 
-			if (y > 0)
+			if (Math.Abs(distanceY) < Position.SpeedY)
 			{
-				Position.Y -= speedY;
-			}
-			else if (y < 0)
-			{
-				Position.Y += speedY;
+				Position.SpeedY = Position.SpeedY / 2;
 			}
 
-			if (x > 0)
+			if (distanceY > 0)
 			{
-				Position.X -= speedX;
+				Position.Y -= Position.SpeedY;
 			}
-			else if (x < 0)
+			else if (distanceY < 0)
 			{
-				Position.X += speedX;
+				Position.Y += Position.SpeedY;
+			}
+
+			if (distanceX > 0)
+			{
+				Position.X -= Position.SpeedX;
+			}
+			else if (distanceX < 0)
+			{
+				Position.X += Position.SpeedX;
 			}
 		}
 

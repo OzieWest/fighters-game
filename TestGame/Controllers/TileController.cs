@@ -20,6 +20,7 @@ namespace TestGame.Controllers
 		protected PlaceController _placeController;
 		protected TileFactory _factory;
 		protected GridController _grid;
+		protected Random rnd;
 		#endregion
 
 		public TileController(ContentManager content, ScoreController score)
@@ -31,6 +32,8 @@ namespace TestGame.Controllers
 
 			_placeController = new PlaceController(_tiles);
 			_factory = new TileFactory(content);
+
+			rnd = new Random();
 		}
 
 		public TileController Init(int x)
@@ -47,7 +50,7 @@ namespace TestGame.Controllers
 
 		protected void _fillGrid(int x)
 		{
-			var startPos = 800;
+			var startPos = -100;
 
 			for (var i = 0; i < x; i++)
 			{
@@ -57,6 +60,7 @@ namespace TestGame.Controllers
 				{
 					var pos = _grid[i, j];
 					var cell = _factory.CreateTile();
+
 					cell.SetPosition(pos.X, startPos);
 					cell.MoveTo(pos.X, pos.Y);
 
