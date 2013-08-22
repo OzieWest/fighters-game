@@ -14,7 +14,7 @@ namespace TestGame.Domain
 		#region Values
 		protected SpriteFont _font;
 		protected Vector2 _position;
-		protected String _text;
+		public String Text { get; set; }
 		#endregion
 
 		public Color Color { get; set; }
@@ -26,10 +26,10 @@ namespace TestGame.Domain
 
 			Color = Color.Black;
 
-			_text = String.Empty;
+			Text = String.Empty;
 		}
 
-		public FontObject SetPosition(int x, int y)
+		public virtual FontObject SetPosition(int x, int y)
 		{
 			_position.X = x;
 			_position.Y = y;
@@ -37,7 +37,7 @@ namespace TestGame.Domain
 			return this;
 		}
 
-		public float X
+		public virtual float X
 		{
 			get
 			{
@@ -49,7 +49,7 @@ namespace TestGame.Domain
 			}
 		}
 
-		public float Y
+		public virtual float Y
 		{
 			get
 			{
@@ -61,26 +61,14 @@ namespace TestGame.Domain
 			}
 		}
 
-		public void Update(GameTime gameTime)
+		public virtual void Update(GameTime gameTime)
 		{
 			//
 		}
 
-		public FontObject Text(String value)
+		public virtual void Draw(SpriteBatch spriteBatch)
 		{
-			_text = value;
-			return this;
-		}
-
-		public FontObject AddText(String value)
-		{
-			_text += value;
-			return this;
-		}
-
-		public void Draw(SpriteBatch spriteBatch)
-		{
-			spriteBatch.DrawString(_font, _text, _position, Color);
+			spriteBatch.DrawString(_font, Text, _position, Color);
 		}
 	}
 }

@@ -27,7 +27,10 @@ namespace TestGame
 
 		MouseObject _cursor;
 
+		SkillController _skillController;
+
 		InputController _inputs;
+
 		#endregion
 
 		public Game1()
@@ -43,18 +46,20 @@ namespace TestGame
 		protected override void LoadContent()
 		{
 			spriteBatch = new SpriteBatch(GraphicsDevice);
-			_scoreController = new ScoreController(Content.Load<Texture2D>("plus"), Content.Load<SpriteFont>("font1"), 1, 2)
+			_scoreController = new ScoreController(Get<Texture2D>("plus"), Get<SpriteFont>("font1"), 1, 2)
 								.SetMessagePosition(50, 60);
 
-			_backController = new BackgroundController(Content.Load<Texture2D>("background"));
+			_backController = new BackgroundController(Get<Texture2D>("background"));
 
 			_tileController = new TileController(Content, _scoreController)
-												.Init(8);
+							.Init(8);
 
-			_infoMessage = new FontObject(Content.Load<SpriteFont>("MainFont"));
+			_skillController = new SkillController(Content);
+
+			_infoMessage = new FontObject(Get<SpriteFont>("MainFont"));
 			_infoMessage.SetPosition(5, 500);
 
-			_cursor = new MouseObject(Content.Load<Texture2D>("cursor"));
+			_cursor = new MouseObject(Get<Texture2D>("cursor"));
 
 			_inputs = new InputController();
 		}
@@ -72,7 +77,7 @@ namespace TestGame
 			//keyboard================================================
 			_inputs.isKeyDown(Keys.A, delegate()
 			{
-				//
+				_skillController.Animate(gameTime);
 			});
 
 			//keyboard================================================
@@ -88,6 +93,13 @@ namespace TestGame
 
 			_scoreController.Update(gameTime, _cursor.Position.X, _cursor.Position.Y);
 
+			_skillController.Update(gameTime);
+			
+			//движение по кругу
+			//alpha += (float)gameTime.ElapsedGameTime.TotalMilliseconds / 1000;
+			//var	x = 55 + 3 * Math.Sin(alpha);
+			//var y = 50 + 3 * Math.Cos(alpha);
+
 			_inputs.End();
 			base.Update(gameTime);
 		}
@@ -102,12 +114,19 @@ namespace TestGame
 			_tileController.Draw(spriteBatch);
 			_scoreController.Draw(spriteBatch);
 
+			_skillController.Draw(spriteBatch);
+
 			_infoMessage.Draw(spriteBatch);
 			_cursor.Draw(spriteBatch);
 
 			//=====================
 			spriteBatch.End();
 			base.Draw(gameTime);
+		}
+
+		public T Get<T>(String path)
+		{
+			return Content.Load<T>(path);
 		}
 
 		#region Init

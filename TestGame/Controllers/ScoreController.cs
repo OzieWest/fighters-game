@@ -60,7 +60,7 @@ namespace TestGame
 
 			_tiles.Update(gameTime);
 
-			_message.Text(_score.ToString());
+			_message.Text = _score.ToString();
 		}
 
 		public void Draw(SpriteBatch spriteBatch)

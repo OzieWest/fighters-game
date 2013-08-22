@@ -55,6 +55,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Controllers\ScoreController.cs" />
     <Compile Include="Domain\TileNeighbor.cs" />
+    <Compile Include="ScoreObject.cs" />
+    <Compile Include="SkillController.cs" />
+    <Compile Include="SkillObject.cs" />
     <Compile Include="TilePool.cs" />
     <Compile Include="TilesContainer.cs" />
     <Compile Include="Domain\TileFactory.cs" />
@@ -125,6 +128,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\set1\ntile_7.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\skills\skill0.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\skills\skill1.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Icon.ico" />

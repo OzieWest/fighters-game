@@ -66,7 +66,7 @@ namespace TestGame.Domain
 			Position.SetSpeed(16, 16);
 		}
 
-		public Boolean IsMoveComplete()
+		public virtual Boolean IsMoveComplete()
 		{
 			return Position.IsMoveComplete();
 		}
