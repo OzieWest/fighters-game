@@ -84,27 +84,41 @@ namespace TestGame.Controllers
 
 			if (_placeController.IsMoveComplete())
 			{
-				_deleteChains();
+				_checkChains();
 				_checkIntersect(gameTime, obj, isSelect);
 				_placeController.MoveColumns(_factory, _grid);
 				_placeController.GenerateNeighbors();
 			}
 		}
 
-		protected void _deleteChains()
+		protected void _checkChains()
 		{
-			var list = _placeController.FindChain();
+			var mainChain = _placeController.FindChain();
+			var dict = new Dictionary<TileTypes, IEnumerable<TileObject>>();
 
-			if (list.Count > 0)
+			foreach (TileTypes type in Enum.GetValues(typeof(TileTypes)))
 			{
-				foreach (var tile in list)
-				{
-					var x = tile.Position.X;
-					var y = tile.Position.Y;
+				var chain = mainChain.Where(o => o.Class.Type == type).ToList();
 
-					if (_tiles.RemoveElement(tile))
-						_score.Down(x, y);
-				}
+				if (chain != null && chain.Count != 0)
+					dict.Add(type, chain);
+			}
+
+			foreach (var item in dict)
+			{
+				_deleteChain(item.Value, item.Key);
+			}
+		}
+
+		protected void _deleteChain(IEnumerable<TileObject> chain, TileTypes type)
+		{
+			foreach (var tile in chain)
+			{
+				var x = tile.Position.X;
+				var y = tile.Position.Y;
+
+				if (_tiles.RemoveElement(tile))
+					_score.Down(x, y, type);
 			}
 		}
 

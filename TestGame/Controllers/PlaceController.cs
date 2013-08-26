@@ -96,20 +96,23 @@ namespace TestGame
 			{
 				for (var j = 0; j < _tiles[i].Count; j++)
 				{
+					var tile = _tiles[i][j];
+					var type = tile.Class.Type;
+
 					var chain = new List<TileObject>();
-					if (_tiles[i][j] != null)
+
+					if (tile != null)
 					{
-						_checkChain(_tiles[i][j].Class.Type, _tiles[i][j], chain);
+						_checkChain(type, tile, chain);
 
 						if (chain.Count > 2)
-						{
 							mainChain.AddRange(chain);
-						}
 					}
 				}
 			}
 
-			return mainChain;
+			return mainChain.Distinct(new TileComparator())
+							.ToList();
 		}
 
 		public Boolean IsMoveComplete()

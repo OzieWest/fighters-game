@@ -58,6 +58,7 @@
     <Compile Include="ScoreObject.cs" />
     <Compile Include="SkillController.cs" />
     <Compile Include="SkillObject.cs" />
+    <Compile Include="TileComparator.cs" />
     <Compile Include="TilePool.cs" />
     <Compile Include="TilesContainer.cs" />
     <Compile Include="Domain\TileFactory.cs" />
@@ -130,12 +131,17 @@
     <Content Include="Content\set1\ntile_7.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\skills\candle.png" />
+    <Content Include="Content\skills\castle.png" />
     <Content Include="Content\skills\skill0.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\skills\skill1.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\skills\web.png" />
+    <Content Include="Content\skills\witch soup.png" />
+    <Content Include="Content\skills\zombie.png" />
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup />

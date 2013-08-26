@@ -93,7 +93,7 @@ namespace TestGame
 
 			_scoreController.Update(gameTime, _cursor.Position.X, _cursor.Position.Y);
 
-			_skillController.Update(gameTime);
+			_skillController.Update(gameTime, _cursor.Position, wasMouseDown);
 			
 			//движение по кругу
 			//alpha += (float)gameTime.ElapsedGameTime.TotalMilliseconds / 1000;

@@ -40,7 +40,7 @@ namespace TestGame
 			_score += _step;
 		}
 
-		public void Down(float x, float y)
+		public void Down(float x, float y, TileTypes type)
 		{
 			_score -= _penalty;
 			_tiles.Take(x, y, _message.X, _message.Y);
