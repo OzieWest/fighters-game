@@ -23,7 +23,6 @@ namespace TestGame
 		TileController _tileController;
 
 		FontObject _infoMessage;
-		ScoreController _scoreController;
 
 		MouseObject _cursor;
 
@@ -46,12 +45,10 @@ namespace TestGame
 		protected override void LoadContent()
 		{
 			spriteBatch = new SpriteBatch(GraphicsDevice);
-			_scoreController = new ScoreController(Get<Texture2D>("plus"), Get<SpriteFont>("font1"), 1, 2)
-								.SetMessagePosition(50, 60);
 
 			_backController = new BackgroundController(Get<Texture2D>("background"));
 
-			_tileController = new TileController(Content, _scoreController)
+			_tileController = new TileController(Content)
 							.Init(8);
 
 			_skillController = new SkillController(Content);
@@ -77,7 +74,7 @@ namespace TestGame
 			//keyboard================================================
 			_inputs.isKeyDown(Keys.A, delegate()
 			{
-				_skillController.Animate(gameTime);
+				//
 			});
 
 			//keyboard================================================
@@ -90,8 +87,6 @@ namespace TestGame
 			_cursor.Update(gameTime);
 
 			_tileController.Update(gameTime, _cursor.Position, wasMouseDown);
-
-			_scoreController.Update(gameTime, _cursor.Position.X, _cursor.Position.Y);
 
 			_skillController.Update(gameTime, _cursor.Position, wasMouseDown);
 			
@@ -112,7 +107,6 @@ namespace TestGame
 
 			_backController.Draw(spriteBatch);
 			_tileController.Draw(spriteBatch);
-			_scoreController.Draw(spriteBatch);
 
 			_skillController.Draw(spriteBatch);
 

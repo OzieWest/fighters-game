@@ -28,8 +28,7 @@ namespace TestGame
 		{
 			_rnd = new Random();
 
-			_textureController = new TextureController(contentManager)
-									.Init();
+			_textureController = new TextureController(contentManager);
 
 			_folder = "set1"; //todo: указывать в config
 			FrameOffset = 10;  //todo: указывать в config

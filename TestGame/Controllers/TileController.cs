@@ -14,8 +14,8 @@ namespace TestGame.Controllers
 	{
 		//todo: public while testing 
 		#region Injects
-		protected ScoreController _score;
 		protected ContentManager _content;
+		protected SkillController _skillController;
 		protected TilesContainer _tiles;
 		protected PlaceController _placeController;
 		protected TileFactory _factory;
@@ -23,12 +23,13 @@ namespace TestGame.Controllers
 		protected Random rnd;
 		#endregion
 
-		public TileController(ContentManager content, ScoreController score)
+		public TileController(ContentManager content)
 		{
 			_content = content;
-			_score = score;
 
 			_tiles = new TilesContainer();
+
+			_skillController = new SkillController(content);
 
 			_placeController = new PlaceController(_tiles);
 			_factory = new TileFactory(content);
@@ -73,11 +74,13 @@ namespace TestGame.Controllers
 
 		public void Draw(SpriteBatch spriteBatch)
 		{
+			_skillController.Draw(spriteBatch);
 			_tiles.Draw(spriteBatch);
 		}
 
 		public void Update(GameTime gameTime, Position obj, Boolean isSelect)
 		{
+			_skillController.Update(gameTime, obj, isSelect);
 			_tiles.Update(gameTime);
 
 			_changeTwoElements(isSelect);
@@ -118,7 +121,9 @@ namespace TestGame.Controllers
 				var y = tile.Position.Y;
 
 				if (_tiles.RemoveElement(tile))
-					_score.Down(x, y, type);
+				{
+					_skillController.Move(x, y, type);
+				}
 			}
 		}
 

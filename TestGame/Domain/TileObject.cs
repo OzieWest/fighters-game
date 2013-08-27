@@ -63,7 +63,7 @@ namespace TestGame.Domain
 		{
 			Position.toX = x;
 			Position.toY = y;
-			Position.SetSpeed(16, 16);
+			Position.SetSpeed(5, 5);
 		}
 
 		public virtual Boolean IsMoveComplete()
@@ -82,7 +82,7 @@ namespace TestGame.Domain
 					_frame.Animate(gameTime, 5, 9, 2);
 					break;
 				case TileState.Test:
-					_frame.Animate(gameTime, 0, 4, 2);
+					_frame.Animate(gameTime, 10, 10, 2);
 					break;
 				default:
 					_frame.ResetCurrent();
@@ -102,12 +102,20 @@ namespace TestGame.Domain
 
 			if (Math.Abs(distanceX) < Position.SpeedX)
 			{
-				Position.SpeedX  = Position.SpeedX / 2;
+				Position.SpeedX = Position.SpeedX / 2;
+			}
+			else
+			{
+				Position.SpeedX += 1; 
 			}
 
 			if (Math.Abs(distanceY) < Position.SpeedY)
 			{
 				Position.SpeedY = Position.SpeedY / 2;
+			}
+			else
+			{
+				Position.SpeedY += 1;
 			}
 
 			if (distanceY > 0)

@@ -5,13 +5,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using TestGame.Content;
 using TestGame.Domain;
 
 namespace TestGame
 {
 	public class SkillController
 	{
-		protected List<SkillObject> _skills;
+		protected Dictionary<TileTypes, SkillObject> _skills;
+
+		public TilePool Pool { get; set; }
+		public TextureController TexController { get; set; }
 
 		public SkillController(ContentManager content)
 		{
@@ -20,81 +24,95 @@ namespace TestGame
 			var score = 100;
 			var step = 1;
 
-			_skills = new List<SkillObject>();
+			TexController = new TextureController(content);
 
-			for (var i = 0; i < 2; i++)
-			{
-				var texture = content.Load<Texture2D>("skills/skill" + i.ToString());
+			Pool = new TilePool(content.Load<Texture2D>("plus"), 20);
 
-				var skill = new SkillObject(texture, TileTypes.def, texture.Height, 0)
-								{
-									Score = new ScoreObject(content.Load<SpriteFont>("font1"))
+			_skills = new Dictionary<TileTypes, SkillObject>();
+			
+			var skill = CreateSkill(content.Load<SpriteFont>("font1"),
+									score,
+									step,
+									TileTypes.first);
+
+			skill.SetPosition(startX, startY + 100);
+			_skills.Add(skill.Class.Type, skill);
+
+			var skill2 = CreateSkill(content.Load<SpriteFont>("font1"),
+									score,
+									step,
+									TileTypes.third);
+
+			skill2.SetPosition(startX, startY + 200);
+			_skills.Add(skill2.Class.Type, skill2);
+		}
+
+		public SkillObject CreateSkill(SpriteFont font, int score, int step, TileTypes type)
+		{
+			var texture = TexController.GetTextureByType(type);
+			var skill = new SkillObject(texture, type, texture.Height, 0)
 										{
-											Step = step,
+											Message = new FontObject(font),
+											State = TileState.Normal,
 											Score = score,
-										},
+											Step = step
+										};
 
-									Name = i.ToString()
-								};
-
-				skill.SetPosition(startX, startY);
-
-				_skills.Add(skill);
-
-				startY += 100;
-			}
-
+			return skill;
 		}
 
 		public void Update(GameTime gameTime, Position obj, Boolean isSelect)
 		{
+			Pool.Update(gameTime);
+
 			foreach (var skill in _skills)
-				skill.Update(gameTime);
+				skill.Value.Update(gameTime);
 
 			_checkIntersect(gameTime, obj, isSelect);
 		}
 
+		public void Move(float x, float y, TileTypes type)
+		{
+			var skill = _skills.SingleOrDefault(o => o.Value.Class.Type == type);
+
+			if (skill.Value != null)
+			{
+				Pool.Take(x, y, skill.Value.Position.X, skill.Value.Position.Y);
+			}
+		}
+
 		protected void _checkIntersect(GameTime gameTime, Position obj, Boolean isSelect)
 		{
-			var selected = _skills.SingleOrDefault(o => o.State == TileState.Selected);
+			var selected = _skills.SingleOrDefault(o => o.Value.State == TileState.Selected);
 
 			foreach (var skill in _skills)
 			{
 				if (isSelect)
 				{
-					if (skill.IsIntersect(obj) && skill.State != TileState.Selected)
+					if (skill.Value.IsIntersect(obj) && skill.Value.State != TileState.Selected)
 					{
-						if (selected == null)
-						{
-							skill.State = TileState.Selected;
-						}
+						if (selected.Value == null)
+							skill.Value.State = TileState.Selected;
 					}
-					else if (skill.IsIntersect(obj) && skill.State == TileState.Selected)
-						skill.State = TileState.Focused;
-					//else
-					//	skill.State = TileState.Normal;
+					else if (skill.Value.IsIntersect(obj) && skill.Value.State == TileState.Selected)
+						skill.Value.State = TileState.Focused;
 				}
 				else
 				{
-					if (skill.IsIntersect(obj) && skill.State != TileState.Selected)
-						skill.State = TileState.Focused;
-					else if (!skill.IsIntersect(obj) && skill.State != TileState.Selected)
-						skill.State = TileState.Normal;
+					if (skill.Value.IsIntersect(obj) && skill.Value.State != TileState.Selected)
+						skill.Value.State = TileState.Focused;
+					else if (!skill.Value.IsIntersect(obj) && skill.Value.State != TileState.Selected)
+						skill.Value.State = TileState.Normal;
 				}
 			}
 		}
 
 		public void Draw(SpriteBatch spriteBatch)
 		{
+			Pool.Draw(spriteBatch);
+
 			foreach (var skill in _skills)
-				skill.Draw(spriteBatch);
-		}
-
-		public void Animate(GameTime gameTime)
-		{
-			var skill = _skills[0];
-
-			skill.Animate(gameTime);
+				skill.Value.Draw(spriteBatch);
 		}
 	}
 }

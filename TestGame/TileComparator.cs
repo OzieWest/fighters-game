@@ -22,11 +22,7 @@ namespace TestGame
 		{
 			if (Object.ReferenceEquals(obj, null)) return 0;
 
-			int GridX = obj.GridX == null ? 0 : obj.GridX.GetHashCode();
-
-			int GridY = obj.GridY == null ? 0 : obj.GridY.GetHashCode();
-
-			return GridY ^ GridX;
+			return obj.GridX.GetHashCode() ^ obj.GridY.GetHashCode();
 		}
 	}
 }

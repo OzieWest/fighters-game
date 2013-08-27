@@ -23,6 +23,8 @@ namespace TestGame.Content
 			_contentManager = contentManager;
 
 			_textures = new Dictionary<TileTypes, Texture2D>();
+
+			Init();
 		}
 
 		public virtual TextureController Init()
