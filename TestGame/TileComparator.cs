@@ -15,14 +15,14 @@ namespace TestGame
 			if (Object.ReferenceEquals(x, null) || Object.ReferenceEquals(y, null))
 				return false;
 
-			return x.GridX == y.GridX && x.GridY == y.GridY;
+			return x.Grid.X == y.Grid.X && x.Grid.Y == y.Grid.Y;
 		}
 
 		public int GetHashCode(TileObject obj)
 		{
 			if (Object.ReferenceEquals(obj, null)) return 0;
 
-			return obj.GridX.GetHashCode() ^ obj.GridY.GetHashCode();
+			return obj.Grid.X.GetHashCode() ^ obj.Grid.Y.GetHashCode();
 		}
 	}
 }

@@ -12,7 +12,7 @@ namespace TestGame
 {
 	public class SkillController
 	{
-		protected Dictionary<TileTypes, SkillObject> _skills;
+		protected List<SkillObject> _skills;
 
 		public TilePool Pool { get; set; }
 		public TextureController TexController { get; set; }
@@ -22,43 +22,40 @@ namespace TestGame
 			var startX = 145;
 			var startY = 10;
 			var score = 100;
-			var step = 1;
 
+			//todo: переделать
 			TexController = new TextureController(content);
 
 			Pool = new TilePool(content.Load<Texture2D>("plus"), 20);
 
-			_skills = new Dictionary<TileTypes, SkillObject>();
-			
+			_skills = new List<SkillObject>();
+
 			var skill = CreateSkill(content.Load<SpriteFont>("font1"),
 									score,
-									step,
 									TileTypes.first);
 
 			skill.SetPosition(startX, startY + 100);
-			_skills.Add(skill.Class.Type, skill);
+			_skills.Add(skill);
 
 			var skill2 = CreateSkill(content.Load<SpriteFont>("font1"),
 									score,
-									step,
 									TileTypes.third);
 
 			skill2.SetPosition(startX, startY + 200);
-			_skills.Add(skill2.Class.Type, skill2);
+			_skills.Add(skill2);
 		}
 
-		public SkillObject CreateSkill(SpriteFont font, int score, int step, TileTypes type)
+		public SkillObject CreateSkill(SpriteFont font, int score, TileTypes type)
 		{
 			var texture = TexController.GetTextureByType(type);
-			var skill = new SkillObject(texture, type, texture.Height, 0)
-										{
-											Message = new FontObject(font),
-											State = TileState.Normal,
-											Score = score,
-											Step = step
-										};
 
-			return skill;
+			return new SkillObject(texture, type, texture.Height, 0)
+						{
+							Message = new FontObject(font),
+							State = TileState.Normal,
+							Score = score
+						};
+
 		}
 
 		public void Update(GameTime gameTime, Position obj, Boolean isSelect)
@@ -66,43 +63,41 @@ namespace TestGame
 			Pool.Update(gameTime);
 
 			foreach (var skill in _skills)
-				skill.Value.Update(gameTime);
+				skill.Update(gameTime);
 
 			_checkIntersect(gameTime, obj, isSelect);
 		}
 
 		public void Move(float x, float y, TileTypes type)
 		{
-			var skill = _skills.SingleOrDefault(o => o.Value.Class.Type == type);
+			var skill = _skills.SingleOrDefault(o => o.Type == type);
 
-			if (skill.Value != null)
-			{
-				Pool.Take(x, y, skill.Value.Position.X, skill.Value.Position.Y);
-			}
+			if (skill != null)
+				Pool.LaunchTile(x, y, skill.Position.X, skill.Position.Y);
 		}
 
 		protected void _checkIntersect(GameTime gameTime, Position obj, Boolean isSelect)
 		{
-			var selected = _skills.SingleOrDefault(o => o.Value.State == TileState.Selected);
+			var selected = _skills.SingleOrDefault(o => o.State == TileState.Selected);
 
 			foreach (var skill in _skills)
 			{
 				if (isSelect)
 				{
-					if (skill.Value.IsIntersect(obj) && skill.Value.State != TileState.Selected)
+					if (skill.IsIntersect(obj) && skill.State != TileState.Selected)
 					{
-						if (selected.Value == null)
-							skill.Value.State = TileState.Selected;
+						if (selected == null)
+							skill.State = TileState.Selected;
 					}
-					else if (skill.Value.IsIntersect(obj) && skill.Value.State == TileState.Selected)
-						skill.Value.State = TileState.Focused;
+					else if (skill.IsIntersect(obj) && skill.State == TileState.Selected)
+						skill.State = TileState.Focused;
 				}
 				else
 				{
-					if (skill.Value.IsIntersect(obj) && skill.Value.State != TileState.Selected)
-						skill.Value.State = TileState.Focused;
-					else if (!skill.Value.IsIntersect(obj) && skill.Value.State != TileState.Selected)
-						skill.Value.State = TileState.Normal;
+					if (skill.IsIntersect(obj) && skill.State != TileState.Selected)
+						skill.State = TileState.Focused;
+					else if (!skill.IsIntersect(obj) && skill.State != TileState.Selected)
+						skill.State = TileState.Normal;
 				}
 			}
 		}
@@ -112,7 +107,7 @@ namespace TestGame
 			Pool.Draw(spriteBatch);
 
 			foreach (var skill in _skills)
-				skill.Value.Draw(spriteBatch);
+				skill.Draw(spriteBatch);
 		}
 	}
 }

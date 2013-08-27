@@ -51,7 +51,7 @@ namespace TestGame
 		{
 			foreach (var tile in this.WhichNotNull())
 			{
-				if (tile.GridX == x && tile.GridY == y)
+				if (tile.Grid.X == x && tile.Grid.Y == y)
 				{
 					return tile;
 				}

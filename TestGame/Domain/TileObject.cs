@@ -13,9 +13,9 @@ namespace TestGame.Domain
 {
 	public class TileObject : BaseObject, IDisposable
 	{
-		public int GridX { get; set; }
-		public int GridY { get; set; }
+		public GridPosition Grid { get; set; }
 		public TileState State { get; set; }
+		public TileTypes Type { get; set; }
 		public TileNeighbor Neighbors { get; set; }
 
 		private Boolean disposed = false;
@@ -23,25 +23,30 @@ namespace TestGame.Domain
 		public TileObject(Texture2D texture, TileTypes type, int frameInterval, int frameOffset)
 			: base(texture)
 		{
-			Neighbors = new TileNeighbor();
-
-			Class.Type = type;
-
-			State = TileState.Normal;
+			Type = type;
 
 			_frame = new Frame()
-				{
-					Interval = frameInterval,
-					Offset = frameOffset
-				};
+			{
+				Interval = frameInterval,
+				Offset = frameOffset
+			};
 
 			Position.Rectangle = new Rectangle()
-					{
-						X = 0,
-						Y = 0,
-						Width = frameInterval,
-						Height = texture.Height
-					};
+			{
+				X = 0,
+				Y = 0,
+				Width = frameInterval,
+				Height = texture.Height
+			};
+
+			_init();
+		}
+
+		protected void _init()
+		{
+			Grid = new GridPosition();
+			Neighbors = new TileNeighbor();
+			State = TileState.Normal;
 		}
 
 		public virtual Boolean IsIntersect(Position obj)
@@ -59,18 +64,6 @@ namespace TestGame.Domain
 			}
 		}
 
-		public virtual void MoveTo(float x, float y)
-		{
-			Position.toX = x;
-			Position.toY = y;
-			Position.SetSpeed(5, 5);
-		}
-
-		public virtual Boolean IsMoveComplete()
-		{
-			return Position.IsMoveComplete();
-		}
-
 		protected virtual void _animate(GameTime gameTime)
 		{
 			switch (State)
@@ -85,62 +78,49 @@ namespace TestGame.Domain
 					_frame.Animate(gameTime, 10, 10, 2);
 					break;
 				default:
-					_frame.ResetCurrent();
+					_frame.Reset();
 					break;
 			}
 		}
 
 		public virtual void Update(GameTime gameTime)
 		{
-			Position.rX = _frame.Current * (int)_frame.Interval;
-			Position.rY = 0;
+			Position.SetFrame(_frame.StrageMath());
 
 			_animate(gameTime);
 
 			var distanceX = Position.X - Position.toX;
 			var distanceY = Position.Y - Position.toY;
 
+			//change X speed
 			if (Math.Abs(distanceX) < Position.SpeedX)
-			{
 				Position.SpeedX = Position.SpeedX / 2;
-			}
 			else
-			{
-				Position.SpeedX += 1; 
-			}
+				Position.SpeedX += 1;
 
+			//change Y speed
 			if (Math.Abs(distanceY) < Position.SpeedY)
-			{
 				Position.SpeedY = Position.SpeedY / 2;
-			}
 			else
-			{
 				Position.SpeedY += 1;
-			}
 
+			//move object (Y)
 			if (distanceY > 0)
-			{
 				Position.Y -= Position.SpeedY;
-			}
 			else if (distanceY < 0)
-			{
 				Position.Y += Position.SpeedY;
-			}
 
+			//move object (X)
 			if (distanceX > 0)
-			{
 				Position.X -= Position.SpeedX;
-			}
 			else if (distanceX < 0)
-			{
 				Position.X += Position.SpeedX;
-			}
 		}
 
-		public virtual Boolean IsSame(TileObject obj)
+		public virtual Boolean Compare(TileObject obj)
 		{
-			if (this.GridX == obj.GridX &&
-				this.GridY == obj.GridY &&
+			if (this.Grid.X == obj.Grid.X &&
+				this.Grid.Y == obj.Grid.Y &&
 				this.Position.X == obj.Position.X &&
 				this.Position.Y == obj.Position.Y)
 			{
@@ -150,17 +130,30 @@ namespace TestGame.Domain
 			return false;
 		}
 
-		public virtual void ToDefault()
+		public virtual void ResetToDefault()
 		{
 			Neighbors.Erase();
 
-			GridX = -1;
-			GridY = -1;
+			Grid.X = -1;
+			Grid.Y = -1;
 
 			this.SetPosition(-100, -100);
 
 			_frame.DefaultValue();
 		}
+
+		#region Interfaces
+		public virtual Boolean IsMoveComplete()
+		{
+			return Position.IsMoveComplete();
+		}
+
+		public virtual void MoveTo(float x, float y)
+		{
+			Position.MoveTo(x, y);
+			Position.SetSpeed(5, 5);
+		}
+		#endregion
 
 		#region Dispose
 		public void Dispose()
@@ -175,12 +168,11 @@ namespace TestGame.Domain
 			{
 				if (disposing)
 				{
-					GridX = -1;
-					GridY = -1;
+					Grid.X = -1;
+					Grid.Y = -1;
 					this.SetPosition(-100, -100);
 
 					Neighbors = null;
-					Class = null;
 					_frame = null;
 				}
 				disposed = true;

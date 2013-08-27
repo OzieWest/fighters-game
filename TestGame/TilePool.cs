@@ -32,13 +32,9 @@ namespace TestGame
 			foreach (var tile in _tiles)
 			{
 				if (tile.IsMoveComplete())
-				{
 					this.Release(tile);
-				}
 				else
-				{
 					tile.Update(gameTime);
-				}
 			}
 		}
 
@@ -47,20 +43,23 @@ namespace TestGame
 			foreach (var tile in _tiles)
 			{
 				if (!tile.IsMoveComplete())
-				{
 					tile.Draw(spriteBatch);
-				}
 			}
 		}
 
-		public TileObject Take(float x, float y, float tox, float toy)
+		protected TileObject GetFreeman()
 		{
-			var tile = _tiles.FirstOrDefault(o => o.Position.X == -100 && o.Position.Y == -100);
+			return _tiles.FirstOrDefault(o => o.Position.X == -100 && o.Position.Y == -100);
+		}
+
+		public TileObject LaunchTile(float x, float y, float destinationX, float destinationY)
+		{
+			var tile = GetFreeman();
 
 			if (tile != null)
 			{
 				tile.SetPosition(x, y);
-				tile.MoveTo(tox, toy);
+				tile.MoveTo(destinationX, destinationY);
 
 				return tile;
 			}
@@ -68,7 +67,7 @@ namespace TestGame
 			return null;
 		}
 
-		public void Release(TileObject tile)
+		protected void Release(TileObject tile)
 		{
 			tile.SetPosition(-100, -100);
 			tile.MoveTo(-100, -100);

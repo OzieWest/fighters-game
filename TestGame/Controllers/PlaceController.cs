@@ -36,8 +36,8 @@ namespace TestGame
 			two.MoveTo(onePos.X, onePos.Y);
 			one.MoveTo(twoPos.X, twoPos.Y);
 
-			_tiles[one.GridX][one.GridY] = two;
-			_tiles[two.GridX][two.GridY] = one;
+			_tiles[one.Grid.X][one.Grid.Y] = two;
+			_tiles[two.Grid.X][two.Grid.Y] = one;
 		}
 
 		public void MoveColumns(TileFactory factory, GridController grid)
@@ -97,7 +97,7 @@ namespace TestGame
 				for (var j = 0; j < _tiles[i].Count; j++)
 				{
 					var tile = _tiles[i][j];
-					var type = tile.Class.Type;
+					var type = tile.Type;
 
 					var chain = new List<TileObject>();
 
@@ -137,9 +137,9 @@ namespace TestGame
 		{
 			foreach (var elm in tile.Neighbors.GetAll())
 			{
-				if (elm.Class.Type == type)
+				if (elm.Type == type)
 				{
-					var item = chain.FirstOrDefault(o => o.GridX == elm.GridX && o.GridY == elm.GridY);
+					var item = chain.FirstOrDefault(o => o.Grid.X == elm.Grid.X && o.Grid.Y == elm.Grid.Y);
 
 					if (item == null)
 					{
@@ -152,8 +152,8 @@ namespace TestGame
 
 		protected void _setNeighbors(int x, int y, TileObject obj)
 		{
-			obj.GridX = x;
-			obj.GridY = y;
+			obj.Grid.X = x;
+			obj.Grid.Y = y;
 
 			var neighbors = obj.Neighbors
 								.Erase();

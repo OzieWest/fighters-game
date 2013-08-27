@@ -39,12 +39,12 @@
     <Compile Include="Controllers\BackgroundController.cs" />
     <Compile Include="Domain\BackgroundTile.cs" />
     <Compile Include="Controllers\TileController.cs" />
+    <Compile Include="Domain\GridPosition.cs" />
     <Compile Include="Domain\TileObject.cs" />
     <Compile Include="Domain\BaseObject.cs" />
     <Compile Include="Domain\MouseObject.cs" />
     <Compile Include="Domain\FontObject.cs" />
     <Compile Include="Domain\TileTypes.cs" />
-    <Compile Include="EnemyController.cs" />
     <Compile Include="Domain\Frame.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Controllers\GridController.cs" />
@@ -61,7 +61,6 @@
     <Compile Include="TilesContainer.cs" />
     <Compile Include="Domain\TileFactory.cs" />
     <Compile Include="Domain\TileState.cs" />
-    <Compile Include="Domain\TileClass.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="OpenTK">

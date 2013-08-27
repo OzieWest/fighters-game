@@ -35,9 +35,14 @@ namespace TestGame
 			}
 		}
 
-		public void ResetCurrent()
+		public void Reset()
 		{
 			Current = 0;
+		}
+
+		public int StrageMath()
+		{
+			return Current * (int)Interval;
 		}
 	}
 }

@@ -79,6 +79,23 @@ namespace TestGame
 		}
 
 		/// <summary>
+		/// Move to destination
+		/// </summary>
+		/// <param name="x"></param>
+		/// <param name="y"></param>
+		public void MoveTo(float x, float y)
+		{
+			_destinationPosition.X = x;
+			_destinationPosition.Y = y;
+		}
+
+		public void SetFrame(int x)
+		{
+			_rectangle.X = x;
+			_rectangle.Y = 0;
+		}
+
+		/// <summary>
 		/// Real position X
 		/// </summary>
 		public float X

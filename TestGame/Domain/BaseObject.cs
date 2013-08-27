@@ -12,7 +12,7 @@ namespace TestGame.Domain
 	{
 		#region Injects
 		public Position Position { get; set; }
-		public TileClass Class { get; set; }
+		public Texture2D Texture { get; set; }
 		public Color Color { get; set; }
 		protected Frame _frame;
 		#endregion
@@ -20,14 +20,11 @@ namespace TestGame.Domain
 		public BaseObject(Texture2D texture)
 		{
 			Position = new Position()
-				{
-					Real = new Vector2(0, 0)
-				};
+			{
+				Real = new Vector2(0, 0)
+			};
 
-			Class = new TileClass()
-				{
-					Texture = texture
-				};
+			Texture = texture;
 
 			Color = Color.White;
 		}
@@ -40,7 +37,7 @@ namespace TestGame.Domain
 
 		public virtual void Draw(SpriteBatch spriteBatch)
 		{
-			spriteBatch.Draw(Class.Texture, Position.Real, Position.Rectangle, Color, 0f, Position.Original, 1.0f, SpriteEffects.None, 0);
+			spriteBatch.Draw(Texture, Position.Real, Position.Rectangle, Color, 0f, Position.Original, 1.0f, SpriteEffects.None, 0);
 		}
 	}
 }

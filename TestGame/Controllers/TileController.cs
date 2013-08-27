@@ -96,33 +96,18 @@ namespace TestGame.Controllers
 
 		protected void _checkChains()
 		{
-			var mainChain = _placeController.FindChain();
-			var dict = new Dictionary<TileTypes, IEnumerable<TileObject>>();
+			var chain = _placeController.FindChain();
 
-			foreach (TileTypes type in Enum.GetValues(typeof(TileTypes)))
+			if (chain != null && chain.Count != 0)
 			{
-				var chain = mainChain.Where(o => o.Class.Type == type).ToList();
-
-				if (chain != null && chain.Count != 0)
-					dict.Add(type, chain);
-			}
-
-			foreach (var item in dict)
-			{
-				_deleteChain(item.Value, item.Key);
-			}
-		}
-
-		protected void _deleteChain(IEnumerable<TileObject> chain, TileTypes type)
-		{
-			foreach (var tile in chain)
-			{
-				var x = tile.Position.X;
-				var y = tile.Position.Y;
-
-				if (_tiles.RemoveElement(tile))
+				foreach (var tile in chain)
 				{
-					_skillController.Move(x, y, type);
+					var x = tile.Position.X;
+					var y = tile.Position.Y;
+					var type = tile.Type;
+
+					if (_tiles.RemoveElement(tile))
+						_skillController.Move(x, y, type);
 				}
 			}
 		}
@@ -132,7 +117,7 @@ namespace TestGame.Controllers
 			var selected = _tiles.FirstByState(TileState.Selected);
 			var focused = _tiles.FirstByState(TileState.Focused);
 
-			if (selected != null && focused != null && !selected.IsSame(focused))
+			if (selected != null && focused != null && !selected.Compare(focused))
 			{
 				var neighbor = selected.Neighbors.GetAll().SingleOrDefault(o => o == focused); //todo: возможно стоит перенести в класс Neibors
 
