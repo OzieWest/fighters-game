@@ -151,7 +151,7 @@ namespace TestGame.Domain
 		public virtual void MoveTo(float x, float y)
 		{
 			Position.MoveTo(x, y);
-			Position.SetSpeed(5, 5);
+			Position.SetSpeed(10, 10);
 		}
 		#endregion
 

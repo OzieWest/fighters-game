@@ -17,16 +17,16 @@ namespace TestGame
 		public TilePool Pool { get; set; }
 		public TextureController TexController { get; set; }
 
-		public SkillController(ContentManager content)
+		public void Init(TextureController controller, ContentManager content)
 		{
 			var startX = 145;
 			var startY = 10;
 			var score = 100;
 
 			//todo: переделать
-			TexController = new TextureController(content);
+			TexController = controller;
 
-			Pool = new TilePool(content.Load<Texture2D>("plus"), 20);
+			Pool = new TilePool(TexController.GetTexture("plus"), 20);
 
 			_skills = new List<SkillObject>();
 
@@ -47,7 +47,7 @@ namespace TestGame
 
 		public SkillObject CreateSkill(SpriteFont font, int score, TileTypes type)
 		{
-			var texture = TexController.GetTextureByType(type);
+			var texture = TexController.GetTexture(type.ToString());
 
 			return new SkillObject(texture, type, texture.Height, 0)
 						{

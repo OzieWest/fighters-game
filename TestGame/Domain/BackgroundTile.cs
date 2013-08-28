@@ -10,6 +10,7 @@ namespace TestGame
 {
 	public class BackgroundTile
 	{
+		//Todo rectangle переделать на Postition
 		protected Rectangle _rectangle;
 		public Rectangle Rectangle { get { return _rectangle; } set { _rectangle = value; } }
 		public Texture2D Texture { get; set; }
@@ -18,7 +19,7 @@ namespace TestGame
 
 		public virtual void Update(GameTime gameTime)
 		{
-			//
+			Color = Color.White;
 		}
 
 		protected virtual BackgroundTile SetPosition(int x, int y)

@@ -35,6 +35,7 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Controllers\LevelController.cs" />
     <Compile Include="Controllers\TextureController.cs" />
     <Compile Include="Controllers\BackgroundController.cs" />
     <Compile Include="Domain\BackgroundTile.cs" />
@@ -104,28 +105,28 @@
     <Content Include="Content\santa.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\set1\ntile_0.png">
+    <Content Include="Content\set1\first.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\set1\ntile_1.png">
+    <Content Include="Content\set1\seven.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\set1\ntile_2.png">
+    <Content Include="Content\set1\six.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\set1\ntile_3.png">
+    <Content Include="Content\set1\second.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\set1\ntile_4.png">
+    <Content Include="Content\set1\foth.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\set1\ntile_5.png">
+    <Content Include="Content\set1\eight.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\set1\ntile_6.png">
+    <Content Include="Content\set1\fifth.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\set1\ntile_7.png">
+    <Content Include="Content\set1\third.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\skills\candle.png" />

@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using TestGame.Domain;
@@ -10,43 +11,49 @@ namespace TestGame.Content
 {
 	public class TextureController
 	{
-		#region Values
-		protected Dictionary<TileTypes, Texture2D> _textures;
-		#endregion Values
+		protected Dictionary<String, Texture2D> _textures;
 
-		#region Injects
-		protected ContentManager _contentManager;
-		#endregion Injects
-
-		public TextureController(ContentManager contentManager)
+		public TextureController()
 		{
-			_contentManager = contentManager;
-
-			_textures = new Dictionary<TileTypes, Texture2D>();
-
-			Init();
+			_textures = new Dictionary<String, Texture2D>();
 		}
 
-		public virtual TextureController Init()
+		public int Init(String folder, ContentManager content)
 		{
-			// todo: имена брать из конфига
-			var folder = "set1";
+			var jpgs = Directory.GetFiles(folder, "*.jpg");
+			var pngs = Directory.GetFiles(folder, "*.png");
 
-			_textures[TileTypes.first] = _contentManager.Load<Texture2D>(folder + "/" + "ntile_0");
-			_textures[TileTypes.second] = _contentManager.Load<Texture2D>(folder + "/" + "ntile_1");
-			_textures[TileTypes.third] = _contentManager.Load<Texture2D>(folder + "/" + "ntile_2");
-			_textures[TileTypes.foth] = _contentManager.Load<Texture2D>(folder + "/" + "ntile_3");
-			_textures[TileTypes.fifth] = _contentManager.Load<Texture2D>(folder + "/" + "ntile_4");
-			_textures[TileTypes.six] = _contentManager.Load<Texture2D>(folder + "/" + "ntile_5");
-			_textures[TileTypes.seven] = _contentManager.Load<Texture2D>(folder + "/" + "ntile_6");
-			_textures[TileTypes.eight] = _contentManager.Load<Texture2D>(folder + "/" + "ntile_7");
+			if (jpgs != null)
+			{
+				foreach (var file in jpgs)
+				{
+					var name = Path.GetFileNameWithoutExtension(file);
+					var texture = content.Load<Texture2D>(file);
 
-			return this;
+					_textures.Add(name, texture);
+				}
+			}
+
+			if (pngs != null)
+			{
+				foreach (var file in pngs)
+				{
+					var name = Path.GetFileNameWithoutExtension(file);
+					var texture = content.Load<Texture2D>("set1/" + name);
+
+					_textures.Add(name, texture);
+				}
+			}
+
+			return _textures.Count;
 		}
 
-		public Texture2D GetTextureByType(TileTypes type)
+		public Texture2D GetTexture(String name)
 		{
-			return _textures[type];
+			if (_textures.ContainsKey(name))
+				return _textures[name];
+
+			return null;
 		}
 	}
 }

@@ -9,21 +9,25 @@ namespace TestGame
 {
 	public class PlaceController
 	{
-		protected TilesContainer _tiles;
+		public TileContainer Container { get; set; }
+		public GridController Grid { get; set; }
 
-		public PlaceController(TilesContainer tiles)
+		public void Init(TileContainer tiles, int x)
 		{
-			_tiles = tiles;
+			Container = tiles;
+			Grid = new GridController();
+
+			Grid.Init(x);
 		}
 
 		public void GenerateNeighbors()
 		{
-			for (var i = 0; i < _tiles.Count; i++)
+			for (var i = 0; i < Container.Count; i++)
 			{
-				for (var j = 0; j < _tiles[i].Count; j++)
+				for (var j = 0; j < Container[i].Count; j++)
 				{
-					if (_tiles[i][j] != null)
-						_setNeighbors(i, j, _tiles[i][j]);
+					if (Container[i][j] != null)
+						_setNeighbors(i, j, Container[i][j]);
 				}
 			}
 		}
@@ -36,16 +40,16 @@ namespace TestGame
 			two.MoveTo(onePos.X, onePos.Y);
 			one.MoveTo(twoPos.X, twoPos.Y);
 
-			_tiles[one.Grid.X][one.Grid.Y] = two;
-			_tiles[two.Grid.X][two.Grid.Y] = one;
+			Container[one.Grid.X][one.Grid.Y] = two;
+			Container[two.Grid.X][two.Grid.Y] = one;
 		}
 
-		public void MoveColumns(TileFactory factory, GridController grid)
+		public void MoveColumns(TileFactory factory)
 		{
 			var start = -100;
-			for (var e = 0; e < _tiles.Count; e++)
+			for (var e = 0; e < Container.Count; e++)
 			{
-				var list = _tiles.Column(e);
+				var list = Container.Column(e);
 
 				for (var i = list.Count - 1; i > -1; i--)
 				{
@@ -55,23 +59,23 @@ namespace TestGame
 
 						if (nextTile != null)
 						{
-							nextTile.MoveTo(grid[i, e].X, grid[i, e].Y);
+							nextTile.MoveTo(Grid[i, e].X, Grid[i, e].Y);
 
 							var index = list.IndexOf(nextTile);
 
 							list[index] = null;
-							_tiles[index][e] = null;
+							Container[index][e] = null;
 						}
 						else
 						{
 							nextTile = factory.CreateTile();
-							nextTile.SetPosition(grid[i, e].X, start);
-							nextTile.MoveTo(grid[i, e].X, grid[i, e].Y);
+							nextTile.SetPosition(Grid[i, e].X, start);
+							nextTile.MoveTo(Grid[i, e].X, Grid[i, e].Y);
 							start -= 100;
 						}
 
 						list[i] = nextTile;
-						_tiles[i][e] = nextTile;
+						Container[i][e] = nextTile;
 					}
 				}
 			}
@@ -92,11 +96,11 @@ namespace TestGame
 		{
 			var mainChain = new List<TileObject>();
 
-			for (var i = 0; i < _tiles.Count; i++)
+			for (var i = 0; i < Container.Count; i++)
 			{
-				for (var j = 0; j < _tiles[i].Count; j++)
+				for (var j = 0; j < Container[i].Count; j++)
 				{
-					var tile = _tiles[i][j];
+					var tile = Container[i][j];
 					var type = tile.Type;
 
 					var chain = new List<TileObject>();
@@ -124,7 +128,7 @@ namespace TestGame
 
 		public Boolean IsMoveComplete()
 		{
-			foreach (var tile in _tiles)
+			foreach (var tile in Container)
 			{
 				if (!tile.IsMoveComplete())
 					return false;
@@ -158,31 +162,31 @@ namespace TestGame
 			var neighbors = obj.Neighbors
 								.Erase();
 
-			var max = _tiles.Count;
+			var max = Container.Count;
 			if (x > 0)
 			{
-				neighbors.T = _tiles[x - 1][y];
+				neighbors.T = Container[x - 1][y];
 				if (x < max - 1)
 				{
-					neighbors.B = _tiles[x + 1][y];
+					neighbors.B = Container[x + 1][y];
 				}
 			}
 			else
 			{
-				neighbors.B = _tiles[x + 1][y];
+				neighbors.B = Container[x + 1][y];
 			}
 
 			if (y > 0)
 			{
-				neighbors.L = _tiles[x][y - 1];
+				neighbors.L = Container[x][y - 1];
 				if (y < max - 1)
 				{
-					neighbors.R = _tiles[x][y + 1];
+					neighbors.R = Container[x][y + 1];
 				}
 			}
 			else
 			{
-				neighbors.R = _tiles[x][y + 1];
+				neighbors.R = Container[x][y + 1];
 			}
 		}
 	}

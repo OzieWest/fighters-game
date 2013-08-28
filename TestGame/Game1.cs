@@ -19,15 +19,14 @@ namespace TestGame
 		GraphicsDeviceManager graphics;
 		SpriteBatch spriteBatch;
 
-		BackgroundController _backController;
-		TileController _tileController;
+		//BackgroundController _backController;
+		//TileController _tileController;
+		//SkillController _skillController;
+
+		LevelController _level;
 
 		FontObject _infoMessage;
-
 		MouseObject _cursor;
-
-		SkillController _skillController;
-
 		InputController _inputs;
 
 		#endregion
@@ -46,12 +45,8 @@ namespace TestGame
 		{
 			spriteBatch = new SpriteBatch(GraphicsDevice);
 
-			_backController = new BackgroundController(Get<Texture2D>("background"));
-
-			_tileController = new TileController(Content)
-							.Init(8);
-
-			_skillController = new SkillController(Content);
+			_level = new LevelController();
+			_level.CreateLevel("level1", Content);
 
 			_infoMessage = new FontObject(Get<SpriteFont>("MainFont"));
 			_infoMessage.SetPosition(5, 500);
@@ -86,9 +81,7 @@ namespace TestGame
 			//Update==================================================
 			_cursor.Update(gameTime);
 
-			_tileController.Update(gameTime, _cursor.Position, wasMouseDown);
-
-			_skillController.Update(gameTime, _cursor.Position, wasMouseDown);
+			_level.Update(gameTime, _cursor.Position, wasMouseDown);
 			
 			//движение по кругу
 			//alpha += (float)gameTime.ElapsedGameTime.TotalMilliseconds / 1000;
@@ -105,10 +98,7 @@ namespace TestGame
 			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied);
 			//=====================
 
-			_backController.Draw(spriteBatch);
-			_tileController.Draw(spriteBatch);
-
-			_skillController.Draw(spriteBatch);
+			_level.Draw(spriteBatch);
 
 			_infoMessage.Draw(spriteBatch);
 			_cursor.Draw(spriteBatch);

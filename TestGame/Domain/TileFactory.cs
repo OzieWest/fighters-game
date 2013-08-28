@@ -11,32 +11,25 @@ namespace TestGame
 {
 	public class TileFactory
 	{
-		#region Values
-		protected String _folder;
 		protected Random _rnd;
-		#endregion
-
-		#region Property
 		public int FrameOffset { get; set; }
-		#endregion
 
-		#region Injects
-		protected TextureController _textureController;
-		#endregion
+		public TextureController TextureController { get; set; }
 
-		public TileFactory(ContentManager contentManager)
+		public TileFactory()
 		{
 			_rnd = new Random();
+		}
 
-			_textureController = new TextureController(contentManager);
-
-			_folder = "set1"; //todo: указывать в config
-			FrameOffset = 10;  //todo: указывать в config
+		public void Init(int frameOffset, TextureController texController)
+		{
+			FrameOffset = frameOffset;
+			TextureController = texController;
 		}
 
 		public TileObject CreateTile()
 		{
-			int rInt = _rnd.Next(1, 9); // все тайлы, кроме дефолтного
+			int rInt = _rnd.Next(1, 9); // todo: все тайлы, кроме дефолтного
 
 			var result = this.CreateTileByType((TileTypes)rInt);
 
@@ -45,7 +38,7 @@ namespace TestGame
 
 		protected TileObject CreateTileByType(TileTypes type)
 		{
-			var tex = _textureController.GetTextureByType(type);
+			var tex = TextureController.GetTexture(type.ToString());
 			var result = new TileObject(tex, type, tex.Height, FrameOffset);
 
 			return result;

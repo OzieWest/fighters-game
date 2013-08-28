@@ -13,7 +13,7 @@ namespace TestGame
 	{
 		protected BackgroundTile _tile;
 
-		public BackgroundController(Texture2D texture)
+		public void Init(Texture2D texture)
 		{
 			_tile = new BackgroundTile()
 			{
@@ -24,8 +24,7 @@ namespace TestGame
 					Y = 0,
 					Width = texture.Width,
 					Height = texture.Height
-				},
-				Color = Color.White
+				}
 			};
 		}
 

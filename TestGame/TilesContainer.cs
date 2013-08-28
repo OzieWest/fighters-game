@@ -9,11 +9,11 @@ using TestGame.Domain;
 
 namespace TestGame
 {
-	public class TilesContainer
+	public class TileContainer
 	{
 		public List<List<TileObject>> List;
 
-		public TilesContainer()
+		public void Init()
 		{
 			List = new List<List<TileObject>>();
 		}

@@ -10,13 +10,10 @@ namespace TestGame
 	{
 		protected List<List<Vector2>> _positions;
 
-		public GridController()
+		public GridController Init(int x)
 		{
 			_positions = new List<List<Vector2>>();
-		}
 
-		public GridController CreateGrid(int x)
-		{
 			var constPosX = 250;
 			var constPosY = 20;
 			var step = 60 + 5;
