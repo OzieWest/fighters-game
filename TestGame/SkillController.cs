@@ -13,47 +13,66 @@ namespace TestGame
 	public class SkillController
 	{
 		protected List<SkillObject> _skills;
+		protected SkillObject _mainSkill;
 
 		public TilePool Pool { get; set; }
-		public TextureController TexController { get; set; }
+		public ObjectFactory Factory { get; set; }
+		public SpriteFont Font { get; set; }
 
-		public void Init(TextureController controller, ContentManager content)
+		public int StartX;
+		public int StartY;
+		public int Score;
+
+		public SkillController()
 		{
-			var startX = 145;
-			var startY = 10;
-			var score = 100;
+			Pool = new TilePool();
 
-			//todo: переделать
-			TexController = controller;
-
-			Pool = new TilePool(TexController.GetTexture("plus"), 20);
-
-			_skills = new List<SkillObject>();
-
-			var skill = CreateSkill(content.Load<SpriteFont>("font1"),
-									score,
-									TileTypes.first);
-
-			skill.SetPosition(startX, startY + 100);
-			_skills.Add(skill);
-
-			var skill2 = CreateSkill(content.Load<SpriteFont>("font1"),
-									score,
-									TileTypes.third);
-
-			skill2.SetPosition(startX, startY + 200);
-			_skills.Add(skill2);
+			StartX = 145;
+			StartY = 10;
+			Score = 10;
 		}
 
-		public SkillObject CreateSkill(SpriteFont font, int score, TileTypes type)
+		public void Init(ObjectFactory factory, ContentManager content)
 		{
-			var texture = TexController.GetTexture(type.ToString());
+			Factory = factory;
+			Pool.Init(Factory.CreateTexture("Bullet1"), 20);
+			Font = content.Load<SpriteFont>("font1");
+
+			CreateMainSkill();
+
+			_skills = new List<SkillObject>()
+			{
+				CreateSkill(Score, "Skill1", TileTypes.One),
+				CreateSkill(Score, "Skill2", TileTypes.Two),
+				CreateSkill(Score, "Skill3", TileTypes.Three)
+			};
+
+			foreach (var skill in _skills)
+			{
+				skill.SetPosition(StartX, StartY);
+				StartY += 100;
+			}
+		}
+
+		protected void CreateMainSkill()
+		{
+			_mainSkill = CreateSkill(Score * 5, "Santa", TileTypes.Default);
+			_mainSkill.MessageOffsetX = 20;
+			_mainSkill.MessageOffsetY = 150;
+			_mainSkill.SetPosition(10, 10);
+		}
+
+		protected SkillObject CreateSkill(int score, String name, TileTypes type)
+		{
+			var texture = Factory.CreateTexture(name);
 
 			return new SkillObject(texture, type, texture.Height, 0)
 						{
-							Message = new FontObject(font),
+							Message = new FontObject(Font),
 							State = TileState.Normal,
-							Score = score
+							Score = score,
+							MessageOffsetX = 10,
+							MessageOffsetY = 60
 						};
 
 		}
@@ -65,6 +84,8 @@ namespace TestGame
 			foreach (var skill in _skills)
 				skill.Update(gameTime);
 
+			_mainSkill.Update(gameTime);
+
 			_checkIntersect(gameTime, obj, isSelect);
 		}
 
@@ -73,13 +94,22 @@ namespace TestGame
 			var skill = _skills.SingleOrDefault(o => o.Type == type);
 
 			if (skill != null)
+			{
 				Pool.LaunchTile(x, y, skill.Position.X, skill.Position.Y);
+				skill.Down(1);
+			}
+			else
+			{
+				Pool.LaunchTile(x, y, _mainSkill.Position.X, _mainSkill.Position.Y);
+				_mainSkill.Down(1);
+			}
 		}
 
 		protected void _checkIntersect(GameTime gameTime, Position obj, Boolean isSelect)
 		{
 			var selected = _skills.SingleOrDefault(o => o.State == TileState.Selected);
 
+			//todo: если TEST то даем возможность включить скил, после чего его обнуляем
 			foreach (var skill in _skills)
 			{
 				if (isSelect)
@@ -89,7 +119,6 @@ namespace TestGame
 						if (selected == null)
 							skill.State = TileState.Selected;
 					}
-					else if (skill.IsIntersect(obj) && skill.State == TileState.Selected)
 						skill.State = TileState.Focused;
 				}
 				else
@@ -105,6 +134,8 @@ namespace TestGame
 		public void Draw(SpriteBatch spriteBatch)
 		{
 			Pool.Draw(spriteBatch);
+
+			_mainSkill.Draw(spriteBatch);
 
 			foreach (var skill in _skills)
 				skill.Draw(spriteBatch);

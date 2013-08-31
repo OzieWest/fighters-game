@@ -44,7 +44,7 @@ namespace TestGame
 			Container[two.Grid.X][two.Grid.Y] = one;
 		}
 
-		public void MoveColumns(TileFactory factory)
+		public void MoveColumns(ObjectFactory factory)
 		{
 			var start = -100;
 			for (var e = 0; e < Container.Count; e++)
@@ -68,7 +68,7 @@ namespace TestGame
 						}
 						else
 						{
-							nextTile = factory.CreateTile();
+							nextTile = factory.CreateRandomTile(10);
 							nextTile.SetPosition(Grid[i, e].X, start);
 							nextTile.MoveTo(Grid[i, e].X, Grid[i, e].Y);
 							start -= 100;

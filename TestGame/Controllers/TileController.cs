@@ -17,7 +17,7 @@ namespace TestGame.Controllers
 		#region Injects
 		public SkillController Skills { get; set; }
 		public TileContainer Container { get; set; }
-		public TileFactory Factory { get; set; }
+		public ObjectFactory Factory { get; set; }
 		#endregion
 
 		public TileController()
@@ -26,8 +26,11 @@ namespace TestGame.Controllers
 			Container = new TileContainer();
 		}
 
-		public TileController Init(int x)
+		public TileController Init(int x, ObjectFactory factory, SkillController skills)
 		{
+			Factory = factory;
+			Skills = skills;
+
 			Container.Init();
 
 			Places.Init(Container, 8);
@@ -49,7 +52,7 @@ namespace TestGame.Controllers
 				for (var j = 0; j < x; j++)
 				{
 					var pos = Places.Grid[i, j];
-					var cell = Factory.CreateTile();
+					var cell = Factory.CreateRandomTile(10);
 
 					cell.SetPosition(pos.X, startPos);
 					cell.MoveTo(pos.X, pos.Y);

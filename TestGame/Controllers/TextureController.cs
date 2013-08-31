@@ -12,6 +12,8 @@ namespace TestGame.Content
 	public class TextureController
 	{
 		protected Dictionary<String, Texture2D> _textures;
+		protected ContentManager Content { get; set; }
+		public String Folder { get; set; }
 
 		public TextureController()
 		{
@@ -20,32 +22,30 @@ namespace TestGame.Content
 
 		public int Init(String folder, ContentManager content)
 		{
-			var jpgs = Directory.GetFiles(folder, "*.jpg");
-			var pngs = Directory.GetFiles(folder, "*.png");
+			Content = content;
+			Folder = folder;
 
-			if (jpgs != null)
+			var files = new List<String>()
 			{
-				foreach (var file in jpgs)
-				{
-					var name = Path.GetFileNameWithoutExtension(file);
-					var texture = content.Load<Texture2D>(file);
+				"One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine",
+				"Background1", "Bullet1", 
+				"Skill1", "Skill2", "Skill3", "Skill4",
+				"Santa",
+				"Cursor"
+			};
 
-					_textures.Add(name, texture);
-				}
-			}
-
-			if (pngs != null)
-			{
-				foreach (var file in pngs)
-				{
-					var name = Path.GetFileNameWithoutExtension(file);
-					var texture = content.Load<Texture2D>("set1/" + name);
-
-					_textures.Add(name, texture);
-				}
-			}
+			foreach (var str in files)
+				_textures.Add(Load(str));
 
 			return _textures.Count;
+		}
+
+		public KeyValuePair<String, Texture2D> Load(String filename)
+		{
+			return new KeyValuePair<String, Texture2D>(
+										filename,
+										Content.Load<Texture2D>(Folder + filename.ToLower())
+									);
 		}
 
 		public Texture2D GetTexture(String name)
@@ -53,7 +53,7 @@ namespace TestGame.Content
 			if (_textures.ContainsKey(name))
 				return _textures[name];
 
-			return null;
+			throw new Exception(String.Format("Texture {0} not found in Dictionary", name));
 		}
 	}
 }

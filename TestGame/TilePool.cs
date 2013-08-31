@@ -13,14 +13,14 @@ namespace TestGame
 		protected List<TileObject> _tiles;
 		protected Texture2D _texture;
 
-		public TilePool(Texture2D texture, int count)
+		public void Init(Texture2D texture, int count)
 		{
 			_texture = texture;
 
 			_tiles = new List<TileObject>();
 			for (var i = 0; i < count; i++)
 			{
-				var tile = new TileObject(_texture, TileTypes.def, 20, 0);
+				var tile = new TileObject(_texture, TileTypes.Default, 20, 0);
 				this.Release(tile);
 
 				_tiles.Add(tile);
@@ -55,6 +55,7 @@ namespace TestGame
 		public TileObject LaunchTile(float x, float y, float destinationX, float destinationY)
 		{
 			var tile = GetFreeman();
+			tile.Position.SpeedConst = 8;
 
 			if (tile != null)
 			{

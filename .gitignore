@@ -108,3 +108,4 @@ Backup*/
 UpgradeLog*.XML
 /TestGame/bin
 /TestGame/obj
+/TestGame/Content/WorkDir

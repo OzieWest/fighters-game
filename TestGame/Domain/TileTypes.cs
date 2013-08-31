@@ -7,14 +7,15 @@ namespace TestGame.Domain
 {
 	public enum TileTypes
 	{
-		def = 0, // базовый тайл, не учавствует в игре
-		first = 1,
-		second = 2,
-		third = 3,
-		foth = 4,
-		fifth = 5,
-		six = 6,
-		seven = 7,
-		eight = 8
+		Default = 0, // базовый тайл
+		One = 1,
+		Two = 2,
+		Three = 3,
+		Four = 4,
+		Five = 5,
+		Six = 6,
+		Seven = 7,
+		Eight = 8,
+		Nine = 9
 	}
 }

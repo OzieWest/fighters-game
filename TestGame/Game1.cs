@@ -25,10 +25,6 @@ namespace TestGame
 
 		LevelController _level;
 
-		FontObject _infoMessage;
-		MouseObject _cursor;
-		InputController _inputs;
-
 		#endregion
 
 		public Game1()
@@ -48,47 +44,17 @@ namespace TestGame
 			_level = new LevelController();
 			_level.CreateLevel("level1", Content);
 
-			_infoMessage = new FontObject(Get<SpriteFont>("MainFont"));
-			_infoMessage.SetPosition(5, 500);
-
-			_cursor = new MouseObject(Get<Texture2D>("cursor"));
-
-			_inputs = new InputController();
 		}
 
 		protected override void Update(GameTime gameTime)
 		{
-			var wasMouseDown = false;
-
-			//mouse===================================================
-			_inputs.isLeftMouseDown(delegate()
-			{
-				wasMouseDown = true;
-			});
-
-			//keyboard================================================
-			_inputs.isKeyDown(Keys.A, delegate()
-			{
-				//
-			});
-
-			//keyboard================================================
-			_inputs.isKeyDown(Keys.S, delegate()
-			{
-				//
-			});
-
-			//Update==================================================
-			_cursor.Update(gameTime);
-
-			_level.Update(gameTime, _cursor.Position, wasMouseDown);
+			_level.Update(gameTime);
 			
 			//движение по кругу
 			//alpha += (float)gameTime.ElapsedGameTime.TotalMilliseconds / 1000;
 			//var	x = 55 + 3 * Math.Sin(alpha);
 			//var y = 50 + 3 * Math.Cos(alpha);
 
-			_inputs.End();
 			base.Update(gameTime);
 		}
 
@@ -99,9 +65,6 @@ namespace TestGame
 			//=====================
 
 			_level.Draw(spriteBatch);
-
-			_infoMessage.Draw(spriteBatch);
-			_cursor.Draw(spriteBatch);
 
 			//=====================
 			spriteBatch.End();

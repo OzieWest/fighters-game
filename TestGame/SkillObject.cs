@@ -16,11 +16,10 @@ namespace TestGame
 
 		public FontObject Message { get; set; }
 
-		public SkillObject(Texture2D texture,
-							TileTypes type,
-							int frameInterval,
-							int frameOffset)
+		public int MessageOffsetX { get; set; }
+		public int MessageOffsetY { get; set; }
 
+		public SkillObject(Texture2D texture, TileTypes type, int frameInterval, int frameOffset)
 			: base(texture, type, frameInterval, frameOffset)
 		{
 			Grid = null;
@@ -30,11 +29,11 @@ namespace TestGame
 		{
 			switch (State)
 			{
-				case TileState.Focused:
+				case TileState.Test:
 					_frame.Animate(gameTime, 1, 4, 4);
 					break;
 				case TileState.Selected:
-					_frame.Animate(gameTime, 3, 4, 1);
+					_frame.Animate(gameTime, 0, 1, 4);
 					break;
 				default:
 					_frame.Reset();
@@ -44,7 +43,7 @@ namespace TestGame
 
 		public override void SetPosition(float x, float y)
 		{
-			Message.SetPosition((int)x + 10, (int)y + 60);
+			Message.SetPosition((int)x + MessageOffsetX, (int)y + MessageOffsetY);
 
 			base.SetPosition(x, y);
 			base.MoveTo(x, y);
@@ -56,6 +55,12 @@ namespace TestGame
 			Message.Update(gameTime);
 
 			base.Update(gameTime);
+
+			if (Score <= 0)
+			{
+				Score = 0;
+				State = TileState.Test;
+			}
 		}
 
 		public override void Draw(SpriteBatch spriteBatch)
