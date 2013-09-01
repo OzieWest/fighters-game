@@ -12,12 +12,14 @@ namespace TestGame
 		public TileContainer Container { get; set; }
 		public GridController Grid { get; set; }
 
-		public void Init(TileContainer tiles, int x)
+		public void Init(int x)
 		{
-			Container = tiles;
-			Grid = new GridController();
+			Container = IoC.GetSingleton<TileContainer>();
+			Grid = IoC.GetSingleton<GridController>();
 
 			Grid.Init(x);
+
+			GenerateNeighbors();
 		}
 
 		public void GenerateNeighbors()

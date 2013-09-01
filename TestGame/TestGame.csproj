@@ -50,18 +50,21 @@
     <Compile Include="Controllers\GridController.cs" />
     <Compile Include="Controllers\InputController.cs" />
     <Compile Include="Controllers\PlaceController.cs" />
+    <Compile Include="IObject.cs" />
+    <Compile Include="IoC.cs" />
     <Compile Include="MouseObject.cs" />
     <Compile Include="Position.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Domain\TileNeighbor.cs" />
-    <Compile Include="SkillController.cs" />
-    <Compile Include="SkillObject.cs" />
+    <Compile Include="BattleController.cs" />
     <Compile Include="TileComparator.cs" />
     <Compile Include="TilePool.cs" />
-    <Compile Include="TilesContainer.cs" />
+    <Compile Include="TileContainer.cs" />
     <Compile Include="Domain\ObjectFactory.cs" />
     <Compile Include="Domain\TileState.cs" />
+    <Compile Include="ComplexObject.cs" />
+    <Compile Include="WarriorObject.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="OpenTK">
@@ -84,13 +87,22 @@
       <Link>SDL.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\set1\bullet2.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\set1\cursor.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\set1\enemy.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\set1\one.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\set1\nine.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\set1\player.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\set1\santa.png">
@@ -100,6 +112,15 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\set1\six.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\set1\skill1.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\set1\skill2.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\set1\skill3.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\set1\two.png">
@@ -121,18 +142,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\set1\bullet1.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\set1\skill1.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\set1\skill2.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\set1\skill3.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\set1\skill4.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Icon.ico" />

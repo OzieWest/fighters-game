@@ -10,12 +10,12 @@ namespace TestGame
 	{
 		protected List<List<Vector2>> _positions;
 
-		public GridController Init(int x)
+		public void Init(int x)
 		{
 			_positions = new List<List<Vector2>>();
 
-			var constPosX = 250;
-			var constPosY = 20;
+			var constPosX = 20;
+			var constPosY = 250;
 			var step = 60 + 5;
 
 			var posX = constPosX;
@@ -39,8 +39,6 @@ namespace TestGame
 				posX = constPosX;
 				posY += step;
 			}
-
-			return this;
 		}
 
 		public Vector2 this[int indexA, int indexB]

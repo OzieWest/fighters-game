@@ -13,37 +13,26 @@ namespace TestGame.Controllers
 	public class TileController
 	{
 		public PlaceController Places { get; set; }
-
-		#region Injects
-		public SkillController Skills { get; set; }
 		public TileContainer Container { get; set; }
 		public ObjectFactory Factory { get; set; }
-		#endregion
+		public BattleController Battle { get; set; }
 
-		public TileController()
+		public void Init(int x)
 		{
-			Places = new PlaceController();
-			Container = new TileContainer();
-		}
-
-		public TileController Init(int x, ObjectFactory factory, SkillController skills)
-		{
-			Factory = factory;
-			Skills = skills;
+			Places = IoC.GetSingleton<PlaceController>();
+			Container = IoC.GetSingleton<TileContainer>();
+			Factory = IoC.GetSingleton<ObjectFactory>();
+			Battle = IoC.GetSingleton<BattleController>();
 
 			Container.Init();
-
-			Places.Init(Container, 8);
-			Places.GenerateNeighbors();
+			Places.Init(x);
 
 			_fillGrid(x);
-
-			return this;
 		}
 
 		protected void _fillGrid(int x)
 		{
-			var startPos = -100;
+			var startPosY = -100;
 
 			for (var i = 0; i < x; i++)
 			{
@@ -54,7 +43,7 @@ namespace TestGame.Controllers
 					var pos = Places.Grid[i, j];
 					var cell = Factory.CreateRandomTile(10);
 
-					cell.SetPosition(pos.X, startPos);
+					cell.SetPosition(pos.X, startPosY);
 					cell.MoveTo(pos.X, pos.Y);
 
 					row.Add(cell);
@@ -97,7 +86,7 @@ namespace TestGame.Controllers
 					var type = tile.Type;
 
 					if (Container.RemoveElement(tile))
-						Skills.Move(x, y, type);
+						Battle.Strike((int)x, (int)y, type);
 				}
 			}
 		}

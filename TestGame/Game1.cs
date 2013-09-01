@@ -15,34 +15,29 @@ namespace TestGame
 {
 	public class Game1 : Game
 	{
-		#region Inject
 		GraphicsDeviceManager graphics;
 		SpriteBatch spriteBatch;
-
-		//BackgroundController _backController;
-		//TileController _tileController;
-		//SkillController _skillController;
-
 		LevelController _level;
-
-		#endregion
 
 		public Game1()
 			: base()
 		{
+
 			graphics = new GraphicsDeviceManager(this);
 			Content.RootDirectory = "Content";
 
-			this.SetResoluton(800, 550, false);
-			this.IsMouseVisible = false;
+			this.SetResoluton(1000, 800, false);
+			this.IsMouseVisible = true;
+
+			IoC.Init(Content);
 		}
 
 		protected override void LoadContent()
 		{
 			spriteBatch = new SpriteBatch(GraphicsDevice);
 
-			_level = new LevelController();
-			_level.CreateLevel("level1", Content);
+			_level = IoC.GetSingleton<LevelController>();
+			_level.Init("level1");
 
 		}
 

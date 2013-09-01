@@ -14,29 +14,29 @@ namespace TestGame.Controllers
 	{
 		public TileController TileController { get; set; }
 		public BackgroundController BackController { get; set; }
-		public ObjectFactory Factory { get; set; }
-		public SkillController Skills { get; set; }
 		public InputController Inputs { get; set; }
+		public BattleController BattleController { get; set; }
+		public TextureController TexController { get; set; }
+		public ObjectFactory Factory { get; set; }
 
-		public LevelController()
+		public void Init(String name)
 		{
-			//todo: создать объект Level, в котором все конфиги для контроллеров
-			TileController = new TileController();
-			BackController = new BackgroundController();
-			Factory = new ObjectFactory();
-			Skills = new SkillController();
-			Inputs = new InputController();
-		}
+			//get
+			TexController = IoC.GetSingleton<TextureController>();
+			BattleController = IoC.GetSingleton<BattleController>();
+			TileController = IoC.GetSingleton<TileController>();
+			BackController = IoC.GetSingleton<BackgroundController>();
+			Inputs = IoC.GetSingleton<InputController>();
+			Factory = IoC.GetSingleton<ObjectFactory>();
 
-		public void CreateLevel(String name, ContentManager content)
-		{
-			Factory.Init("set1/", content);
-			Skills.Init(Factory, content);
-			TileController.Init(8, Factory, Skills);
-			BackController.Init(Factory);
-			
+			//init
+			TexController.Init("set1/");
+			Factory.Init();
+			BattleController.Init();
+			TileController.Init(8);
+			BackController.Init();
 			Inputs.Init(
-				Factory.CreateTexture("Cursor")
+				TexController.GetTexture("Cursor")
 			);
 		} 
 
@@ -47,7 +47,7 @@ namespace TestGame.Controllers
 
 			BackController.Update(gameTime);
 			TileController.Update(gameTime, mousePosition, wasMouseDown);
-			Skills.Update(gameTime, mousePosition, wasMouseDown);
+			BattleController.Update(gameTime);
 
 			Inputs.End();
 		}
@@ -56,7 +56,8 @@ namespace TestGame.Controllers
 		{
 			BackController.Draw(spriteBatch);
 			TileController.Draw(spriteBatch);
-			Skills.Draw(spriteBatch);
+			BattleController.Draw(spriteBatch);
+
 			Inputs.DrawMouse(spriteBatch);
 		}
 

@@ -17,15 +17,10 @@ namespace TestGame
 
 		public TextureController TextureController { get; set; }
 
-		public ObjectFactory()
+		public void Init()
 		{
 			_rnd = new Random();
-			TextureController = new TextureController();
-		}
-
-		public void Init(string folder, ContentManager content)
-		{
-			TextureController.Init(folder, content);
+			TextureController = IoC.GetSingleton<TextureController>();
 		}
 
 		public TileObject CreateRandomTile(int frameOffset)

@@ -13,10 +13,13 @@ namespace TestGame
 	public class BackgroundController
 	{
 		protected BaseObject _tile;
+		private ObjectFactory _factory;
 
-		public void Init(ObjectFactory factory)
+		public void Init()
 		{
-			_tile = factory.CreateBackground("Background1");
+			_factory = IoC.GetSingleton<ObjectFactory>();
+
+			_tile = _factory.CreateBackground("Background1");
 		}
 
 		public virtual void Update(GameTime gameTime)
