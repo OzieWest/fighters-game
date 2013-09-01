@@ -36,7 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Controllers\LevelController.cs" />
-    <Compile Include="Controllers\TextureController.cs" />
+    <Compile Include="Controllers\Loader.cs" />
     <Compile Include="Controllers\BackgroundController.cs" />
     <Compile Include="Controllers\TileController.cs" />
     <Compile Include="Domain\GridPosition.cs" />

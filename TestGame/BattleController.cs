@@ -5,16 +5,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using TestGame.Content;
 using TestGame.Domain;
 
 namespace TestGame
 {
 	public class BattleController : IObject
 	{
-		private TextureController _texController;
-		private ContentManager _content;
-
 		public WarriorObject Player { get; set; }
 		public WarriorObject Enemy { get; set; }
 		public TilePool bullets { get; set; }
@@ -29,30 +25,27 @@ namespace TestGame
 
 		public void Init()
 		{
-			_texController = IoC.GetSingleton<TextureController>();
-			_content = IoC.GetSingleton<ContentManager>();
-
 			bullets = IoC.GetAsNew<TilePool>();
 			heals = IoC.GetAsNew<TilePool>();
 
 			var score = 100;
 
 			Player = new WarriorObject(
-				_texController.GetTexture("Player"),
-				_content.Load<SpriteFont>("font1"),
+				Loader.GetTexture("Player"),
+				Loader.GetFont("font1"),
 				score
 			);
 			Player.SetPosition(10, 10, 30, 100);
 
 			Enemy = new WarriorObject(
-				_texController.GetTexture("Enemy"),
-				_content.Load<SpriteFont>("font1"),
+				Loader.GetTexture("Enemy"),
+				Loader.GetFont("font1"),
 				score
 			);
 			Enemy.SetPosition(400, 10, 30, 100);
 
-			bullets.Init(_texController.GetTexture("Bullet2"), 20);
-			heals.Init(_texController.GetTexture("Bullet1"), 20);
+			bullets.Init(Loader.GetTexture("Bullet2"), 20);
+			heals.Init(Loader.GetTexture("Bullet1"), 20);
 
 			GenerateSkills();
 		}
@@ -61,8 +54,8 @@ namespace TestGame
 		{
 			Player.AddSkill(
 				new ComplexObject(
-					_texController.GetTexture("Skill1"),
-					_content.Load<SpriteFont>("font1"),
+					Loader.GetTexture("Skill1"),
+					Loader.GetFont("font1"),
 					TileTypes.One,
 					100
 				)
@@ -70,8 +63,8 @@ namespace TestGame
 
 			Player.AddSkill(
 				new ComplexObject(
-					_texController.GetTexture("Skill2"),
-					_content.Load<SpriteFont>("font1"),
+					Loader.GetTexture("Skill2"),
+					Loader.GetFont("font1"),
 					TileTypes.Two,
 					100
 				)
@@ -79,8 +72,8 @@ namespace TestGame
 
 			Enemy.AddSkill(
 				new ComplexObject(
-					_texController.GetTexture("Skill3"),
-					_content.Load<SpriteFont>("font1"),
+					Loader.GetTexture("Skill3"),
+					Loader.GetFont("font1"),
 					TileTypes.Three,
 					100
 				)

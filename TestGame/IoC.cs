@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using TestGame.Content;
 using TestGame.Controllers;
 
 namespace TestGame
@@ -28,14 +27,8 @@ namespace TestGame
 			Register<InputController>(
 				new InputController()
 			);
-			Register<ObjectFactory>(
-				new ObjectFactory()
-			);
 			Register<TilePool>(
 				new TilePool()
-			);
-			Register<TextureController>(
-				new TextureController()
 			);
 			Register<LevelController>(
 				new LevelController()
@@ -46,8 +39,8 @@ namespace TestGame
 			Register<GridController>(
 				new GridController()
 			);
-			Register<TileContainer>(
-				new TileContainer()
+			Register<TContainer>(
+				new TContainer()
 			);
 			Register<BackgroundController>(
 				new BackgroundController()

@@ -9,12 +9,12 @@ namespace TestGame
 {
 	public class PlaceController
 	{
-		public TileContainer Container { get; set; }
+		public TContainer Container { get; set; }
 		public GridController Grid { get; set; }
 
 		public void Init(int x)
 		{
-			Container = IoC.GetSingleton<TileContainer>();
+			Container = IoC.GetSingleton<TContainer>();
 			Grid = IoC.GetSingleton<GridController>();
 
 			Grid.Init(x);
@@ -46,7 +46,7 @@ namespace TestGame
 			Container[two.Grid.X][two.Grid.Y] = one;
 		}
 
-		public void MoveColumns(ObjectFactory factory)
+		public void MoveColumns()
 		{
 			var start = -100;
 			for (var e = 0; e < Container.Count; e++)
@@ -70,7 +70,7 @@ namespace TestGame
 						}
 						else
 						{
-							nextTile = factory.CreateRandomTile(10);
+							nextTile = OFactory.CreateRandomTile(10);
 							nextTile.SetPosition(Grid[i, e].X, start);
 							nextTile.MoveTo(Grid[i, e].X, Grid[i, e].Y);
 							start -= 100;

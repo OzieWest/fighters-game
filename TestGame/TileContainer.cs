@@ -9,7 +9,7 @@ using TestGame.Domain;
 
 namespace TestGame
 {
-	public class TileContainer
+	public class TContainer
 	{
 		public List<List<TileObject>> List;
 

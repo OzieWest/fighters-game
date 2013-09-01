@@ -17,9 +17,11 @@ namespace TestGame
 		protected MouseState _currentMouseState;
 		protected MouseState _previousMouseState;
 
-		public void Init(Texture2D mouseTexture)
+		public void Init()
 		{
-			MouseControl = new MouseObject(mouseTexture);
+			MouseControl = new MouseObject(
+				Loader.GetTexture("Cursor")
+			);
 		}
 
 		public void UpdateMouse()

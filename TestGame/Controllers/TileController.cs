@@ -13,15 +13,13 @@ namespace TestGame.Controllers
 	public class TileController
 	{
 		public PlaceController Places { get; set; }
-		public TileContainer Container { get; set; }
-		public ObjectFactory Factory { get; set; }
+		public TContainer Container { get; set; }
 		public BattleController Battle { get; set; }
 
 		public void Init(int x)
 		{
 			Places = IoC.GetSingleton<PlaceController>();
-			Container = IoC.GetSingleton<TileContainer>();
-			Factory = IoC.GetSingleton<ObjectFactory>();
+			Container = IoC.GetSingleton<TContainer>();
 			Battle = IoC.GetSingleton<BattleController>();
 
 			Container.Init();
@@ -41,7 +39,7 @@ namespace TestGame.Controllers
 				for (var j = 0; j < x; j++)
 				{
 					var pos = Places.Grid[i, j];
-					var cell = Factory.CreateRandomTile(10);
+					var cell = OFactory.CreateRandomTile(10);
 
 					cell.SetPosition(pos.X, startPosY);
 					cell.MoveTo(pos.X, pos.Y);
@@ -68,7 +66,7 @@ namespace TestGame.Controllers
 			{
 				_checkChains();
 				_checkIntersect(gameTime, obj, isSelect);
-				Places.MoveColumns(Factory);
+				Places.MoveColumns();
 				Places.GenerateNeighbors();
 			}
 		}
