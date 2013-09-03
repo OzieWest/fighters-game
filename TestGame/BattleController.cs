@@ -46,38 +46,6 @@ namespace TestGame
 
 			bullets.Init(Loader.GetTexture("Bullet2"), 20);
 			heals.Init(Loader.GetTexture("Bullet1"), 20);
-
-			GenerateSkills();
-		}
-
-		protected void GenerateSkills()
-		{
-			Player.AddSkill(
-				new ComplexObject(
-					Loader.GetTexture("Skill1"),
-					Loader.GetFont("font1"),
-					TileTypes.One,
-					100
-				)
-			);
-
-			Player.AddSkill(
-				new ComplexObject(
-					Loader.GetTexture("Skill2"),
-					Loader.GetFont("font1"),
-					TileTypes.Two,
-					100
-				)
-			);
-
-			Enemy.AddSkill(
-				new ComplexObject(
-					Loader.GetTexture("Skill3"),
-					Loader.GetFont("font1"),
-					TileTypes.Three,
-					100
-				)
-			);
 		}
 
 		public void Update(GameTime gameTime)
@@ -97,19 +65,47 @@ namespace TestGame
 
 		public void Strike(int x, int y, TileTypes type)
 		{
-			var skill = Player.GetByType(type);
-			if (skill != null)
+			switch (type)
 			{
-				heals.LaunchTile(x, y, skill.centerX(), skill.centerY());
-				skill.ScoreDown(1);
+				case TileTypes.One:
+					Enemy.Health(-1);
+					break;
+				case TileTypes.Two:
+					Player.Health(1);
+					break;
+				case TileTypes.Three:
+					Player.Power(1);
+					break;
+				case TileTypes.Four:
+					Player.Gold(1);
+					break;
+				case TileTypes.Five:
+					Player.Power(-1);
+					break;
+				case TileTypes.Six:
+					Player.Health(-1);
+					break;
+				case TileTypes.Seven:
+					Player.Health(-2);
+					Enemy.Health(-2);
+					break;
+				default:
+					break;
 			}
 
-			var skill2 = Enemy.GetByType(type);
-			if (skill2 != null)
-			{
-				heals.LaunchTile(x, y, skill2.centerX(), skill2.centerY());
-				skill2.ScoreDown(1);
-			}
+			//var skill = Player.GetByType(type);
+			//if (skill != null)
+			//{
+			//	heals.LaunchTile(x, y, skill.centerX(), skill.centerY());
+			//	skill.ScoreDown(1);
+			//}
+
+			//var skill2 = Enemy.GetByType(type);
+			//if (skill2 != null)
+			//{
+			//	heals.LaunchTile(x, y, skill2.centerX(), skill2.centerY());
+			//	skill2.ScoreDown(1);
+			//}
 		}
 
 		public void Draw(SpriteBatch spriteBatch)
@@ -120,10 +116,10 @@ namespace TestGame
 			heals.Draw(spriteBatch);
 		}
 
-		protected void Shoot(ComplexObject one, ComplexObject two)
+		protected void Shoot(WarriorObject one, WarriorObject two)
 		{
 			bullets.LaunchTile(one.centerX(), one.centerY(), two.centerX(), two.centerY());
-			two.ScoreDown(1);
+			two.Health((-1) * one.ScorePower);
 		}
 	}
 }

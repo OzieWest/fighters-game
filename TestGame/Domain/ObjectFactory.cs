@@ -23,7 +23,7 @@ namespace TestGame
 		{
 			FrameOffset = frameOffset;
 
-			int rInt = _rnd.Next(1, 10); // todo: все тайлы, кроме дефолтного
+			int rInt = _rnd.Next(1, 9); // todo: все тайлы, кроме дефолтного
 
 			var result = OFactory.CreateTileByType((TileTypes)rInt);
 

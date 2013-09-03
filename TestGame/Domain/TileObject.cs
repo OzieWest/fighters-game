@@ -69,10 +69,10 @@ namespace TestGame.Domain
 			switch (State)
 			{
 				case TileState.Focused:
-					_frame.Animate(gameTime, 0, 4, 2);
+					_frame.Animate(gameTime, 1, 1, 2);
 					break;
 				case TileState.Selected:
-					_frame.Animate(gameTime, 5, 9, 2);
+					_frame.Animate(gameTime, 2, 2, 2);
 					break;
 				case TileState.Test:
 					_frame.Animate(gameTime, 10, 10, 2);

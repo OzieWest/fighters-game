@@ -70,7 +70,7 @@ namespace TestGame
 						}
 						else
 						{
-							nextTile = OFactory.CreateRandomTile(10);
+							nextTile = OFactory.CreateRandomTile(0);
 							nextTile.SetPosition(Grid[i, e].X, start);
 							nextTile.MoveTo(Grid[i, e].X, Grid[i, e].Y);
 							start -= 100;

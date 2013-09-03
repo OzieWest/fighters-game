@@ -99,9 +99,6 @@
     <Content Include="Content\set1\one.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\set1\nine.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Content\set1\player.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

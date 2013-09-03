@@ -27,7 +27,7 @@ public static class Loader
 
 		var files = new List<String>()
 			{
-				"One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine",
+				"One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight",
 				"Background1", "Bullet1", "Bullet2", 
 				"Skill1", "Skill2", "Skill3",
 				"Player", "Enemy",

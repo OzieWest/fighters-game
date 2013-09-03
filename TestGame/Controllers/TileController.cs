@@ -39,7 +39,7 @@ namespace TestGame.Controllers
 				for (var j = 0; j < x; j++)
 				{
 					var pos = Places.Grid[i, j];
-					var cell = OFactory.CreateRandomTile(10);
+					var cell = OFactory.CreateRandomTile(0);
 
 					cell.SetPosition(pos.X, startPosY);
 					cell.MoveTo(pos.X, pos.Y);
