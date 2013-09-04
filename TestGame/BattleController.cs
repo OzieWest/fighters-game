@@ -29,23 +29,30 @@ namespace TestGame
 			heals = IoC.GetAsNew<TilePool>();
 
 			var score = 100;
+			var alg = 3;
 
 			Player = new WarriorObject(
 				Loader.GetTexture("Player"),
 				Loader.GetFont("font1"),
 				score
 			);
-			Player.SetPosition(10, 10, 30, 100);
+			Player.SetPosition(10, 10);
 
 			Enemy = new WarriorObject(
 				Loader.GetTexture("Enemy"),
 				Loader.GetFont("font1"),
-				score
+				(score * alg)
 			);
-			Enemy.SetPosition(400, 10, 30, 100);
+			Enemy.SetPosition(400, 10);
 
-			bullets.Init(Loader.GetTexture("Bullet2"), 20);
-			heals.Init(Loader.GetTexture("Bullet1"), 20);
+			bullets.Init(
+				Loader.GetTexture("Bullet2"),
+				20
+			);
+			heals.Init(
+				Loader.GetTexture("Bullet1"),
+				20
+			);
 		}
 
 		public void Update(GameTime gameTime)
@@ -54,7 +61,7 @@ namespace TestGame
 
 			if (_timer == 1)
 				Shoot(Player, Enemy);
-			if (_timer == 199)
+			else if (_timer == 199)
 				Shoot(Enemy, Player);
 
 			Player.Update(gameTime);
@@ -68,44 +75,30 @@ namespace TestGame
 			switch (type)
 			{
 				case TileTypes.One:
-					Enemy.Health(-1);
+					Enemy.Health.Down(1);
 					break;
 				case TileTypes.Two:
-					Player.Health(1);
+					Player.Health.Up(1);
 					break;
 				case TileTypes.Three:
-					Player.Power(1);
+					Player.Power.Up(1);
 					break;
 				case TileTypes.Four:
-					Player.Gold(1);
+					Player.Gold.Up(1);
 					break;
 				case TileTypes.Five:
-					Player.Power(-1);
+					Player.Power.Down(1);
 					break;
 				case TileTypes.Six:
-					Player.Health(-1);
+					Player.Health.Down(1);
 					break;
 				case TileTypes.Seven:
-					Player.Health(-2);
-					Enemy.Health(-2);
+					Player.Health.Down(2);
+					Enemy.Health.Down(2);
 					break;
 				default:
 					break;
 			}
-
-			//var skill = Player.GetByType(type);
-			//if (skill != null)
-			//{
-			//	heals.LaunchTile(x, y, skill.centerX(), skill.centerY());
-			//	skill.ScoreDown(1);
-			//}
-
-			//var skill2 = Enemy.GetByType(type);
-			//if (skill2 != null)
-			//{
-			//	heals.LaunchTile(x, y, skill2.centerX(), skill2.centerY());
-			//	skill2.ScoreDown(1);
-			//}
 		}
 
 		public void Draw(SpriteBatch spriteBatch)
@@ -118,8 +111,11 @@ namespace TestGame
 
 		protected void Shoot(WarriorObject one, WarriorObject two)
 		{
-			bullets.LaunchTile(one.centerX(), one.centerY(), two.centerX(), two.centerY());
-			two.Health((-1) * one.ScorePower);
+			bullets.LaunchTile(
+				one.X, one.Y,
+				two.X, two.Y
+			);
+			two.Health.Down(one.Power.Value);
 		}
 	}
 }

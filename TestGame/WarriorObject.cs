@@ -8,73 +8,98 @@ using TestGame.Domain;
 
 namespace TestGame
 {
-	public class WarriorObject : ComplexObject
+	public class WarriorObject
 	{
-		public int ScoreGold { get; private set; }
-		protected FontObject _gold;
+		protected TileObject _tile;
 
-		public int ScoreHealth { get; private set; }
-		protected FontObject _health;
+		public Score Gold { get; set; }
+		public Score Health { get; set; }
+		public Score Power { get; set; }
 
-		public int ScorePower { get; private set; }
-		protected FontObject _power;
-
-		public WarriorObject(Texture2D texture, SpriteFont font, int score)
-			:base(texture, font, TileTypes.Default, score)
+		public WarriorObject(Texture2D texture, SpriteFont font, int healthValue)
 		{
-			_gold = new FontObject(Loader.GetFont("font1"));
-			_health = new FontObject(Loader.GetFont("font1"));
-			_power = new FontObject(Loader.GetFont("font1"));
+			_tile = new TileObject(texture, TileTypes.Default, 128, 0);
 
-			ScorePower = 1;
-			ScoreHealth = 100;
-			ScoreGold = 0;
+			Gold = new Score(
+				Loader.GetFont("font1"),
+				"Gold",
+				0
+			);
+			Health = new Score(
+				Loader.GetFont("font1"),
+				"Health",
+				healthValue
+			);
+			Power = new Score(
+				Loader.GetFont("font1"),
+				"Power",
+				1
+			);
 		}
 
-		public void Health(int value)
+		public void SetPosition(float x, float y)
 		{
-			ScoreHealth += value;
+			_tile.Position.X = x;
+			_tile.Position.Y = y;
+			_tile.MoveTo(x, y);
 		}
 
-		public void Power(int value)
+		public float X
 		{
-			ScorePower += value;
+			get
+			{
+				var x = _tile.Position.X;
+				return (int)x + _tile.Texture.Width / 2;
+			}
 		}
 
-		public void Gold(int value)
+		public float Y
 		{
-			ScoreGold += value;
+			get
+			{
+				var y = _tile.Position.Y;
+				return (int)y + _tile.Texture.Height / 2;
+			}
 		}
 
-		private void _initPosition()
+		private void _correctSkillPosition()
 		{
-			_gold.SetPosition(centerX() + 50, centerY() + 0);
-			_health.SetPosition(centerX() + 50, centerY() + 30);
-			_power.SetPosition(centerX() + 50, centerY() + 60);
+			var x = _tile.Position.X;
+			var y = _tile.Position.Y;
+			var corX = 100;
+
+			Gold.SetPosition(
+				x + corX,
+				y + 100
+			);
+			Health.SetPosition(
+				x + corX,
+				y + 130
+			);
+			Power.SetPosition(
+				x + corX,
+				y + 160
+			);
 		}
 
-		public override void Update(GameTime gameTime)
+		public virtual void Update(GameTime gameTime)
 		{
-			_initPosition();
+			_correctSkillPosition();
 
-			_gold.Text = String.Format("Gold: {0}", ScoreGold);
-			_health.Text = String.Format("Health: {0}", ScoreHealth);
-			_power.Text = String.Format("Power: {0}", ScorePower);
+			Gold.Update();
+			Health.Update();
+			Power.Update();
 
-			_gold.Update(gameTime);
-			_health.Update(gameTime);
-			_power.Update(gameTime);
-
-			base.Update(gameTime);
+			_tile.Update(gameTime);
 		}
 
-		public override void Draw(SpriteBatch spriteBatch)
+		public virtual void Draw(SpriteBatch spriteBatch)
 		{
-			_gold.Draw(spriteBatch);
-			_health.Draw(spriteBatch);
-			_power.Draw(spriteBatch);
-
-			base.Draw(spriteBatch);
+			Gold.Draw(spriteBatch);
+			Health.Draw(spriteBatch);
+			Power.Draw(spriteBatch);
+			
+			_tile.Draw(spriteBatch);
 		}
 	}
 }

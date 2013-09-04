@@ -11,11 +11,9 @@ namespace TestGame.Domain
 {
 	public class FontObject
 	{
-		#region Values
 		protected SpriteFont _font;
 		protected Vector2 _position;
 		public String Text { get; set; }
-		#endregion
 
 		public Color Color { get; set; }
 
@@ -29,12 +27,10 @@ namespace TestGame.Domain
 			Text = String.Empty;
 		}
 
-		public virtual FontObject SetPosition(int x, int y)
+		public virtual void SetPosition(float x, float y)
 		{
 			_position.X = x;
 			_position.Y = y;
-
-			return this;
 		}
 
 		public virtual float X
@@ -59,11 +55,6 @@ namespace TestGame.Domain
 			{
 				_position.Y = value;
 			}
-		}
-
-		public virtual void Update(GameTime gameTime)
-		{
-			//
 		}
 
 		public virtual void Draw(SpriteBatch spriteBatch)
