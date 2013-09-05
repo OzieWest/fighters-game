@@ -59,6 +59,7 @@
     <Compile Include="Domain\TileNeighbor.cs" />
     <Compile Include="BattleController.cs" />
     <Compile Include="Score.cs" />
+    <Compile Include="SparkTile.cs" />
     <Compile Include="TileComparator.cs" />
     <Compile Include="TilePool.cs" />
     <Compile Include="TileContainer.cs" />

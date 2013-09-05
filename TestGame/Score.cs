@@ -21,19 +21,24 @@ namespace TestGame
 
 		public void Update()
 		{
+			_checkValue();
 			Text = String.Format("{0}: {1}", Prefix, Value); 
 		}
 
-		public void Up(int value)
+		public void Plus(int value)
 		{
 			Value += value;
 		}
 
-		public void Down(int value)
+		public void Minus(int value)
 		{
 			if (Value > 0)
 				Value -= value;
-			else
+		}
+
+		protected void _checkValue()
+		{
+			if (Value < 0)
 				Value = 0;
 		}
 	}

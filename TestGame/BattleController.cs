@@ -14,7 +14,7 @@ namespace TestGame
 		public WarriorObject Player { get; set; }
 		public WarriorObject Enemy { get; set; }
 		public TilePool bullets { get; set; }
-		public TilePool heals { get; set; }
+		public SparkPool skills { get; set; }
 
 		protected Random _rnd;
 
@@ -26,7 +26,6 @@ namespace TestGame
 		public void Init()
 		{
 			bullets = IoC.GetAsNew<TilePool>();
-			heals = IoC.GetAsNew<TilePool>();
 
 			var score = 100;
 			var alg = 3;
@@ -47,11 +46,7 @@ namespace TestGame
 
 			bullets.Init(
 				Loader.GetTexture("Bullet2"),
-				20
-			);
-			heals.Init(
-				Loader.GetTexture("Bullet1"),
-				20
+				6
 			);
 		}
 
@@ -67,7 +62,6 @@ namespace TestGame
 			Player.Update(gameTime);
 			Enemy.Update(gameTime);
 			bullets.Update(gameTime);
-			heals.Update(gameTime);
 		}
 
 		public void Strike(int x, int y, TileTypes type)
@@ -75,26 +69,26 @@ namespace TestGame
 			switch (type)
 			{
 				case TileTypes.One:
-					Enemy.Health.Down(1);
+					Enemy.Health.Minus(Player.Power.Value);
 					break;
 				case TileTypes.Two:
-					Player.Health.Up(1);
+					Player.Health.Plus(1);
 					break;
 				case TileTypes.Three:
-					Player.Power.Up(1);
+					Player.Power.Plus(1);
 					break;
 				case TileTypes.Four:
-					Player.Gold.Up(1);
+					Player.Gold.Plus(1);
 					break;
 				case TileTypes.Five:
-					Player.Power.Down(1);
+					Player.Power.Minus(1);
 					break;
 				case TileTypes.Six:
-					Player.Health.Down(1);
+					Player.Health.Minus(Enemy.Power.Value);
 					break;
 				case TileTypes.Seven:
-					Player.Health.Down(2);
-					Enemy.Health.Down(2);
+					Player.Health.Minus(10);
+					Enemy.Health.Minus(10);
 					break;
 				default:
 					break;
@@ -106,7 +100,6 @@ namespace TestGame
 			bullets.Draw(spriteBatch);
 			Player.Draw(spriteBatch);
 			Enemy.Draw(spriteBatch);
-			heals.Draw(spriteBatch);
 		}
 
 		protected void Shoot(WarriorObject one, WarriorObject two)
@@ -115,7 +108,7 @@ namespace TestGame
 				one.X, one.Y,
 				two.X, two.Y
 			);
-			two.Health.Down(one.Power.Value);
+			two.Health.Minus(one.Power.Value);
 		}
 	}
 }
