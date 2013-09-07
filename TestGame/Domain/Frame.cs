@@ -8,41 +8,47 @@ namespace TestGame
 {
 	public class Frame
 	{
-		public int Current { get; set; }
-		public float Timer { get; set; }
+		int _current;
+		float _timer { get; set; }
+
 		public float Interval { get; set; }
 		public int Offset { get; set; }
 
+		public Frame(float interval)
+		{
+			Interval = interval;
+		}
+
 		public void DefaultValue()
 		{
-			Current = 0;
-			Timer = 0;
+			_current = 0;
+			_timer = 0;
 			Interval = 0;
 			Offset = 0;
 		}
 
 		public virtual void Animate(GameTime gameTime, int startFrame, int endFrame, int speed)
 		{
-			Timer += (float)gameTime.ElapsedGameTime.TotalMilliseconds / 2;
-			if (Timer > Interval / speed)
+			_timer += (float)gameTime.ElapsedGameTime.TotalMilliseconds / 2;
+			if (_timer > Interval / speed)
 			{
-				Current++;
-				Timer = 0;
-				if (Current > endFrame)
+				_current++;
+				_timer = 0;
+				if (_current > endFrame)
 				{
-					Current = startFrame;
+					_current = startFrame;
 				}
 			}
 		}
 
 		public void Reset()
 		{
-			Current = 0;
+			_current = 0;
 		}
 
-		public int StrageMath()
+		public int CurrentFrame()
 		{
-			return Current * (int)Interval;
+			return _current * (int)Interval;
 		}
 	}
 }

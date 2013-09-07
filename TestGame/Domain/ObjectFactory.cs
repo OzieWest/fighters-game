@@ -9,48 +9,42 @@ using TestGame.Domain;
 
 namespace TestGame
 {
-	public static class OFactory
+	public class OFactory
 	{
-		public static Random _rnd;
-		public static int FrameOffset { get; set; }
+		public static OFactory Instance { get; private set; }
+
+		Random _rnd;
 
 		static OFactory()
+		{
+			Instance = new OFactory();
+		}
+
+		private OFactory()
 		{
 			_rnd = new Random();
 		}
 
-		public static TileObject CreateRandomTile(int frameOffset)
+		public TileObject CreateRandomTile()
 		{
-			FrameOffset = frameOffset;
-
 			int rInt = _rnd.Next(1, 9); // todo: все тайлы, кроме дефолтного
 
-			var result = OFactory.CreateTileByType((TileTypes)rInt);
-
-			return result;
+			return CreateTileByType((TileTypes)rInt);
 		}
 
-		public static BaseObject CreateBackground(String textureName)
+		public BaseObject CreateBackground(String textureName)
 		{
 			var texture = Loader.Instance.GetTexture(textureName);
 
-			var result = new BaseObject(texture);
-			result.Position.SetFrame(0);
-			result.Position.Rectangle = new Rectangle()
-			{
-				X = 0,
-				Y = 0,
-				Width = texture.Width,
-				Height = texture.Height
-			};
-
+			var result = new BaseObject(texture, texture.Height);
+			
 			return result;
 		}
 
-		public static TileObject CreateTileByType(TileTypes type)
+		public TileObject CreateTileByType(TileTypes type)
 		{
 			var tex = Loader.Instance.GetTexture(type.ToString());
-			var result = new TileObject(tex, type, tex.Height, FrameOffset);
+			var result = new TileObject(tex, type, tex.Height);
 
 			return result;
 		}

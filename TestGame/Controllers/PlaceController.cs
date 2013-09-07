@@ -70,7 +70,7 @@ namespace TestGame
 						}
 						else
 						{
-							nextTile = OFactory.CreateRandomTile(0);
+							nextTile = OFactory.Instance.CreateRandomTile();
 							nextTile.SetPosition(Grid[i, e].X, start);
 							nextTile.MoveTo(Grid[i, e].X, Grid[i, e].Y);
 							start -= 100;
@@ -112,14 +112,7 @@ namespace TestGame
 						_checkChain(type, tile, chain);
 
 						if (chain.Count > 2)
-						{
-							foreach (var item in chain)
-							{
-								item.State = TileState.Test;
-							}
-
 							mainChain.AddRange(chain);
-						}
 					}
 				}
 			}

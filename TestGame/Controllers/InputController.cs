@@ -11,11 +11,10 @@ namespace TestGame
 	{
 		public MouseObject MouseControl { get; set; }
 
-		protected KeyboardState _currentState;
-		protected KeyboardState _previousState;
+		KeyboardState _currentKeyboardState;
+		KeyboardState _previousKeyboardState;
 
-		protected MouseState _currentMouseState;
-		protected MouseState _previousMouseState;
+		MouseState _previousMouseState;
 
 		public void Init()
 		{
@@ -36,10 +35,10 @@ namespace TestGame
 
 		public void isKeyDown(Keys key, Action del)
 		{
-			_currentState = Keyboard.GetState();
+			_currentKeyboardState = Keyboard.GetState();
 
-			if (_currentState.IsKeyDown(key) &&
-				!_previousState.IsKeyDown(key))
+			if (_currentKeyboardState.IsKeyDown(key) &&
+				!_previousKeyboardState.IsKeyDown(key))
 			{
 				del.Invoke();
 			}
@@ -58,7 +57,7 @@ namespace TestGame
 
 		public void End()
 		{
-			_previousState = Keyboard.GetState();
+			_previousKeyboardState = Keyboard.GetState();
 		}
 	}
 }

@@ -32,14 +32,16 @@ namespace TestGame
 			Player = new WarriorObject(
 				Loader.Instance.GetTexture("player"),
 				font,
-				score
+				score,
+				180
 			);
 			Player.SetPosition(10, 10);
 
 			Enemy = new WarriorObject(
 				Loader.Instance.GetTexture("enemy"),
 				font,
-				(score * alg)
+				(score * alg),
+				180
 			);
 			Enemy.SetPosition(400, 10);
 

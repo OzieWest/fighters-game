@@ -12,17 +12,8 @@ namespace TestGame
 	public class MouseObject: BaseObject
 	{
 		public MouseObject(Texture2D texture)
-			: base(texture)
+			: base(texture, 10)
 		{
-			Position.SetFrame(0);
-
-			Position.Rectangle = new Rectangle()
-			{
-				X = 0,
-				Y = 0,
-				Width = texture.Width,
-				Height = texture.Height
-			};
 
 		}
 
@@ -32,13 +23,9 @@ namespace TestGame
 			this.SetPosition(state.X, state.Y);
 		}
 
-		public override void SetPosition(float x, float y)
+		public void SetPosition(float x, float y)
 		{
-			Position.X = x;
-			Position.Y = y;
-
-			//Position.rX = (int)x;
-			//Position.rY = (int)y;
+			Position.Set(x, y);
 		}
 	}
 }

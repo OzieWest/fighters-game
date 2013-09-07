@@ -10,29 +10,22 @@ namespace TestGame.Domain
 {
 	public class BaseObject
 	{
-		#region Injects
 		public Position Position { get; set; }
 		public Texture2D Texture { get; set; }
 		public Color Color { get; set; }
-		protected Frame _frame;
-		#endregion
 
-		public BaseObject(Texture2D texture)
+		public BaseObject(Texture2D texture, int frameInterval)
 		{
-			Position = new Position()
-			{
-				Real = new Vector2(0, 0)
-			};
-
 			Texture = texture;
+
+			Position = new Position(Texture.Height, frameInterval);
 
 			Color = Color.White;
 		}
 
-		public virtual void SetPosition(float x, float y)
+		public virtual void Update(GameTime gameTime)
 		{
-			Position.X = x;
-			Position.Y = y;
+			Position.Update();
 		}
 
 		public virtual void Draw(SpriteBatch spriteBatch)

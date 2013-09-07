@@ -8,20 +8,14 @@ namespace TestGame
 {
 	public class Position
 	{
-		protected Vector2 _realPosition;
-		protected Vector2 _originalPosition;
-		protected Vector2 _destinationPosition;
-		protected Rectangle _rectangle;
+		Vector2 _realPosition;
+		Vector2 _originalPosition;
+		Vector2 _destinationPosition;
+		Rectangle _rectangle;
 
 		public float SpeedConst { get; set; }
-		public float SpeedX { get; set; }
-		public float SpeedY { get; set; }
-
-		public void ResetSpeed()
-		{
-			SpeedX = SpeedConst;
-			SpeedY = SpeedConst;
-		}
+		float _speedX;
+		float _speedY;
 
 		public Vector2 Original
 		{
@@ -60,8 +54,20 @@ namespace TestGame
 			set { _rectangle = value; }
 		}
 
-		public Position()
+		public Frame Frame { get; set; }
+
+		public Position(int height, int frameInterval)
 		{
+			Rectangle = new Rectangle()
+			{
+				X = 0,
+				Y = 0,
+				Width = frameInterval,
+				Height = height
+			};
+
+			Frame = new Frame(frameInterval);
+
 			Original = new Vector2(0, 0);
 			Real = new Vector2(0, 0);
 			Destination = new Vector2(0, 0);
@@ -69,11 +75,56 @@ namespace TestGame
 			SpeedConst = 15;
 
 			ResetSpeed();
+			_setFrame();
+		}
+
+		public void Set(float x, float y)
+		{
+			X = x;
+			Y = y;
+		}
+
+		public void ResetSpeed()
+		{
+			_speedX = SpeedConst;
+			_speedY = SpeedConst;
+		}
+
+		public void Update()
+		{
+			_setFrame();
+
+			var distanceX = X - _destinationPosition.X;
+			var distanceY = Y - _destinationPosition.Y;
+
+			//change X speed
+			if (Math.Abs(distanceX) < _speedX)
+				_speedX = _speedX / 2;
+			else
+				_speedX += 1;
+
+			//change Y speed
+			if (Math.Abs(distanceY) < _speedY)
+				_speedY = _speedY / 2;
+			else
+				_speedY += 1;
+
+			//move object (Y)
+			if (distanceY > 0)
+				Y -= _speedY;
+			else if (distanceY < 0)
+				Y += _speedY;
+
+			//move object (X)
+			if (distanceX > 0)
+				X -= _speedX;
+			else if (distanceX < 0)
+				X += _speedX;
 		}
 
 		public Boolean IsMoveComplete()
 		{
-			if (X != toX || Y != toY)
+			if (X != _destinationPosition.X || Y != _destinationPosition.Y)
 			{
 				return false;
 			}
@@ -81,75 +132,27 @@ namespace TestGame
 			return true;
 		}
 
-		/// <summary>
-		/// Move to destination
-		/// </summary>
-		/// <param name="x"></param>
-		/// <param name="y"></param>
 		public void MoveTo(float x, float y)
 		{
 			_destinationPosition.X = x;
 			_destinationPosition.Y = y;
 		}
 
-		public void SetFrame(int x)
-		{
-			_rectangle.X = x;
-			_rectangle.Y = 0;
-		}
-
-		/// <summary>
-		/// Real position X
-		/// </summary>
 		public float X
 		{
 			get { return _realPosition.X; }
 			set { _realPosition.X = value; }
 		}
 
-		/// <summary>
-		/// Real position Y
-		/// </summary>
 		public float Y
 		{
 			get { return _realPosition.Y; }
 			set { _realPosition.Y = value; }
 		}
 
-		/// <summary>
-		/// Destination position X
-		/// </summary>
-		public float toX
+		void _setFrame()
 		{
-			get { return _destinationPosition.X; }
-			set { _destinationPosition.X = value; }
-		}
-
-		/// <summary>
-		/// Destination position Y
-		/// </summary>
-		public float toY
-		{
-			get { return _destinationPosition.Y; }
-			set { _destinationPosition.Y = value; }
-		}
-
-		/// <summary>
-		/// Rectangle position X
-		/// </summary>
-		public int rX
-		{
-			get { return _rectangle.X; }
-			set { _rectangle.X = value; }
-		}
-
-		/// <summary>
-		/// Rectangle position Y
-		/// </summary>
-		public int rY
-		{
-			get { return _rectangle.Y; }
-			set { _rectangle.Y = value; }
+			_rectangle.X = Frame.CurrentFrame();
 		}
 	}
 }

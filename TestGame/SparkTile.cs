@@ -8,14 +8,14 @@ using TestGame.Domain;
 
 namespace TestGame
 {
-	public class SparkTile : TileObject
+	public class SparkTile : BaseObject
 	{
 		public Boolean IsGood { get; set; }
 		public int LiveTime { get; set; }
 		public FontObject Info { get; set; }
 
-		public SparkTile(Texture2D texture, SpriteFont font, TileTypes type, int frameInterval, int frameOffset, Boolean isGood)
-			: base(texture, type, frameInterval, frameOffset)
+		public SparkTile(Texture2D texture, SpriteFont font, int frameInterval, Boolean isGood)
+			: base(texture, frameInterval)
 		{
 			LiveTime = 0;
 			Info = new FontObject(font);
@@ -29,6 +29,7 @@ namespace TestGame
 
 		public override void Update(GameTime gameTime)
 		{
+			Position.Frame.Animate(gameTime, 0, 40, 10);
 			_decreaseLive();
 			base.Update(gameTime);
 		}
@@ -41,10 +42,10 @@ namespace TestGame
 				Info.Text = "-" + value.ToString();
 		}
 
-		public override void SetPosition(float x, float y)
+		public void SetPosition(float x, float y)
 		{
-			MoveTo(x, y);
-			base.SetPosition(x, y);
+			Position.MoveTo(x, y);
+			Position.Set(x, y);
 			Info.SetPosition(x + 70, y + 70);
 		}
 

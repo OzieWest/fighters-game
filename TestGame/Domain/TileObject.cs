@@ -20,24 +20,10 @@ namespace TestGame.Domain
 
 		private Boolean disposed = false;
 
-		public TileObject(Texture2D texture, TileTypes type, int frameInterval, int frameOffset)
-			: base(texture)
+		public TileObject(Texture2D texture, TileTypes type, int frameInterval)
+			: base(texture, frameInterval)
 		{
 			Type = type;
-
-			_frame = new Frame()
-			{
-				Interval = frameInterval,
-				Offset = frameOffset
-			};
-
-			Position.Rectangle = new Rectangle()
-			{
-				X = 0,
-				Y = 0,
-				Width = frameInterval,
-				Height = texture.Height
-			};
 
 			_init();
 		}
@@ -51,10 +37,10 @@ namespace TestGame.Domain
 
 		public virtual Boolean IsIntersect(Position obj)
 		{
-			if (obj.X > (this.Position.X + _frame.Offset) &&
-				obj.X < (this.Position.X + _frame.Interval) - _frame.Offset &&
-				obj.Y > (this.Position.Y + _frame.Offset) &&
-				obj.Y < (this.Position.Y + _frame.Interval) - _frame.Offset)
+			if (obj.X > (Position.X + Position.Frame.Offset) &&
+				obj.X < (Position.X + Position.Frame.Interval) - Position.Frame.Offset &&
+				obj.Y > (Position.Y + Position.Frame.Offset) &&
+				obj.Y < (Position.Y + Position.Frame.Interval) - Position.Frame.Offset)
 			{
 				return true;
 			}
@@ -69,55 +55,21 @@ namespace TestGame.Domain
 			switch (State)
 			{
 				case TileState.Focused:
-					_frame.Animate(gameTime, 1, 1, 2);
+					Position.Frame.Animate(gameTime, 1, 1, 2);
 					break;
 				case TileState.Selected:
-					_frame.Animate(gameTime, 2, 2, 2);
-					break;
-				case TileState.Test:
-					_frame.Animate(gameTime, 0, 40, 10);
-					break;
-				case TileState.Walk:
-					_frame.Animate(gameTime, 0, 3, 2);
+					Position.Frame.Animate(gameTime, 2, 2, 2);
 					break;
 				default:
-					_frame.Reset();
+					Position.Frame.Reset();
 					break;
 			}
 		}
 
-		public virtual void Update(GameTime gameTime)
+		public override void Update(GameTime gameTime)
 		{
-			Position.SetFrame(_frame.StrageMath());
-
 			_animate(gameTime);
-
-			var distanceX = Position.X - Position.toX;
-			var distanceY = Position.Y - Position.toY;
-
-			//change X speed
-			if (Math.Abs(distanceX) < Position.SpeedX)
-				Position.SpeedX = Position.SpeedX / 2;
-			else
-				Position.SpeedX += 1;
-
-			//change Y speed
-			if (Math.Abs(distanceY) < Position.SpeedY)
-				Position.SpeedY = Position.SpeedY / 2;
-			else
-				Position.SpeedY += 1;
-
-			//move object (Y)
-			if (distanceY > 0)
-				Position.Y -= Position.SpeedY;
-			else if (distanceY < 0)
-				Position.Y += Position.SpeedY;
-
-			//move object (X)
-			if (distanceX > 0)
-				Position.X -= Position.SpeedX;
-			else if (distanceX < 0)
-				Position.X += Position.SpeedX;
+			base.Update(gameTime);
 		}
 
 		public virtual Boolean Compare(TileObject obj)
@@ -140,9 +92,8 @@ namespace TestGame.Domain
 			Grid.X = -1;
 			Grid.Y = -1;
 
-			this.SetPosition(-100, -100);
-
-			_frame.DefaultValue();
+			Position.Set(-100, -100);
+			Position.Frame.DefaultValue();
 		}
 
 		#region Interfaces
@@ -155,6 +106,11 @@ namespace TestGame.Domain
 		{
 			Position.MoveTo(x, y);
 			Position.ResetSpeed();
+		}
+
+		public virtual void SetPosition(float x, float y)
+		{
+			Position.Set(x, y);
 		}
 		#endregion
 
@@ -176,7 +132,7 @@ namespace TestGame.Domain
 					this.SetPosition(-100, -100);
 
 					Neighbors = null;
-					_frame = null;
+					Position.Frame = null;
 				}
 				disposed = true;
 			}

@@ -20,7 +20,7 @@ namespace TestGame
 			_tiles = new List<TileObject>();
 			for (var i = 0; i < count; i++)
 			{
-				var tile = new TileObject(_texture, TileTypes.Default, _texture.Width, 0);
+				var tile = new TileObject(_texture, TileTypes.Default, _texture.Width);
 				this.Release(tile);
 
 				_tiles.Add(tile);

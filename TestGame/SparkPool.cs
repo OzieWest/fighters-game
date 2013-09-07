@@ -15,12 +15,13 @@ namespace TestGame
 
 		public void Init(Texture2D texture, int count, int sparksLiveTime)
 		{
+			var font = Loader.Instance.GetFont("font_12");
 			_liveTime = sparksLiveTime;
 
 			_sparks = new List<SparkTile>();
 			for (var i = 0; i < count; i++)
 			{
-				var tile = new SparkTile(texture, Loader.Instance.GetFont("font_12"), TileTypes.Default, 128, 0, false);
+				var tile = new SparkTile(texture, font, 128, false);
 				this.Release(tile);
 
 				_sparks.Add(tile);
@@ -59,7 +60,6 @@ namespace TestGame
 			if (tile != null)
 			{
 				tile.LiveTime = _liveTime;
-				tile.State = TileState.Test;
 				tile.SetInfo(value);
 				tile.SetPosition(x, y);
 
