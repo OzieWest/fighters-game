@@ -9,20 +9,19 @@ namespace TestGame
 {
 	public class PlaceController
 	{
+		public List<List<Vector2>> Positions { get; set; }
 		public TContainer Container { get; set; }
-		public GridController Grid { get; set; }
 
 		public void Init(int x)
 		{
-			Container = IoC.GetSingleton<TContainer>();
-			Grid = IoC.GetSingleton<GridController>();
+			Container = GameRoot.TContainer;
 
-			Grid.Init(x);
+			_initGrid(20, 250, 65, x);
 
-			GenerateNeighbors();
+			InitNeighbors();
 		}
 
-		public void GenerateNeighbors()
+		public void InitNeighbors()
 		{
 			for (var i = 0; i < Container.Count; i++)
 			{
@@ -57,11 +56,14 @@ namespace TestGame
 				{
 					if (list[i] == null)
 					{
-						var nextTile = this._getNextNotNull(list, i);
+						var nextTile = _getNextNotNull(list, i);
+
+						var x = Positions[i][e].X;
+						var y = Positions[i][e].Y;
 
 						if (nextTile != null)
 						{
-							nextTile.MoveTo(Grid[i, e].X, Grid[i, e].Y);
+							nextTile.MoveTo(x, y);
 
 							var index = list.IndexOf(nextTile);
 
@@ -70,9 +72,9 @@ namespace TestGame
 						}
 						else
 						{
-							nextTile = OFactory.Instance.CreateRandomTile();
-							nextTile.SetPosition(Grid[i, e].X, start);
-							nextTile.MoveTo(Grid[i, e].X, Grid[i, e].Y);
+							nextTile = GameRoot.TileFactory.GetTile();
+							nextTile.SetPosition(x, start);
+							nextTile.MoveTo(x, y);
 							start -= 100;
 						}
 
@@ -81,6 +83,8 @@ namespace TestGame
 					}
 				}
 			}
+
+			InitNeighbors();
 		}
 
 		protected TileObject _getNextNotNull(List<TileObject> list, int startIndex)
@@ -182,6 +186,33 @@ namespace TestGame
 			else
 			{
 				neighbors.R = Container[x][y + 1];
+			}
+		}
+
+		void _initGrid(int constPosX, int constPosY, int step, int x)
+		{
+			Positions = new List<List<Vector2>>();
+
+			var posX = constPosX;
+			var posY = constPosY;
+
+			for (var i = 0; i < x; i++)
+			{
+				var row = new List<Vector2>();
+
+				for (var j = 0; j < x; j++)
+				{
+					var cell = new Vector2(posX, posY);
+
+					row.Add(cell);
+
+					posX += step;
+				}
+
+				Positions.Add(row);
+
+				posX = constPosX;
+				posY += step;
 			}
 		}
 	}

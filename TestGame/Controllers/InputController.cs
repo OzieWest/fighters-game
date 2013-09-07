@@ -16,11 +16,9 @@ namespace TestGame
 
 		MouseState _previousMouseState;
 
-		public void Init()
+		public InputController(Texture2D texture)
 		{
-			MouseControl = new MouseObject(
-				Loader.Instance.GetTexture("cursor")
-			);
+			MouseControl = new MouseObject(texture);
 		}
 
 		public void UpdateMouse()

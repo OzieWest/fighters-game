@@ -24,23 +24,11 @@ namespace TestGame
 			Register<BattleController>(
 				new BattleController()
 			);
-			Register<InputController>(
-				new InputController()
-			);
 			Register<LevelController>(
 				new LevelController()
 			);
 			Register<PlaceController>(
 				new PlaceController()
-			);
-			Register<GridController>(
-				new GridController()
-			);
-			Register<TContainer>(
-				new TContainer()
-			);
-			Register<BackgroundController>(
-				new BackgroundController()
 			);
 		}
 

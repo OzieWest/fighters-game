@@ -13,19 +13,34 @@ using TestGame.Controllers;
 
 namespace TestGame
 {
-	public class Game1 : Game
+	public class GameRoot : Game
 	{
 		GraphicsDeviceManager graphics;
 		SpriteBatch spriteBatch;
-		LevelController _level;
+		public static LevelController Level { get; set; }
 
-		public static ParticleManager<ParticleState> ParticleManager { get; private set; }
+		public static Random RND { get; set; }
 
-		public Game1()
+		public static Dictionary<String, Texture2D> Textures { get; set; }
+		public static Dictionary<String, SpriteFont> Fonts { get; set; }
+		public static TileFactory TileFactory { get; set; }
+		public static TContainer TContainer { get; set; }
+		
+		static GameRoot()
+		{
+			RND = new Random();
+
+			Textures = new Dictionary<String, Texture2D>();
+
+			Fonts = new Dictionary<String, SpriteFont>();
+			TContainer = new TContainer();
+			TileFactory = new TileFactory();
+			Level = new LevelController();
+		}
+
+		public GameRoot()
 			: base()
 		{
-			ParticleManager = new ParticleManager<ParticleState>(1024 * 20, ParticleState.UpdateParticle);
-
 			graphics = new GraphicsDeviceManager(this);
 			Content.RootDirectory = "Content";
 
@@ -41,20 +56,14 @@ namespace TestGame
 		{
 			spriteBatch = new SpriteBatch(GraphicsDevice);
 
-			_level = IoC.GetSingleton<LevelController>();
-			_level.Init("level1");
+			Level = IoC.GetSingleton<LevelController>();
+			Level.Init("level1");
 
 		}
 
 		protected override void Update(GameTime gameTime)
 		{
-			_level.Update(gameTime);
-			
-			//движение по кругу
-			//alpha += (float)gameTime.ElapsedGameTime.TotalMilliseconds / 1000;
-			//var	x = 55 + 3 * Math.Sin(alpha);
-			//var y = 50 + 3 * Math.Cos(alpha);
-			ParticleManager.Update();
+			Level.Update(gameTime);
 
 			base.Update(gameTime);
 		}
@@ -65,22 +74,47 @@ namespace TestGame
 			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied);
 			//=====================
 
-			_level.Draw(spriteBatch);
-			ParticleManager.Draw(spriteBatch);
+			Level.Draw(spriteBatch);
 
 			//=====================
 			spriteBatch.End();
 			base.Draw(gameTime);
 		}
 
-		public T Get<T>(String path)
+		protected void LoadTexures(String folder, List<String> fileNames)
 		{
-			return Content.Load<T>(path);
+			fileNames.ForEach(file =>
+			{
+				Textures.Add(file, Content.Load<Texture2D>(folder + file));
+			});
 		}
 
 		#region Init
 		protected override void Initialize()
 		{
+			var file_textures = new List<String>()
+			{
+				"one", "two", "three", "four", "five", "six", "seven", "eight",
+				"background1", "bullet1",
+				"player", "enemy",
+				"cursor",
+				"exp_type_a",
+				"laser"
+			};
+			file_textures.ForEach(file =>
+			{
+				Textures.Add(file, Content.Load<Texture2D>("textures/" + file));
+			});
+
+			var file_fonts = new List<String>() 
+			{
+				"font_12", "font_14", "font_16", "font_18"
+			};
+			file_fonts.ForEach(file_name =>
+			{
+				Fonts.Add(file_name, Content.Load<SpriteFont>("fonts/" + file_name));
+			});
+
 			base.Initialize();
 		}
 

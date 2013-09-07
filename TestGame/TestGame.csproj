@@ -37,8 +37,6 @@
   <ItemGroup>
     <Compile Include="ColorUtil.cs" />
     <Compile Include="Controllers\LevelController.cs" />
-    <Compile Include="Controllers\Loader.cs" />
-    <Compile Include="Controllers\BackgroundController.cs" />
     <Compile Include="Controllers\TileController.cs" />
     <Compile Include="Domain\GridPosition.cs" />
     <Compile Include="Domain\TileObject.cs" />
@@ -47,12 +45,13 @@
     <Compile Include="Domain\TileTypes.cs" />
     <Compile Include="Domain\Frame.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="Game1.cs" />
-    <Compile Include="Controllers\GridController.cs" />
+    <Compile Include="GameRoot.cs" />
     <Compile Include="Controllers\InputController.cs" />
     <Compile Include="Controllers\PlaceController.cs" />
     <Compile Include="IObject.cs" />
-    <Compile Include="IoC.cs" />
+    <Compile Include="IoC.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="MouseObject.cs" />
     <Compile Include="ParticleManager.cs" />
     <Compile Include="ParticleState.cs" />
@@ -66,7 +65,7 @@
     <Compile Include="TileComparator.cs" />
     <Compile Include="TilePool.cs" />
     <Compile Include="TileContainer.cs" />
-    <Compile Include="Domain\ObjectFactory.cs" />
+    <Compile Include="Domain\TileFactory.cs" />
     <Compile Include="Domain\TileState.cs" />
     <Compile Include="WarriorActions.cs" />
     <Compile Include="WarriorObject.cs" />

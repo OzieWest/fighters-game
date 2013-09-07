@@ -15,7 +15,7 @@ namespace TestGame
 
 		public void Init(Texture2D texture, int count, int sparksLiveTime)
 		{
-			var font = Loader.Instance.GetFont("font_12");
+			var font = GameRoot.Fonts["font_12"];
 			_liveTime = sparksLiveTime;
 
 			_sparks = new List<SparkTile>();

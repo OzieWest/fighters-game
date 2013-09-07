@@ -16,21 +16,14 @@ namespace TestGame
 		public TilePool bullets { get; set; }
 		public SparkPool skills { get; set; }
 
-		protected Random _rnd;
-
-		public BattleController()
-		{
-			_rnd = new Random();
-		}
-
 		public void Init()
 		{
 			var score = 100;
 			var alg = 3;
-			var font = Loader.Instance.GetFont("font_12");
+			var font = GameRoot.Fonts["font_12"];
 
 			Player = new WarriorObject(
-				Loader.Instance.GetTexture("player"),
+				GameRoot.Textures["player"],
 				font,
 				score,
 				180
@@ -38,7 +31,7 @@ namespace TestGame
 			Player.SetPosition(10, 10);
 
 			Enemy = new WarriorObject(
-				Loader.Instance.GetTexture("enemy"),
+				GameRoot.Textures["enemy"],
 				font,
 				(score * alg),
 				180
@@ -47,13 +40,13 @@ namespace TestGame
 
 			bullets = IoC.GetAsNew<TilePool>();
 			bullets.Init(
-				Loader.Instance.GetTexture("bullet1"),
+				GameRoot.Textures["bullet1"],
 				6
 			);
 
 			skills = IoC.GetAsNew<SparkPool>();
 			skills.Init(
-				Loader.Instance.GetTexture("exp_type_a"),
+				GameRoot.Textures["exp_type_a"],
 				10, 80
 			);
 
@@ -61,16 +54,10 @@ namespace TestGame
 
 		public void Update(GameTime gameTime)
 		{
-			var attackQuery = _rnd.Next(0, 500);
+			var attackQuery = GameRoot.RND.Next(0, 500);
 
 			if (attackQuery == 1)
-			{
-				Shoot(Player, Enemy);
-			}
-			else if (attackQuery == 2)
-			{
 				Shoot(Enemy, Player);
-			}
 
 			Player.Update(gameTime);
 			Enemy.Update(gameTime);
@@ -83,6 +70,7 @@ namespace TestGame
 			switch (type)
 			{
 				case TileTypes.one:
+					Shoot(Player, Enemy);
 					Enemy.Health.Minus(Player.Power.Value);
 					skills.Start(Enemy.Position.X, Enemy.Position.Y, Player.Power.Value);
 					break;

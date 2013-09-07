@@ -19,7 +19,7 @@ namespace TestGame.Controllers
 		public void Init(int x)
 		{
 			Places = IoC.GetSingleton<PlaceController>();
-			Container = IoC.GetSingleton<TContainer>();
+			Container = GameRoot.TContainer;
 			Battle = IoC.GetSingleton<BattleController>();
 
 			Container.Init();
@@ -38,8 +38,8 @@ namespace TestGame.Controllers
 
 				for (var j = 0; j < x; j++)
 				{
-					var pos = Places.Grid[i, j];
-					var cell = OFactory.Instance.CreateRandomTile();
+					var pos = Places.Positions[i][j];
+					var cell = GameRoot.TileFactory.GetTile();
 
 					cell.SetPosition(pos.X, startPosY);
 					cell.MoveTo(pos.X, pos.Y);
@@ -67,7 +67,6 @@ namespace TestGame.Controllers
 				_checkChains();
 				_checkIntersect(gameTime, obj, isSelect);
 				Places.MoveColumns();
-				Places.GenerateNeighbors();
 			}
 		}
 
@@ -101,7 +100,7 @@ namespace TestGame.Controllers
 				if (isSelect && neighbor != null)
 				{
 					Places.ChangePlace(selected, focused);
-					Places.GenerateNeighbors();
+					Places.InitNeighbors();
 					selected.State = TileState.Normal;
 				}
 			}
