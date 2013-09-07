@@ -19,9 +19,12 @@ namespace TestGame
 		SpriteBatch spriteBatch;
 		LevelController _level;
 
+		public static ParticleManager<ParticleState> ParticleManager { get; private set; }
+
 		public Game1()
 			: base()
 		{
+			ParticleManager = new ParticleManager<ParticleState>(1024 * 20, ParticleState.UpdateParticle);
 
 			graphics = new GraphicsDeviceManager(this);
 			Content.RootDirectory = "Content";
@@ -51,6 +54,7 @@ namespace TestGame
 			//alpha += (float)gameTime.ElapsedGameTime.TotalMilliseconds / 1000;
 			//var	x = 55 + 3 * Math.Sin(alpha);
 			//var y = 50 + 3 * Math.Cos(alpha);
+			ParticleManager.Update();
 
 			base.Update(gameTime);
 		}
@@ -62,6 +66,7 @@ namespace TestGame
 			//=====================
 
 			_level.Draw(spriteBatch);
+			ParticleManager.Draw(spriteBatch);
 
 			//=====================
 			spriteBatch.End();

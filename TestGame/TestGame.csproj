@@ -35,6 +35,7 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="ColorUtil.cs" />
     <Compile Include="Controllers\LevelController.cs" />
     <Compile Include="Controllers\Loader.cs" />
     <Compile Include="Controllers\BackgroundController.cs" />
@@ -53,6 +54,8 @@
     <Compile Include="IObject.cs" />
     <Compile Include="IoC.cs" />
     <Compile Include="MouseObject.cs" />
+    <Compile Include="ParticleManager.cs" />
+    <Compile Include="ParticleState.cs" />
     <Compile Include="Position.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -100,6 +103,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\textures\exp_type_a.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\textures\laser.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\textures\one.png">

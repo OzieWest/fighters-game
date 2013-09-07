@@ -36,7 +36,8 @@ public class Loader
 				"background1", "bullet1",
 				"player", "enemy",
 				"cursor",
-				"exp_type_a"
+				"exp_type_a",
+				"laser"
 			}
 		);
 

@@ -13,7 +13,7 @@ namespace TestGame.Domain
 {
 	public class TileObject : BaseObject, IDisposable
 	{
-		int timeUntilStart = 100;
+		int timeUntilStart = 60;
 
 		public GridPosition Grid { get; set; }
 		public TileState State { get; set; }

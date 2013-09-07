@@ -103,8 +103,8 @@ namespace TestGame
 					skills.Start(Player.Position.X, Player.Position.Y, Enemy.Power.Value);
 					break;
 				case TileTypes.seven:
-					Player.Health.Minus(10);
-					Enemy.Health.Minus(10);
+					Player.Health.Minus(5);
+					Enemy.Health.Minus(5);
 					break;
 				default:
 					break;
