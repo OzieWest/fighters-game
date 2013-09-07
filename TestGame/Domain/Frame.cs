@@ -8,9 +8,9 @@ namespace TestGame
 {
 	public class Frame
 	{
-		int _current;
 		float _timer { get; set; }
 
+		public int Current { get; set; }
 		public float Interval { get; set; }
 		public int Offset { get; set; }
 
@@ -21,7 +21,7 @@ namespace TestGame
 
 		public void DefaultValue()
 		{
-			_current = 0;
+			Current = 0;
 			_timer = 0;
 			Interval = 0;
 			Offset = 0;
@@ -32,23 +32,23 @@ namespace TestGame
 			_timer += (float)gameTime.ElapsedGameTime.TotalMilliseconds / 2;
 			if (_timer > Interval / speed)
 			{
-				_current++;
+				Current++;
 				_timer = 0;
-				if (_current > endFrame)
+				if (Current > endFrame)
 				{
-					_current = startFrame;
+					Current = startFrame;
 				}
 			}
 		}
 
 		public void Reset()
 		{
-			_current = 0;
+			Current = 0;
 		}
 
 		public int CurrentFrame()
 		{
-			return _current * (int)Interval;
+			return Current * (int)Interval;
 		}
 	}
 }

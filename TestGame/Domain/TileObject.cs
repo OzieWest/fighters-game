@@ -13,6 +13,8 @@ namespace TestGame.Domain
 {
 	public class TileObject : BaseObject, IDisposable
 	{
+		int timeUntilStart = 100;
+
 		public GridPosition Grid { get; set; }
 		public TileState State { get; set; }
 		public TileTypes Type { get; set; }
@@ -24,6 +26,7 @@ namespace TestGame.Domain
 			: base(texture, frameInterval)
 		{
 			Type = type;
+			Color = Color.Transparent;
 
 			_init();
 		}
@@ -68,6 +71,9 @@ namespace TestGame.Domain
 
 		public override void Update(GameTime gameTime)
 		{
+			timeUntilStart--;
+			Color = Color.White * (1 - timeUntilStart / 60f);
+
 			_animate(gameTime);
 			base.Update(gameTime);
 		}

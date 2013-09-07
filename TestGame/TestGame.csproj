@@ -65,6 +65,7 @@
     <Compile Include="TileContainer.cs" />
     <Compile Include="Domain\ObjectFactory.cs" />
     <Compile Include="Domain\TileState.cs" />
+    <Compile Include="WarriorActions.cs" />
     <Compile Include="WarriorObject.cs" />
     <Compile Include="SparkPool.cs" />
   </ItemGroup>
@@ -105,9 +106,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\textures\player.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\textures\santa.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\textures\seven.png">

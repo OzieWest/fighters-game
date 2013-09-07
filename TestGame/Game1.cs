@@ -26,8 +26,10 @@ namespace TestGame
 			graphics = new GraphicsDeviceManager(this);
 			Content.RootDirectory = "Content";
 
-			this.SetResoluton(1000, 800, false);
+			this.SetResoluton(550, 800, false);
 			this.IsMouseVisible = true;
+
+			Window.SetPosition(new Point(200, 100));
 
 			IoC.Init(Content);
 		}

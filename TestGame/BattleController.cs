@@ -43,7 +43,7 @@ namespace TestGame
 				(score * alg),
 				180
 			);
-			Enemy.SetPosition(400, 10);
+			Enemy.SetPosition(350, 10);
 
 			bullets = IoC.GetAsNew<TilePool>();
 			bullets.Init(
@@ -61,12 +61,16 @@ namespace TestGame
 
 		public void Update(GameTime gameTime)
 		{
-			var attackQuery = _rnd.Next(0, 200);
+			var attackQuery = _rnd.Next(0, 500);
 
 			if (attackQuery == 1)
+			{
 				Shoot(Player, Enemy);
-			else if (attackQuery == 199)
+			}
+			else if (attackQuery == 2)
+			{
 				Shoot(Enemy, Player);
+			}
 
 			Player.Update(gameTime);
 			Enemy.Update(gameTime);
@@ -117,12 +121,13 @@ namespace TestGame
 
 		protected void Shoot(WarriorObject one, WarriorObject two)
 		{
-			bullets.LaunchTile(
-				one.Position.X, one.Position.Y,
-				two.Position.X, two.Position.Y
-			);
-
+			one.Action = WarriorActions.Strike;
 			two.Health.Minus(one.Power.Value);
+
+			bullets.LaunchTile(
+				one.Position.X + 10, one.Position.Y + 60,
+				two.Position.X + 10, two.Position.Y + 60
+			);
 		}
 	}
 }
