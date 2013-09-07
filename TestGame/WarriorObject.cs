@@ -23,17 +23,17 @@ namespace TestGame
 			Gold = new Score(
 				Loader.GetFont("font1"),
 				"Gold",
-				0
+				0, 0
 			);
 			Health = new Score(
 				Loader.GetFont("font1"),
 				"Health",
-				healthValue
+				healthValue, 0
 			);
 			Power = new Score(
 				Loader.GetFont("font1"),
 				"Power",
-				1
+				1, 1
 			);
 		}
 
@@ -48,12 +48,28 @@ namespace TestGame
 		{
 			get
 			{
+				return _tile.Position.X;
+			}
+		}
+
+		public float Y
+		{
+			get
+			{
+				return _tile.Position.Y;
+			}
+		}
+
+		public float cX
+		{
+			get
+			{
 				var x = _tile.Position.X;
 				return (int)x + _tile.Texture.Width / 2;
 			}
 		}
 
-		public float Y
+		public float cY
 		{
 			get
 			{

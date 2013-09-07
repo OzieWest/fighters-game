@@ -27,9 +27,6 @@ namespace TestGame
 			Register<InputController>(
 				new InputController()
 			);
-			Register<TilePool>(
-				new TilePool()
-			);
 			Register<LevelController>(
 				new LevelController()
 			);

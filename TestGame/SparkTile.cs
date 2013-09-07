@@ -12,15 +12,15 @@ namespace TestGame
 	{
 		public int LiveTime { get; set; }
 
-		public SparkTile(Texture2D texture, TileTypes type, int liveTime)
-			:base(texture, type, 0, 0)
+		public SparkTile(Texture2D texture, TileTypes type, int frameInterval, int frameOffset)
+			: base(texture, type, frameInterval, frameOffset)
 		{
-			LiveTime = liveTime;
+			LiveTime = 0;
 		}
 
 		public Boolean IsAlive()
 		{
-			return LiveTime <= 0 ? true : false;
+			return LiveTime > 0 ? true : false;
 		}
 
 		public override void Update(GameTime gameTime)

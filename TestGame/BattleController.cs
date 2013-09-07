@@ -25,8 +25,6 @@ namespace TestGame
 
 		public void Init()
 		{
-			bullets = IoC.GetAsNew<TilePool>();
-
 			var score = 100;
 			var alg = 3;
 
@@ -44,10 +42,18 @@ namespace TestGame
 			);
 			Enemy.SetPosition(400, 10);
 
+			bullets = IoC.GetAsNew<TilePool>();
 			bullets.Init(
 				Loader.GetTexture("Bullet2"),
 				6
 			);
+
+			skills = IoC.GetAsNew<SparkPool>();
+			skills.Init(
+				Loader.GetTexture("exp_type_a"),
+				10, 80
+			);
+
 		}
 
 		public void Update(GameTime gameTime)
@@ -62,6 +68,7 @@ namespace TestGame
 			Player.Update(gameTime);
 			Enemy.Update(gameTime);
 			bullets.Update(gameTime);
+			skills.Update(gameTime);
 		}
 
 		public void Strike(int x, int y, TileTypes type)
@@ -70,6 +77,7 @@ namespace TestGame
 			{
 				case TileTypes.One:
 					Enemy.Health.Minus(Player.Power.Value);
+					skills.Start(Enemy.X, Enemy.Y);
 					break;
 				case TileTypes.Two:
 					Player.Health.Plus(1);
@@ -100,13 +108,14 @@ namespace TestGame
 			bullets.Draw(spriteBatch);
 			Player.Draw(spriteBatch);
 			Enemy.Draw(spriteBatch);
+			skills.Draw(spriteBatch);
 		}
 
 		protected void Shoot(WarriorObject one, WarriorObject two)
 		{
 			bullets.LaunchTile(
-				one.X, one.Y,
-				two.X, two.Y
+				one.cX, one.cY,
+				two.cX, two.cY
 			);
 			two.Health.Minus(one.Power.Value);
 		}

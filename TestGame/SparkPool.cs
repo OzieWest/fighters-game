@@ -20,7 +20,7 @@ namespace TestGame
 			_sparks = new List<SparkTile>();
 			for (var i = 0; i < count; i++)
 			{
-				var tile = new SparkTile(texture, TileTypes.Default, _liveTime);
+				var tile = new SparkTile(texture, TileTypes.Default, 128, 0);
 				this.Release(tile);
 
 				_sparks.Add(tile);
@@ -42,7 +42,7 @@ namespace TestGame
 		{
 			foreach (var tile in _sparks)
 			{
-				if (!tile.IsMoveComplete())
+				if (tile.IsAlive())
 					tile.Draw(spriteBatch);
 			}
 		}
@@ -58,6 +58,8 @@ namespace TestGame
 
 			if (tile != null)
 			{
+				tile.LiveTime = _liveTime;
+				tile.State = TileState.Test;
 				tile.SetPosition(x, y);
 
 				return tile;
@@ -68,7 +70,7 @@ namespace TestGame
 
 		protected void Release(SparkTile tile)
 		{
-			tile.LiveTime = _liveTime;
+			tile.LiveTime = 0;
 			tile.SetPosition(-100, -100);
 		}
 	}

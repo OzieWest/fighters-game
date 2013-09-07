@@ -66,6 +66,7 @@
     <Compile Include="Domain\ObjectFactory.cs" />
     <Compile Include="Domain\TileState.cs" />
     <Compile Include="WarriorObject.cs" />
+    <Compile Include="SparkPool.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="OpenTK">
@@ -95,6 +96,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\set1\enemy.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\set1\exp_type_a.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\set1\one.png">

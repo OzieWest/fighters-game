@@ -31,7 +31,8 @@ public static class Loader
 				"Background1", "Bullet1", "Bullet2", 
 				"Skill1", "Skill2", "Skill3",
 				"Player", "Enemy",
-				"Cursor"
+				"Cursor",
+				"exp_type_a"
 			};
 
 		foreach (var file in files)

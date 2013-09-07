@@ -9,12 +9,14 @@ namespace TestGame
 {
 	public class Score : FontObject
 	{
+		protected int _minValue;
 		public int Value { get; private set; }
 		public String Prefix { get; set; }
 
-		public Score(SpriteFont font, String prefix, int value)
+		public Score(SpriteFont font, String prefix, int value, int minValue)
 			: base(font)
 		{
+			_minValue = minValue;
 			Value = value;
 			Prefix = prefix;
 		}
@@ -32,14 +34,14 @@ namespace TestGame
 
 		public void Minus(int value)
 		{
-			if (Value > 0)
+			if (Value > _minValue)
 				Value -= value;
 		}
 
 		protected void _checkValue()
 		{
-			if (Value < 0)
-				Value = 0;
+			if (Value < _minValue)
+				Value = _minValue;
 		}
 	}
 }
