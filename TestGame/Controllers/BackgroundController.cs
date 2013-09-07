@@ -16,7 +16,7 @@ namespace TestGame
 
 		public void Init()
 		{
-			_tile = OFactory.CreateBackground("Background1");
+			_tile = OFactory.CreateBackground("background1");
 		}
 
 		public virtual void Update(GameTime gameTime)

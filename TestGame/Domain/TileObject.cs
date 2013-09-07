@@ -77,6 +77,9 @@ namespace TestGame.Domain
 				case TileState.Test:
 					_frame.Animate(gameTime, 0, 40, 10);
 					break;
+				case TileState.Walk:
+					_frame.Animate(gameTime, 0, 3, 2);
+					break;
 				default:
 					_frame.Reset();
 					break;

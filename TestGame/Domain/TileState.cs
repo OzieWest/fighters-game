@@ -10,6 +10,7 @@ namespace TestGame
 		Normal,
 		Focused,
 		Selected,
-		Test
+		Test,
+		Walk
 	}
 }

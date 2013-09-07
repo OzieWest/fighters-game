@@ -20,7 +20,7 @@ namespace TestGame
 		public void Init()
 		{
 			MouseControl = new MouseObject(
-				Loader.GetTexture("Cursor")
+				Loader.Instance.GetTexture("cursor")
 			);
 		}
 

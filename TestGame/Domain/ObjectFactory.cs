@@ -32,7 +32,7 @@ namespace TestGame
 
 		public static BaseObject CreateBackground(String textureName)
 		{
-			var texture = Loader.GetTexture(textureName);
+			var texture = Loader.Instance.GetTexture(textureName);
 
 			var result = new BaseObject(texture);
 			result.Position.SetFrame(0);
@@ -49,7 +49,7 @@ namespace TestGame
 
 		public static TileObject CreateTileByType(TileTypes type)
 		{
-			var tex = Loader.GetTexture(type.ToString());
+			var tex = Loader.Instance.GetTexture(type.ToString());
 			var result = new TileObject(tex, type, tex.Height, FrameOffset);
 
 			return result;

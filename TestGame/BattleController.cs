@@ -27,30 +27,31 @@ namespace TestGame
 		{
 			var score = 100;
 			var alg = 3;
+			var font = Loader.Instance.GetFont("font_12");
 
 			Player = new WarriorObject(
-				Loader.GetTexture("Player"),
-				Loader.GetFont("font1"),
+				Loader.Instance.GetTexture("player"),
+				font,
 				score
 			);
 			Player.SetPosition(10, 10);
 
 			Enemy = new WarriorObject(
-				Loader.GetTexture("Enemy"),
-				Loader.GetFont("font1"),
+				Loader.Instance.GetTexture("enemy"),
+				font,
 				(score * alg)
 			);
 			Enemy.SetPosition(400, 10);
 
 			bullets = IoC.GetAsNew<TilePool>();
 			bullets.Init(
-				Loader.GetTexture("Bullet2"),
+				Loader.Instance.GetTexture("bullet1"),
 				6
 			);
 
 			skills = IoC.GetAsNew<SparkPool>();
 			skills.Init(
-				Loader.GetTexture("exp_type_a"),
+				Loader.Instance.GetTexture("exp_type_a"),
 				10, 80
 			);
 
@@ -58,11 +59,11 @@ namespace TestGame
 
 		public void Update(GameTime gameTime)
 		{
-			var _timer = _rnd.Next(0, 200);
+			var attackQuery = _rnd.Next(0, 200);
 
-			if (_timer == 1)
+			if (attackQuery == 1)
 				Shoot(Player, Enemy);
-			else if (_timer == 199)
+			else if (attackQuery == 199)
 				Shoot(Enemy, Player);
 
 			Player.Update(gameTime);
@@ -75,27 +76,27 @@ namespace TestGame
 		{
 			switch (type)
 			{
-				case TileTypes.One:
+				case TileTypes.one:
 					Enemy.Health.Minus(Player.Power.Value);
-					skills.Start(Enemy.X, Enemy.Y, Player.Power.Value);
+					skills.Start(Enemy.Position.X, Enemy.Position.Y, Player.Power.Value);
 					break;
-				case TileTypes.Two:
+				case TileTypes.two:
 					Player.Health.Plus(1);
 					break;
-				case TileTypes.Three:
+				case TileTypes.three:
 					Player.Power.Plus(1);
 					break;
-				case TileTypes.Four:
+				case TileTypes.four:
 					Player.Gold.Plus(1);
 					break;
-				case TileTypes.Five:
+				case TileTypes.five:
 					Player.Power.Minus(1);
 					break;
-				case TileTypes.Six:
+				case TileTypes.six:
 					Player.Health.Minus(Enemy.Power.Value);
-					skills.Start(Player.X, Player.Y, Enemy.Power.Value);
+					skills.Start(Player.Position.X, Player.Position.Y, Enemy.Power.Value);
 					break;
-				case TileTypes.Seven:
+				case TileTypes.seven:
 					Player.Health.Minus(10);
 					Enemy.Health.Minus(10);
 					break;
@@ -115,9 +116,10 @@ namespace TestGame
 		protected void Shoot(WarriorObject one, WarriorObject two)
 		{
 			bullets.LaunchTile(
-				one.cX, one.cY,
-				two.cX, two.cY
+				one.Position.X, one.Position.Y,
+				two.Position.X, two.Position.Y
 			);
+
 			two.Health.Minus(one.Power.Value);
 		}
 	}

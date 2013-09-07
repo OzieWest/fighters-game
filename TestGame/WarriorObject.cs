@@ -8,80 +8,30 @@ using TestGame.Domain;
 
 namespace TestGame
 {
-	public class WarriorObject
+	public class WarriorObject : TileObject
 	{
-		protected TileObject _tile;
-
 		public Score Gold { get; set; }
 		public Score Health { get; set; }
 		public Score Power { get; set; }
 
 		public WarriorObject(Texture2D texture, SpriteFont font, int healthValue)
+			:base(texture, TileTypes.Default, 180, 0)
 		{
-			_tile = new TileObject(texture, TileTypes.Default, 128, 0);
-
-			Gold = new Score(
-				Loader.GetFont("font1"),
-				"Gold",
-				0, 0
-			);
-			Health = new Score(
-				Loader.GetFont("font1"),
-				"Health",
-				healthValue, 0
-			);
-			Power = new Score(
-				Loader.GetFont("font1"),
-				"Power",
-				1, 1
-			);
+			Gold = new Score( font, "Gold", 0, 0 );
+			Health = new Score( font, "Health", healthValue, 0 );
+			Power = new Score( font, "Power", 1, 1 );
 		}
 
-		public void SetPosition(float x, float y)
+		public override void SetPosition(float x, float y)
 		{
-			_tile.Position.X = x;
-			_tile.Position.Y = y;
-			_tile.MoveTo(x, y);
+			MoveTo(x, y);
+			base.SetPosition(x, y);
 		}
 
-		public float X
+		private void _correctInfoPosition()
 		{
-			get
-			{
-				return _tile.Position.X;
-			}
-		}
-
-		public float Y
-		{
-			get
-			{
-				return _tile.Position.Y;
-			}
-		}
-
-		public float cX
-		{
-			get
-			{
-				var x = _tile.Position.X;
-				return (int)x + _tile.Texture.Width / 2;
-			}
-		}
-
-		public float cY
-		{
-			get
-			{
-				var y = _tile.Position.Y;
-				return (int)y + _tile.Texture.Height / 2;
-			}
-		}
-
-		private void _correctSkillPosition()
-		{
-			var x = _tile.Position.X;
-			var y = _tile.Position.Y;
+			var x = Position.X;
+			var y = Position.Y;
 			var corX = 100;
 
 			Gold.SetPosition(
@@ -98,24 +48,24 @@ namespace TestGame
 			);
 		}
 
-		public virtual void Update(GameTime gameTime)
+		public override void Update(GameTime gameTime)
 		{
-			_correctSkillPosition();
+			_correctInfoPosition();
 
 			Gold.Update();
 			Health.Update();
 			Power.Update();
 
-			_tile.Update(gameTime);
+			base.Update(gameTime);
 		}
 
-		public virtual void Draw(SpriteBatch spriteBatch)
+		public override void Draw(SpriteBatch spriteBatch)
 		{
 			Gold.Draw(spriteBatch);
 			Health.Draw(spriteBatch);
 			Power.Draw(spriteBatch);
-			
-			_tile.Draw(spriteBatch);
+
+			base.Draw(spriteBatch);
 		}
 	}
 }

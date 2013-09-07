@@ -20,7 +20,7 @@ namespace TestGame
 			_sparks = new List<SparkTile>();
 			for (var i = 0; i < count; i++)
 			{
-				var tile = new SparkTile(texture, Loader.GetFont("font1"), TileTypes.Default, 128, 0, false);
+				var tile = new SparkTile(texture, Loader.Instance.GetFont("font_12"), TileTypes.Default, 128, 0, false);
 				this.Release(tile);
 
 				_sparks.Add(tile);
