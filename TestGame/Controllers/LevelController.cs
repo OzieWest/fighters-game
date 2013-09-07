@@ -45,7 +45,7 @@ namespace TestGame.Controllers
 
 		public void Draw(SpriteBatch spriteBatch)
 		{
-			BackController.Draw(spriteBatch);
+			//BackController.Draw(spriteBatch);
 			TileController.Draw(spriteBatch);
 			BattleController.Draw(spriteBatch);
 

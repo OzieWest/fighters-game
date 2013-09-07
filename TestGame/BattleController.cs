@@ -77,7 +77,7 @@ namespace TestGame
 			{
 				case TileTypes.One:
 					Enemy.Health.Minus(Player.Power.Value);
-					skills.Start(Enemy.X, Enemy.Y);
+					skills.Start(Enemy.X, Enemy.Y, Player.Power.Value);
 					break;
 				case TileTypes.Two:
 					Player.Health.Plus(1);
@@ -93,6 +93,7 @@ namespace TestGame
 					break;
 				case TileTypes.Six:
 					Player.Health.Minus(Enemy.Power.Value);
+					skills.Start(Player.X, Player.Y, Enemy.Power.Value);
 					break;
 				case TileTypes.Seven:
 					Player.Health.Minus(10);

@@ -20,7 +20,7 @@ namespace TestGame
 			_sparks = new List<SparkTile>();
 			for (var i = 0; i < count; i++)
 			{
-				var tile = new SparkTile(texture, TileTypes.Default, 128, 0);
+				var tile = new SparkTile(texture, Loader.GetFont("font1"), TileTypes.Default, 128, 0, false);
 				this.Release(tile);
 
 				_sparks.Add(tile);
@@ -52,7 +52,7 @@ namespace TestGame
 			return _sparks.FirstOrDefault(o => o.Position.X == -100 && o.Position.Y == -100);
 		}
 
-		public SparkTile Start(float x, float y)
+		public SparkTile Start(float x, float y, int value)
 		{
 			var tile = GetFreeman();
 
@@ -60,6 +60,7 @@ namespace TestGame
 			{
 				tile.LiveTime = _liveTime;
 				tile.State = TileState.Test;
+				tile.SetInfo(value);
 				tile.SetPosition(x, y);
 
 				return tile;
