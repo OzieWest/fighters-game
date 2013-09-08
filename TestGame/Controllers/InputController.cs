@@ -18,7 +18,7 @@ namespace TestGame
 
 		public static void Load(Texture2D texture)
 		{
-			MouseObject = new MouseObject(texture);
+			MouseObject = new MouseObject(texture, 10);
 		}
 
 		public static void UpdateMouse()

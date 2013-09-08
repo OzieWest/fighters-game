@@ -27,6 +27,7 @@ namespace TestGame
 		public static TContainer TContainer { get; set; }
 		public static GameStates State { get; set; }
 		public static FontObject message;
+		public static ParticleManager<ParticleState> ParticleManager { get; private set; }
 		
 		static GameRoot()
 		{
@@ -68,6 +69,8 @@ namespace TestGame
 			Inputs.Load(Textures["cursor"]);
 
 			spriteBatch = new SpriteBatch(GraphicsDevice);
+
+			ParticleManager = new ParticleManager<ParticleState>(1024 * 20, ParticleState.UpdateParticle);
 		}
 
 		protected override void Update(GameTime gameTime)
@@ -86,6 +89,8 @@ namespace TestGame
 				MediaPlayer.Stop();
 			}
 
+			ParticleManager.Update();
+
 			base.Update(gameTime);
 		}
 
@@ -99,6 +104,7 @@ namespace TestGame
 
 			if (State != GameStates.Play)
 				message.Draw(spriteBatch);
+
 
 			//=====================
 			spriteBatch.End();
@@ -118,6 +124,22 @@ namespace TestGame
 			Sound.Load(Content);
 			MediaPlayer.IsRepeating = true;
 			MediaPlayer.Volume = 0.1f;
+		}
+
+		public static void Explosive(float x, float y)
+		{
+			for (int i = 0; i < 120; i++)
+			{
+				float speed = 18f * (1f - 1 / RND.NextFloat(1f, 10f));
+				var state = new ParticleState()
+				{
+					Velocity = RND.NextVector2(speed, speed),
+					Type = ParticleType.IgnoreGravity,
+					LengthMultiplier = 1
+				};
+
+				ParticleManager.CreateParticle(GameRoot.Textures["laser"], new Vector2(x, y), Color.RoyalBlue, 200, 1.5f, state);
+			}
 		}
 
 		#region Init

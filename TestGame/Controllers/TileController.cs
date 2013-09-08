@@ -83,7 +83,10 @@ namespace TestGame.Controllers
 					var type = tile.Type;
 
 					if (Container.RemoveElement(tile))
+					{
+						GameRoot.Explosive(x, y);
 						Sound.FX1.Play(0.005f, 1, 1);
+					}
 				}
 			}
 		}

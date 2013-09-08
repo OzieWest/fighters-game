@@ -56,7 +56,9 @@ namespace TestGame.Controllers
 		public void Draw(SpriteBatch spriteBatch)
 		{
 			background.Draw(spriteBatch);
-			
+
+			GameRoot.ParticleManager.Draw(spriteBatch);
+
 			TileController.Draw(spriteBatch);
 
 			background_up.Draw(spriteBatch);
@@ -88,13 +90,6 @@ namespace TestGame.Controllers
 				{
 					MediaPlayer.Play(Sound.Background);
 					isGameStart = true;
-
-					//BattleController.Player.Health.Value = 100;
-					//BattleController.Player.Gold.Value = 0;
-					//BattleController.Player.Power.Value = 1;
-
-					//BattleController.Enemy.Health.Value = 300;
-					//BattleController.Enemy.Power.Value = 3;
 				}
 			});
 

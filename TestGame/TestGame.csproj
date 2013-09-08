@@ -35,7 +35,6 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="ColorUtil.cs" />
     <Compile Include="Controllers\LevelController.cs" />
     <Compile Include="Controllers\TileController.cs" />
     <Compile Include="Domain\GridPosition.cs" />

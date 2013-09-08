@@ -11,8 +11,8 @@ namespace TestGame
 {
 	public class MouseObject: BaseObject
 	{
-		public MouseObject(Texture2D texture)
-			: base(texture, 10)
+		public MouseObject(Texture2D texture, int frameInterval)
+			: base(texture, frameInterval)
 		{
 
 		}
@@ -20,12 +20,7 @@ namespace TestGame
 		public void Update()
 		{
 			var state = Mouse.GetState();
-			this.SetPosition(state.X, state.Y);
-		}
-
-		public void SetPosition(float x, float y)
-		{
-			Position.Set(x, y);
+			Position.Set(state.X, state.Y);
 		}
 	}
 }
