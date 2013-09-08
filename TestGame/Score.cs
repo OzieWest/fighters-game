@@ -10,7 +10,7 @@ namespace TestGame
 	public class Score : FontObject
 	{
 		protected int _minValue;
-		public int Value { get; private set; }
+		public int Value { get; set; }
 		public String Prefix { get; set; }
 
 		public Score(SpriteFont font, String prefix, int value, int minValue)

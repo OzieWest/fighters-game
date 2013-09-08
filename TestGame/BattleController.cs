@@ -9,18 +9,16 @@ using TestGame.Domain;
 
 namespace TestGame
 {
-	public class BattleController : IObject
+	public class BattleController
 	{
 		public WarriorObject Player { get; set; }
 		public WarriorObject Enemy { get; set; }
-		public TilePool bullets { get; set; }
-		public SparkPool skills { get; set; }
 
 		public void Init()
 		{
 			var score = 100;
 			var alg = 3;
-			var font = GameRoot.Fonts["font_12"];
+			var font = Fonts.S14;
 
 			Player = new WarriorObject(
 				GameRoot.Textures["player"],
@@ -28,7 +26,7 @@ namespace TestGame
 				score,
 				180
 			);
-			Player.SetPosition(10, 10);
+			Player.SetPosition(80, 90);
 
 			Enemy = new WarriorObject(
 				GameRoot.Textures["enemy"],
@@ -36,86 +34,71 @@ namespace TestGame
 				(score * alg),
 				180
 			);
-			Enemy.SetPosition(350, 10);
-
-			bullets = IoC.GetAsNew<TilePool>();
-			bullets.Init(
-				GameRoot.Textures["bullet1"],
-				6
-			);
-
-			skills = IoC.GetAsNew<SparkPool>();
-			skills.Init(
-				GameRoot.Textures["exp_type_a"],
-				10, 80
-			);
-
+			Enemy.SetPosition(250, 90);
+			Enemy.Power.Value = 3;
 		}
 
 		public void Update(GameTime gameTime)
 		{
-			var attackQuery = GameRoot.RND.Next(0, 500);
+			var attackQuery = GameRoot.RND.Next(0, 200);
 
 			if (attackQuery == 1)
 				Shoot(Enemy, Player);
 
 			Player.Update(gameTime);
 			Enemy.Update(gameTime);
-			bullets.Update(gameTime);
-			skills.Update(gameTime);
+
+			if (Player.Health.Value == 0)
+				GameRoot.State = GameStates.Stop;
+			else if (Enemy.Health.Value == 0)
+				GameRoot.State = GameStates.Stop;
 		}
 
 		public void Strike(int x, int y, TileTypes type)
 		{
-			switch (type)
+			if (GameRoot.State != GameStates.Stop)
 			{
-				case TileTypes.one:
-					Shoot(Player, Enemy);
-					Enemy.Health.Minus(Player.Power.Value);
-					skills.Start(Enemy.Position.X, Enemy.Position.Y, Player.Power.Value);
-					break;
-				case TileTypes.two:
-					Player.Health.Plus(1);
-					break;
-				case TileTypes.three:
-					Player.Power.Plus(1);
-					break;
-				case TileTypes.four:
-					Player.Gold.Plus(1);
-					break;
-				case TileTypes.five:
-					Player.Power.Minus(1);
-					break;
-				case TileTypes.six:
-					Player.Health.Minus(Enemy.Power.Value);
-					skills.Start(Player.Position.X, Player.Position.Y, Enemy.Power.Value);
-					break;
-				case TileTypes.seven:
-					Player.Health.Minus(5);
-					Enemy.Health.Minus(5);
-					break;
-				default:
-					break;
+				switch (type)
+				{
+					case TileTypes.one:
+						Shoot(Player, Enemy);
+						Enemy.Health.Minus(Player.Power.Value);
+						break;
+					case TileTypes.two:
+						Player.Health.Plus(4);
+						break;
+					case TileTypes.three:
+						Player.Power.Plus(1);
+						break;
+					case TileTypes.four:
+						Player.Gold.Plus(10);
+						break;
+					case TileTypes.five:
+						Player.Power.Minus(1);
+						break;
+					case TileTypes.six:
+						Player.Health.Minus(Enemy.Power.Value);
+						break;
+					case TileTypes.seven:
+						Player.Health.Minus(4);
+						Enemy.Health.Minus(4);
+						break;
+					default:
+						break;
+				}
 			}
 		}
 
 		public void Draw(SpriteBatch spriteBatch)
 		{
-			bullets.Draw(spriteBatch);
 			Player.Draw(spriteBatch);
 			Enemy.Draw(spriteBatch);
-			skills.Draw(spriteBatch);
 		}
 
 		protected void Shoot(WarriorObject one, WarriorObject two)
 		{
 			one.Action = WarriorActions.Strike;
 			two.Health.Minus(one.Power.Value);
-
-			bullets.LaunchTile(
-				one.Position.X + 10, one.Position.Y + 60,
-				two.Position.X + 10, two.Position.Y + 60
-			);
 		}
 	}
 }

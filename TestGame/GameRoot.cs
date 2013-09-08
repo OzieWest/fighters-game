@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Storage;
 using Microsoft.Xna.Framework.GamerServices;
 using TestGame.Domain;
 using TestGame.Controllers;
+using Microsoft.Xna.Framework.Media;
 #endregion
 
 namespace TestGame
@@ -17,25 +18,26 @@ namespace TestGame
 	{
 		GraphicsDeviceManager graphics;
 		SpriteBatch spriteBatch;
-		public static LevelController Level { get; set; }
+		public LevelController Level { get; set; }
 
 		public static Random RND { get; set; }
 
 		public static Dictionary<String, Texture2D> Textures { get; set; }
-		public static Dictionary<String, SpriteFont> Fonts { get; set; }
 		public static TileFactory TileFactory { get; set; }
 		public static TContainer TContainer { get; set; }
+		public static GameStates State { get; set; }
+		public static FontObject message;
 		
 		static GameRoot()
 		{
 			RND = new Random();
 
 			Textures = new Dictionary<String, Texture2D>();
-
-			Fonts = new Dictionary<String, SpriteFont>();
+				
 			TContainer = new TContainer();
 			TileFactory = new TileFactory();
-			Level = new LevelController();
+
+			State = GameStates.Pause;
 		}
 
 		public GameRoot()
@@ -48,33 +50,55 @@ namespace TestGame
 			this.IsMouseVisible = true;
 
 			Window.SetPosition(new Point(200, 100));
-
-			IoC.Init(Content);
 		}
 
 		protected override void LoadContent()
 		{
-			spriteBatch = new SpriteBatch(GraphicsDevice);
 
-			Level = IoC.GetSingleton<LevelController>();
+			Fonts.Load(Content);
+
+			SetSound();
+
+			Level = new LevelController();
 			Level.Init("level1");
 
+			message = new FontObject(Fonts.S20);
+			message.SetPosition(210, 10);
+
+			Inputs.Load(Textures["cursor"]);
+
+			spriteBatch = new SpriteBatch(GraphicsDevice);
 		}
 
 		protected override void Update(GameTime gameTime)
 		{
 			Level.Update(gameTime);
 
+			if (State == GameStates.Pause)
+			{
+				message.Text = "Game Pause";
+				message.Color = Color.Green;
+			}
+			else if(State == GameStates.Stop)
+			{
+				message.Text = "Game Over";
+				message.Color = Color.Red;
+				MediaPlayer.Stop();
+			}
+
 			base.Update(gameTime);
 		}
 
 		protected override void Draw(GameTime gameTime)
 		{
-			GraphicsDevice.Clear(Color.Black);
+			GraphicsDevice.Clear(Color.White);
 			spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied);
 			//=====================
 
 			Level.Draw(spriteBatch);
+
+			if (State != GameStates.Play)
+				message.Draw(spriteBatch);
 
 			//=====================
 			spriteBatch.End();
@@ -89,13 +113,20 @@ namespace TestGame
 			});
 		}
 
+		public void SetSound()
+		{
+			Sound.Load(Content);
+			MediaPlayer.IsRepeating = true;
+			MediaPlayer.Volume = 0.1f;
+		}
+
 		#region Init
 		protected override void Initialize()
 		{
 			var file_textures = new List<String>()
 			{
 				"one", "two", "three", "four", "five", "six", "seven", "eight",
-				"background1", "bullet1",
+				"background1", "background_up", "bullet1",
 				"player", "enemy",
 				"cursor",
 				"exp_type_a",
@@ -104,15 +135,6 @@ namespace TestGame
 			file_textures.ForEach(file =>
 			{
 				Textures.Add(file, Content.Load<Texture2D>("textures/" + file));
-			});
-
-			var file_fonts = new List<String>() 
-			{
-				"font_12", "font_14", "font_16", "font_18"
-			};
-			file_fonts.ForEach(file_name =>
-			{
-				Fonts.Add(file_name, Content.Load<SpriteFont>("fonts/" + file_name));
 			});
 
 			base.Initialize();

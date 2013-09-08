@@ -45,13 +45,11 @@
     <Compile Include="Domain\TileTypes.cs" />
     <Compile Include="Domain\Frame.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="Fonts.cs" />
     <Compile Include="GameRoot.cs" />
     <Compile Include="Controllers\InputController.cs" />
     <Compile Include="Controllers\PlaceController.cs" />
-    <Compile Include="IObject.cs" />
-    <Compile Include="IoC.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="GameStates.cs" />
     <Compile Include="MouseObject.cs" />
     <Compile Include="ParticleManager.cs" />
     <Compile Include="ParticleState.cs" />
@@ -61,15 +59,13 @@
     <Compile Include="Domain\TileNeighbor.cs" />
     <Compile Include="BattleController.cs" />
     <Compile Include="Score.cs" />
-    <Compile Include="SparkTile.cs" />
+    <Compile Include="Sound.cs" />
     <Compile Include="TileComparator.cs" />
-    <Compile Include="TilePool.cs" />
     <Compile Include="TileContainer.cs" />
     <Compile Include="Domain\TileFactory.cs" />
     <Compile Include="Domain\TileState.cs" />
     <Compile Include="WarriorActions.cs" />
     <Compile Include="WarriorObject.cs" />
-    <Compile Include="SparkPool.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="OpenTK">
@@ -90,6 +86,15 @@
   <ItemGroup>
     <Content Include="..\..\..\..\..\..\..\Program Files %28x86%29\MonoGame\v3.0\Assemblies\WindowsGL\SDL.dll">
       <Link>SDL.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\sound\fall.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\sound\music.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\textures\background_up.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\textures\bullet1.png">
@@ -151,6 +156,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Content\fonts\font_18.xnb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\fonts\font_20_bold.xnb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

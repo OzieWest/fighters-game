@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,13 +15,12 @@ namespace TestGame.Controllers
 	{
 		public PlaceController Places { get; set; }
 		public TContainer Container { get; set; }
-		public BattleController Battle { get; set; }
 
 		public void Init(int x)
 		{
-			Places = IoC.GetSingleton<PlaceController>();
 			Container = GameRoot.TContainer;
-			Battle = IoC.GetSingleton<BattleController>();
+
+			Places = new PlaceController();
 
 			Container.Init();
 			Places.Init(x);
@@ -83,7 +83,7 @@ namespace TestGame.Controllers
 					var type = tile.Type;
 
 					if (Container.RemoveElement(tile))
-						Battle.Strike((int)x, (int)y, type);
+						Sound.FX1.Play(0.005f, 1, 1);
 				}
 			}
 		}

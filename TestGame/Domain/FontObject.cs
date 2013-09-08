@@ -22,7 +22,7 @@ namespace TestGame.Domain
 			_font = font;
 			_position = new Vector2();
 
-			Color = Color.White;
+			Color = Color.Black;
 
 			Text = String.Empty;
 		}

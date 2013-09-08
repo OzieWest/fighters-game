@@ -2,46 +2,65 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using TestGame.Domain;
 
 namespace TestGame.Controllers
 {
 	public class LevelController
 	{
+		Boolean isGameStart = false;
+
+		public BaseObject background;
+		public BaseObject background_up;
+
 		public TileController TileController { get; set; }
-		public InputController Inputs { get; set; }
 		public BattleController BattleController { get; set; }
 
 		public void Init(String name)
 		{
-			//get
-			BattleController = IoC.GetSingleton<BattleController>();
-			TileController = IoC.GetSingleton<TileController>();
-			Inputs = new InputController(GameRoot.Textures["cursor"]);
+			background = new BaseObject(GameRoot.Textures["background1"], 550);
+			background_up = new BaseObject(GameRoot.Textures["background_up"], 550);
 
+			//get
+			BattleController = new BattleController();
+			TileController = new TileController();
+			
 			//init
 			BattleController.Init();
 			TileController.Init(8);
-		} 
+		}
 
 		public void Update(GameTime gameTime)
 		{
 			var wasMouseDown = UpdateControl();
-			var mousePosition = Inputs.MouseControl.Position;
+			var mousePosition = Inputs.MouseObject.Position;
 
-			TileController.Update(gameTime, mousePosition, wasMouseDown);
-			BattleController.Update(gameTime);
+			if (GameRoot.State == GameStates.Play)
+			{
+				background.Update(gameTime);
+				background_up.Update(gameTime);
+
+				TileController.Update(gameTime, mousePosition, wasMouseDown);
+
+				BattleController.Update(gameTime);
+			}
 
 			Inputs.End();
 		}
 
 		public void Draw(SpriteBatch spriteBatch)
 		{
-			//BackController.Draw(spriteBatch);
+			background.Draw(spriteBatch);
+			
 			TileController.Draw(spriteBatch);
+
+			background_up.Draw(spriteBatch);
+			
 			BattleController.Draw(spriteBatch);
 
 			Inputs.DrawMouse(spriteBatch);
@@ -62,7 +81,21 @@ namespace TestGame.Controllers
 			//keyboard================================================
 			Inputs.isKeyDown(Keys.A, delegate()
 			{
-				//
+				if (GameRoot.State != GameStates.Stop)
+					GameRoot.State = GameStates.Play;
+
+				if (!isGameStart)
+				{
+					MediaPlayer.Play(Sound.Background);
+					isGameStart = true;
+
+					//BattleController.Player.Health.Value = 100;
+					//BattleController.Player.Gold.Value = 0;
+					//BattleController.Player.Power.Value = 1;
+
+					//BattleController.Enemy.Health.Value = 300;
+					//BattleController.Enemy.Power.Value = 3;
+				}
 			});
 
 			//keyboard================================================

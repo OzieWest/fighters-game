@@ -41,15 +41,15 @@ namespace TestGame
 
 			Gold.SetPosition(
 				x + corX,
-				y + 150
+				y - 40
 			);
 			Health.SetPosition(
 				x + corX,
-				y + 170
+				y - 20
 			);
 			Power.SetPosition(
 				x + corX,
-				y + 190
+				y + 0
 			);
 		}
 
