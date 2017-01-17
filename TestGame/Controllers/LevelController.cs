@@ -29,6 +29,7 @@ namespace TestGame.Controllers
 			//get
 			BattleController = new BattleController();
 			TileController = new TileController();
+			TileController.Battle = BattleController;
 			
 			//init
 			BattleController.Init();

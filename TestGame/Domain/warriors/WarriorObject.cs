@@ -11,18 +11,25 @@ namespace TestGame
 {
 	public class WarriorObject : BaseObject
 	{
+		float infoX;
+		float infoY;
+		BaseObject window;
+
 		public Score Gold { get; set; }
 		public Score Health { get; set; }
 		public Score Power { get; set; }
 		public Boolean IsReady { get; set; }
 		public WarriorActions Action { get; set; }
 
-		public WarriorObject(Texture2D texture, SpriteFont font, int healthValue, int frameInterval)
+		public WarriorObject(Texture2D texture, Texture2D messageTexture, SpriteFont font, int healthValue, int frameInterval)
 			: base(texture, frameInterval)
 		{
 			Gold = new Score(font, "Gold", 0, 0);
 			Health = new Score(font, "Health", healthValue, 0);
 			Power = new Score(font, "Power", 1, 1);
+
+			window = new BaseObject(messageTexture, 132);
+
 			IsReady = true;
 			Action = WarriorActions.Stand;
 		}
@@ -31,25 +38,36 @@ namespace TestGame
 		{
 			Position.MoveTo(x, y);
 			Position.Set(x, y);
+
+			SetPositionMessage(x, y, Color.Black);
+		}
+
+		public void SetPositionMessage(float x, float y, Color color)
+		{
+			window.Position.MoveTo(x, y);
+			window.Position.Set(x, y);
+
+			infoX = x + 10;
+			infoY = y + 15;
+
+			Gold.Color = color;
+			Health.Color = color;
+			Power.Color = color;
 		}
 
 		private void _correctInfoPosition()
 		{
-			var x = Position.X;
-			var y = Position.Y;
-			var corX = 20;
-
 			Gold.SetPosition(
-				x + corX,
-				y - 40
+				infoX,
+				infoY - 0
 			);
 			Health.SetPosition(
-				x + corX,
-				y - 20
+				infoX,
+				infoY + 20
 			);
 			Power.SetPosition(
-				x + corX,
-				y + 0
+				infoX,
+				infoY + 40
 			);
 		}
 
@@ -60,6 +78,7 @@ namespace TestGame
 			Gold.Update();
 			Health.Update();
 			Power.Update();
+			window.Update(gameTime);
 
 			_animation(gameTime);
 			base.Update(gameTime);
@@ -86,6 +105,7 @@ namespace TestGame
 
 		public override void Draw(SpriteBatch spriteBatch)
 		{
+			window.Draw(spriteBatch);
 			Gold.Draw(spriteBatch);
 			Health.Draw(spriteBatch);
 			Power.Draw(spriteBatch);

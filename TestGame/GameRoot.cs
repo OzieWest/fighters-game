@@ -26,7 +26,7 @@ namespace TestGame
 		public static TileFactory TileFactory { get; set; }
 		public static TContainer TContainer { get; set; }
 		public static GameStates State { get; set; }
-		public static FontObject message;
+		public static FontObject Info;
 		public static ParticleManager<ParticleState> ParticleManager { get; private set; }
 		
 		static GameRoot()
@@ -63,8 +63,8 @@ namespace TestGame
 			Level = new LevelController();
 			Level.Init("level1");
 
-			message = new FontObject(Fonts.S20);
-			message.SetPosition(210, 10);
+			Info = new FontObject(Fonts.S20);
+			Info.SetPosition(180, 10);
 
 			Inputs.Load(Textures["cursor"]);
 
@@ -79,13 +79,11 @@ namespace TestGame
 
 			if (State == GameStates.Pause)
 			{
-				message.Text = "Game Pause";
-				message.Color = Color.Green;
+				Info.Text = "Game Pause: press A";
+				Info.Color = Color.Green;
 			}
 			else if(State == GameStates.Stop)
 			{
-				message.Text = "Game Over";
-				message.Color = Color.Red;
 				MediaPlayer.Stop();
 			}
 
@@ -103,27 +101,18 @@ namespace TestGame
 			Level.Draw(spriteBatch);
 
 			if (State != GameStates.Play)
-				message.Draw(spriteBatch);
-
+				Info.Draw(spriteBatch);
 
 			//=====================
 			spriteBatch.End();
 			base.Draw(gameTime);
 		}
 
-		protected void LoadTexures(String folder, List<String> fileNames)
-		{
-			fileNames.ForEach(file =>
-			{
-				Textures.Add(file, Content.Load<Texture2D>(folder + file));
-			});
-		}
-
 		public void SetSound()
 		{
 			Sound.Load(Content);
 			MediaPlayer.IsRepeating = true;
-			MediaPlayer.Volume = 0.1f;
+			MediaPlayer.Volume = 0.5f;
 		}
 
 		public static void Explosive(float x, float y)
@@ -148,10 +137,9 @@ namespace TestGame
 			var file_textures = new List<String>()
 			{
 				"one", "two", "three", "four", "five", "six", "seven", "eight",
-				"background1", "background_up", "bullet1",
+				"background1", "background_up",
 				"player", "enemy",
-				"cursor",
-				"exp_type_a",
+				"cursor", "messageWindow1", "messageWindow2",
 				"laser"
 			};
 			file_textures.ForEach(file =>

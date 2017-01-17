@@ -15,6 +15,7 @@ namespace TestGame.Controllers
 	{
 		public PlaceController Places { get; set; }
 		public TContainer Container { get; set; }
+		public BattleController Battle { get; set; }
 
 		public void Init(int x)
 		{
@@ -86,6 +87,7 @@ namespace TestGame.Controllers
 					{
 						GameRoot.Explosive(x, y);
 						Sound.FX1.Play(0.005f, 1, 1);
+						Battle.Strike(x, y, type);
 					}
 				}
 			}

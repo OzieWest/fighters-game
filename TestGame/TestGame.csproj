@@ -32,39 +32,40 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Icon.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Controllers\LevelController.cs" />
     <Compile Include="Controllers\TileController.cs" />
-    <Compile Include="Domain\GridPosition.cs" />
-    <Compile Include="Domain\TileObject.cs" />
-    <Compile Include="Domain\BaseObject.cs" />
-    <Compile Include="Domain\FontObject.cs" />
-    <Compile Include="Domain\TileTypes.cs" />
-    <Compile Include="Domain\Frame.cs" />
-    <Compile Include="Extensions.cs" />
-    <Compile Include="Fonts.cs" />
+    <Compile Include="Domain\tiles\GridPosition.cs" />
+    <Compile Include="Domain\tiles\TileObject.cs" />
+    <Compile Include="Domain\base\BaseObject.cs" />
+    <Compile Include="Domain\fonts\FontObject.cs" />
+    <Compile Include="Domain\tiles\TileTypes.cs" />
+    <Compile Include="Domain\base\Frame.cs" />
+    <Compile Include="Utilities\Extensions.cs" />
+    <Compile Include="Utilities\Fonts.cs" />
     <Compile Include="GameRoot.cs" />
     <Compile Include="Controllers\InputController.cs" />
     <Compile Include="Controllers\PlaceController.cs" />
     <Compile Include="GameStates.cs" />
-    <Compile Include="MouseObject.cs" />
-    <Compile Include="ParticleManager.cs" />
-    <Compile Include="ParticleState.cs" />
-    <Compile Include="Position.cs" />
+    <Compile Include="Domain\MouseObject.cs" />
+    <Compile Include="Controllers\ParticleManager.cs" />
+    <Compile Include="Domain\particles\ParticleState.cs" />
+    <Compile Include="Domain\base\Position.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Domain\TileNeighbor.cs" />
-    <Compile Include="BattleController.cs" />
-    <Compile Include="Score.cs" />
-    <Compile Include="Sound.cs" />
-    <Compile Include="TileComparator.cs" />
-    <Compile Include="TileContainer.cs" />
-    <Compile Include="Domain\TileFactory.cs" />
-    <Compile Include="Domain\TileState.cs" />
-    <Compile Include="WarriorActions.cs" />
-    <Compile Include="WarriorObject.cs" />
+    <Compile Include="Domain\tiles\TileNeighbor.cs" />
+    <Compile Include="Controllers\BattleController.cs" />
+    <Compile Include="Domain\fonts\Score.cs" />
+    <Compile Include="Utilities\Sound.cs" />
+    <Compile Include="Utilities\TileComparator.cs" />
+    <Compile Include="Utilities\TileContainer.cs" />
+    <Compile Include="Utilities\TileFactory.cs" />
+    <Compile Include="Domain\tiles\TileState.cs" />
+    <Compile Include="Domain\warriors\WarriorActions.cs" />
+    <Compile Include="Domain\warriors\WarriorObject.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="OpenTK">
@@ -96,19 +97,19 @@
     <Content Include="Content\textures\background_up.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\textures\bullet1.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Content\textures\cursor.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\textures\enemy.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\textures\exp_type_a.png">
+    <Content Include="Content\textures\laser.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\textures\laser.png">
+    <Content Include="Content\textures\messageWindow2.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\textures\messageWindow1.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\textures\one.png">
@@ -141,7 +142,6 @@
     <Content Include="Content\textures\background1.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

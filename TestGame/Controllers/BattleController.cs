@@ -16,45 +16,58 @@ namespace TestGame
 
 		public void Init()
 		{
-			var score = 100;
+			var health = 100;
 			var alg = 3;
-			var font = Fonts.S14;
+			var font = Fonts.S12;
 
 			Player = new WarriorObject(
 				GameRoot.Textures["player"],
+				GameRoot.Textures["messageWindow1"],
 				font,
-				score,
+				health,
 				180
 			);
 			Player.SetPosition(80, 90);
+			Player.SetPositionMessage(0, 90, Color.White);
+			Player.Power.Value = 1;
 
 			Enemy = new WarriorObject(
 				GameRoot.Textures["enemy"],
+				GameRoot.Textures["messageWindow2"],
 				font,
-				(score * alg),
+				(health * alg),
 				180
 			);
 			Enemy.SetPosition(250, 90);
-			Enemy.Power.Value = 3;
+			Enemy.SetPositionMessage(415, 90, Color.Black);
+			Enemy.Power.Value = 2;
 		}
 
 		public void Update(GameTime gameTime)
 		{
-			var attackQuery = GameRoot.RND.Next(0, 200);
+			var enemyAttackChance = GameRoot.RND.Next(0, 200);
 
-			if (attackQuery == 1)
+			if (enemyAttackChance == 1)
 				Shoot(Enemy, Player);
 
 			Player.Update(gameTime);
 			Enemy.Update(gameTime);
 
 			if (Player.Health.Value == 0)
+			{
 				GameRoot.State = GameStates.Stop;
+				GameRoot.Info.Color = Color.Red;
+				GameRoot.Info.Text = "Enemy WIN!";
+			}
 			else if (Enemy.Health.Value == 0)
+			{
 				GameRoot.State = GameStates.Stop;
+				GameRoot.Info.Color = Color.Green;
+				GameRoot.Info.Text = "Player WIN!";
+			}
 		}
 
-		public void Strike(int x, int y, TileTypes type)
+		public void Strike(float x, float y, TileTypes type)
 		{
 			if (GameRoot.State != GameStates.Stop)
 			{
